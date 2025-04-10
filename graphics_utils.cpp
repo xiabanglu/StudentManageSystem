@@ -4,7 +4,7 @@ IMAGE img;
 
 //初始化窗口
 void LoadBgk() {
-    loadimage(&img, _T("res\\bk.jpg"));
+    loadimage(&img, _T("bk.jpg"));
     putimage(0, 0, &img);
     setbkmode(TRANSPARENT);
     settextcolor(BLACK);
