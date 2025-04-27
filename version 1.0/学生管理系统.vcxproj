@@ -131,7 +131,6 @@
     <ClCompile Include="graphics_utils.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="student.cpp" />
-    <ClCompile Include="Test.cpp" />
     <ClCompile Include="ui.cpp" />
   </ItemGroup>
   <ItemGroup>
