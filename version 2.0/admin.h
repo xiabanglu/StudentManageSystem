@@ -10,13 +10,13 @@
 typedef struct Admin
 {
     int id;
-	Account account;
+    Account account;
 } Admin;
 
 // 管理员数组
 extern Admin admins[ADMINMAXNUM];
 
-//函数声明
+// 函数声明
 int countAdminNum();
 int loadAdminFromFile();
 int saveAdminToFile();

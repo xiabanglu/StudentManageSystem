@@ -8,4 +8,3 @@ typedef struct Account
 } Account;
 
 #endif // ACCOUNT_H
-

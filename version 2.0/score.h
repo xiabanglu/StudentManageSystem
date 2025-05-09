@@ -1,7 +1,8 @@
 #ifndef SCORE_H
 #define SCORE_H
 
-typedef struct Score {
+typedef struct Score
+{
     float advancedMath;
     float linearAlgebra;
     float programming;
@@ -12,9 +13,8 @@ typedef struct Score {
     float operatingSystem;
     float computerOrganization;
     float dataStructureAndAlgorithm;
-	float averageScore;
-	float totalScore;
+    float averageScore;
+    float totalScore;
 } Score;
 
 #endif // SCORE_H
-

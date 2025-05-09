@@ -1,7 +1,8 @@
 #ifndef INFO_H
 #define INFO_H
 
-typedef struct Info {
+typedef struct Info
+{
     char name[20];
     char gender[20];
     char age[20];
@@ -11,4 +12,3 @@ typedef struct Info {
 } Info;
 
 #endif // INFO_H
-

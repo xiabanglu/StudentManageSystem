@@ -9,21 +9,24 @@
 // 记录选择
 Selections select;
 
-//登录检查
-int LoginCheck(const char* username, const char* password) {
-    //管理员
-    for (int i = 0; i < ADMINMAXNUM && admins[i].id != -1; i++) {
+// 登录检查
+int LoginCheck(const char *username, const char *password)
+{
+    // 管理员
+    for (int i = 0; i < ADMINMAXNUM && admins[i].id != -1; i++)
+    {
         if (strcmp(username, admins[i].account.username) == 0 &&
-            strcmp(password, admins[i].account.password) == 0) 
+            strcmp(password, admins[i].account.password) == 0)
             return 1;
     }
-    //学生
-    for (int i = 0; i < STUDENTMAXNUM && students[i].id != -1; i++) {
+    // 学生
+    for (int i = 0; i < STUDENTMAXNUM && students[i].id != -1; i++)
+    {
         if (strcmp(username, students[i].account.username) == 0 &&
-            strcmp(password, students[i].account.password) == 0) 
+            strcmp(password, students[i].account.password) == 0)
             return 2;
     }
-    //未找到
+    // 未找到
     return 0;
 }
 
@@ -78,7 +81,7 @@ void loginInGraph()
     signInUsername[strcspn(signInUsername, "\n")] = '\0';
     signInPassword[strcspn(signInPassword, "\n")] = '\0';
 
-    switch (LoginCheck(signInUsername,signInPassword))
+    switch (LoginCheck(signInUsername, signInPassword))
     {
     case 1:
         adminGraph();
@@ -86,8 +89,8 @@ void loginInGraph()
     case 2:
         studentGraph();
         break;
-	case 0:
-		printf("登录失败，请检查账号密码是否正确！\n");
+    case 0:
+        printf("登录失败，请检查账号密码是否正确！\n");
     }
 }
 
@@ -146,7 +149,7 @@ void registerAdminGraph()
     printf("test: 你输入的账号密码：%s %s\n", registerAdminUsername, registerAdminPassword);
 
     printf("注册成功！\n");
-	printf("按任意键返回主界面...\n");
+    printf("按任意键返回主界面...\n");
     int ch = getchar();
     (void)ch;
     welcomeGraph();
@@ -168,9 +171,8 @@ void registerStudentGraph()
     registerStudentUsername[strcspn(registerStudentUsername, "\n")] = '\0';
     registerStudentPassword[strcspn(registerStudentPassword, "\n")] = '\0';
 
-
-	// 尚未完成
-	// test
+    // 尚未完成
+    // test
     printf("test: 你输入的账号密码：%s %s\n", registerStudentUsername, registerStudentPassword);
 
     printf("注册成功！\n");
@@ -237,16 +239,18 @@ void adminGraph()
         printf("ID\t姓名\t性别\t年龄\t年级\t班级\t学号\n");
 
         // 打印学生信息
-        for (int i = 0; i < STUDENTMAXNUM; i++) {
-            if (students[i].id == -1) break;
+        for (int i = 0; i < STUDENTMAXNUM; i++)
+        {
+            if (students[i].id == -1)
+                break;
             printf("%d\t%s\t%s\t%s\t%s\t%s\t%s\n",
-                students[i].id,
-                students[i].info.name,
-                students[i].info.gender,
-                students[i].info.age,
-                students[i].info.grade,
-                students[i].info.classNum,
-                students[i].info.stuNum);
+                   students[i].id,
+                   students[i].info.name,
+                   students[i].info.gender,
+                   students[i].info.age,
+                   students[i].info.grade,
+                   students[i].info.classNum,
+                   students[i].info.stuNum);
         }
 
         printf("按任意键返回主界面...\n");
@@ -263,22 +267,23 @@ void adminGraph()
         printf("ID\t姓名\t高数\t线代\t程设\t概率论\t离散\t数据库\t计网\t操系\t计组\t算法\n");
 
         // 打印学生信息
-        for (int i = 0; i < STUDENTMAXNUM; i++) {
-            if (students[i].id == -1) break;
+        for (int i = 0; i < STUDENTMAXNUM; i++)
+        {
+            if (students[i].id == -1)
+                break;
             printf("%d\t%s\t%.1f\t%.1f\t%.1f\t%.1f\t%.1f\t%.1f\t%.1f\t%.1f\t%.1f\t%.1f\n",
-				students[i].id,
-				students[i].info.name,
-				students[i].score.advancedMath,
-				students[i].score.linearAlgebra,
-				students[i].score.programming,
-				students[i].score.probability,
-				students[i].score.discreteMath,
-				students[i].score.database,
-				students[i].score.computerNetwork,
-				students[i].score.operatingSystem,
-				students[i].score.computerOrganization,
-				students[i].score.dataStructureAndAlgorithm
-            );
+                   students[i].id,
+                   students[i].info.name,
+                   students[i].score.advancedMath,
+                   students[i].score.linearAlgebra,
+                   students[i].score.programming,
+                   students[i].score.probability,
+                   students[i].score.discreteMath,
+                   students[i].score.database,
+                   students[i].score.computerNetwork,
+                   students[i].score.operatingSystem,
+                   students[i].score.computerOrganization,
+                   students[i].score.dataStructureAndAlgorithm);
         }
         printf("按任意键返回主界面...\n");
         getchar();
@@ -322,7 +327,7 @@ void studentGraph()
     scanf_s("%d", &select.studentSelect);
 
     // 清除输入缓冲区的换行符
-    int ch = getchar(); 
+    int ch = getchar();
     (void)ch;
 
     switch (select.studentSelect)

@@ -5,7 +5,8 @@
 #include <graphics.h>
 #include "graphics_utils.h"
 
-int main() {
+int main()
+{
     initgraph(WIN_WIDTH, WIN_HEIGHT);
     setlocale(LC_ALL, "");
     FreeConsole();
