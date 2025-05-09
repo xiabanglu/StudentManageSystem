@@ -128,7 +128,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="admin.cpp" />
-    <ClCompile Include="errorCode.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="student.cpp" />
     <ClCompile Include="ui.cpp" />

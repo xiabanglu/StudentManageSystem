@@ -13,6 +13,6 @@ int main()
 
 	loadAdminFromFile();
 	loadStudentFromFile();
-	adminGraph();
+	welcomeGraph();
 	return 0;
 }
