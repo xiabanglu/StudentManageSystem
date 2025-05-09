@@ -1,6 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\.gitee",
+    "\\version 1.0",
+    "\\version 1.0\\\u5B66\u751F\u7BA1\u7406\u7CFB\u7EDF\\x64",
+    "\\version 1.0\\\u5B66\u751F\u7BA1\u7406\u7CFB\u7EDF\\x64\\Debug"
   ],
+  "SelectedNode": "\\version 1.0\\admin.h",
   "PreviewInSolutionExplorer": false
 }

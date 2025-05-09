@@ -16,7 +16,7 @@ extern Admin admins[AdminMaxNum];
 
 //管理员函数声明
 int LoadAdminFromFile();
-void SaveAdminToFile();
+int SaveAdminToFile();
 int CountAdminNum();
 
 #endif // ADMIN_H

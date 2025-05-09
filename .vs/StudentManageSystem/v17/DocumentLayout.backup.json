@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\StudentManageSystem\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\StudentManageSystem\\version 1.0\\admin.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:version 1.0\\admin.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\StudentManageSystem\\version 1.0\\admin.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:version 1.0\\admin.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -18,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,7 +38,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "admin.h",
+              "DocumentMoniker": "D:\\StudentManageSystem\\version 1.0\\admin.h",
+              "RelativeDocumentMoniker": "version 1.0\\admin.h",
+              "ToolTip": "D:\\StudentManageSystem\\version 1.0\\admin.h",
+              "RelativeToolTip": "version 1.0\\admin.h",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABAAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-05-09T01:31:25.867Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "errorCode.cpp",
               "DocumentMoniker": "D:\\StudentManageSystem\\version 1.0\\errorCode.cpp",
               "RelativeDocumentMoniker": "version 1.0\\errorCode.cpp",
@@ -47,13 +64,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "admin.cpp",
               "DocumentMoniker": "D:\\StudentManageSystem\\version 1.0\\admin.cpp",
               "RelativeDocumentMoniker": "version 1.0\\admin.cpp",
               "ToolTip": "D:\\StudentManageSystem\\version 1.0\\admin.cpp",
               "RelativeToolTip": "version 1.0\\admin.cpp",
-              "ViewState": "AgIAABAAAAAAAAAAAAAWwBsAAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAWwBIAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-05-09T00:58:45.205Z",
               "EditorCaption": ""

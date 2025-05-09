@@ -14,14 +14,15 @@ typedef struct Student {
     wchar_t age[20];
     wchar_t grade[20];
     wchar_t classNum[20];
+ 
 } Student;
 
 //学生数组
 extern Student students[StudentMaxNum];
 
 //学生函数声明
-void LoadStudentFromFile();
-void SaveStudentToFile();
+int LoadStudentFromFile();
+int SaveStudentToFile();
 int CountStudentNum();
 
 #endif // STUDENT_H

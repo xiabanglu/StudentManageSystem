@@ -23,11 +23,11 @@ int LoadAdminFromFile() {
 
     FILE *file;
     const wchar_t *fileName = L"管理员信息.txt";
-    const wchar_t *mode = L"r";
+    const wchar_t *mode = L"r,ccs=UTF-8";
 
-    file = _wfopen(fileName, mode);
+    int error= _wfopen_s(&file,fileName, mode);
     //文件读写错误
-    if (file == NULL) {
+    if (file !=0) {
         wprintf(L"failed to open file:%ls\n", fileName);
         //标准错误码
         return FILE_IS_NULL_CODE;
@@ -54,15 +54,32 @@ int LoadAdminFromFile() {
 }
 
 //保存管理员信息到文件
-void SaveAdminToFile() {
+int SaveAdminToFile() {
     FILE* file;
     int count = CountAdminNum();
-    if (_wfopen_s(&file, L"管理员信息.txt", L"w, ccs=UTF-8") != 0) return;
+
+    FILE* file;
+    const wchar_t* fileName = L"管理员信息.txt";
+    const wchar_t* mode = L"r,ccs=UTF-8";
+    int error = _wfopen_s(&file, fileName, mode);
+    //文件读写错误
+    if (error != 0) {
+        wprintf(L"failed to open file:%ls\n", fileName);
+        //标准错误码
+        return FILE_IS_NULL_CODE;
+
+    }
+   
     for (int i = 0; i < count; i++) {
         fwprintf(file, L"%d,%ls,%ls\n",
             admins[i].id, admins[i].account, admins[i].password);
     }
+    if(file!=0)
     fclose(file);
+
+    return SUCCESS_SAVE_ADMIN_CODE;
+
+
 }
 
 
