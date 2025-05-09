@@ -15,7 +15,7 @@ typedef struct Admin {
 extern Admin admins[AdminMaxNum];
 
 //管理员函数声明
-void LoadAdminFromFile();
+int LoadAdminFromFile();
 void SaveAdminToFile();
 int CountAdminNum();
 
