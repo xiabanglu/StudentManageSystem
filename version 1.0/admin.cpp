@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "admin.h"
 #include <stdio.h>
 #include <wchar.h>
