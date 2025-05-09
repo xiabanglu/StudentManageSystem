@@ -1,6 +1,8 @@
 #ifndef ADMIN_H
 #define ADMIN_H
 
+#include "account.h"
+
 // 管理员最大数量
 #define ADMINMAXNUM 50
 
@@ -8,8 +10,7 @@
 typedef struct Admin
 {
     int id;
-    char account[20];
-    char password[20];
+	Account account;
 } Admin;
 
 // 管理员数组

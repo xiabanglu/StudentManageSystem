@@ -134,8 +134,11 @@
     <ClCompile Include="ui.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="account.h" />
     <ClInclude Include="admin.h" />
     <ClInclude Include="errorcode.h" />
+    <ClInclude Include="info.h" />
+    <ClInclude Include="score.h" />
     <ClInclude Include="student.h" />
     <ClInclude Include="ui.h" />
   </ItemGroup>

@@ -13,13 +13,15 @@ Selections select;
 int LoginCheck(const char* username, const char* password) {
     //管理员
     for (int i = 0; i < ADMINMAXNUM && admins[i].id != -1; i++) {
-        if (strcmp(username, admins[i].account) == 0 &&
-            strcmp(password, admins[i].password) == 0) return 1;
+        if (strcmp(username, admins[i].account.username) == 0 &&
+            strcmp(password, admins[i].account.password) == 0) 
+            return 1;
     }
     //学生
     for (int i = 0; i < STUDENTMAXNUM && students[i].id != -1; i++) {
-        if (strcmp(username, students[i].account) == 0 &&
-            strcmp(password, students[i].password) == 0) return 2;
+        if (strcmp(username, students[i].account.username) == 0 &&
+            strcmp(password, students[i].account.password) == 0) 
+            return 2;
     }
     //未找到
     return 0;
@@ -62,21 +64,21 @@ void welcomeGraph()
 void loginInGraph()
 {
     // 当前登录信息
-    char signInAccount[20];
+    char signInUsername[20];
     char signInPassword[20];
 
     system("cls"); // 清屏
     printf("请登录：\n");
     printf("请输入你的账号：\n");
-    fgets(signInAccount, sizeof(signInAccount), stdin);
+    fgets(signInUsername, sizeof(signInUsername), stdin);
     printf("请输入你的密码：\n");
     fgets(signInPassword, sizeof(signInPassword), stdin);
 
     // 去掉换行符
-    signInAccount[strcspn(signInAccount, "\n")] = '\0';
+    signInUsername[strcspn(signInUsername, "\n")] = '\0';
     signInPassword[strcspn(signInPassword, "\n")] = '\0';
 
-    switch (LoginCheck(signInAccount,signInPassword))
+    switch (LoginCheck(signInUsername,signInPassword))
     {
     case 1:
         adminGraph();
@@ -126,46 +128,55 @@ void registerGraph()
 // 注册管理员界面
 void registerAdminGraph()
 {
-    char registerAdminAccount[20];
+    char registerAdminUsername[20];
     char registerAdminPassword[20];
 
     system("cls"); // 清屏
     printf("注册管理员账号：\n\n");
     printf("请输入你的账号：\n");
-    fgets(registerAdminAccount, sizeof(registerAdminAccount), stdin);
+    fgets(registerAdminUsername, sizeof(registerAdminUsername), stdin);
     printf("请输入你的密码：\n");
     fgets(registerAdminPassword, sizeof(registerAdminPassword), stdin);
     // 去掉换行符
-    registerAdminAccount[strcspn(registerAdminAccount, "\n")] = '\0';
+    registerAdminUsername[strcspn(registerAdminUsername, "\n")] = '\0';
     registerAdminPassword[strcspn(registerAdminPassword, "\n")] = '\0';
-    // 账号密码录入正常
-    printf("test: 你输入的账号密码：%s %s\n", registerAdminAccount, registerAdminPassword);
 
     // 尚未完成
+    // test
+    printf("test: 你输入的账号密码：%s %s\n", registerAdminUsername, registerAdminPassword);
+
     printf("注册成功！\n");
+	printf("按任意键返回主界面...\n");
+    int ch = getchar();
+    (void)ch;
     welcomeGraph();
 }
 
 // 注册学生界面
 void registerStudentGraph()
 {
-    char registerStudentAccount[20];
+    char registerStudentUsername[20];
     char registerStudentPassword[20];
 
     system("cls"); // 清屏
     printf("注册学生账号：\n\n");
     printf("请输入你的账号：\n");
-    fgets(registerStudentAccount, sizeof(registerStudentAccount), stdin);
+    fgets(registerStudentUsername, sizeof(registerStudentUsername), stdin);
     printf("请输入你的密码：\n");
     fgets(registerStudentPassword, sizeof(registerStudentPassword), stdin);
     // 去掉换行符
-    registerStudentAccount[strcspn(registerStudentAccount, "\n")] = '\0';
+    registerStudentUsername[strcspn(registerStudentUsername, "\n")] = '\0';
     registerStudentPassword[strcspn(registerStudentPassword, "\n")] = '\0';
-    // 账号密码录入正常
-    printf("test: 你输入的账号密码：%s %s\n", registerStudentAccount, registerStudentPassword);
 
-    // 尚未完成
+
+	// 尚未完成
+	// test
+    printf("test: 你输入的账号密码：%s %s\n", registerStudentUsername, registerStudentPassword);
+
     printf("注册成功！\n");
+    printf("按任意键返回主界面...\n");
+    int ch = getchar();
+    (void)ch;
     welcomeGraph();
 }
 
@@ -191,7 +202,7 @@ void adminGraph()
     scanf_s("%d", &select.adminSelect);
 
     // 清除输入缓冲区的换行符
-    int ch = getchar(); 
+    int ch = getchar();
     (void)ch;
 
     switch (select.adminSelect)
@@ -199,17 +210,23 @@ void adminGraph()
     case 1:
         // 录入学生成绩
         printf("录入学生成绩功能尚未完成！\n");
-		welcomeGraph();
+        printf("按任意键返回主界面...\n");
+        getchar();
+        welcomeGraph();
         break;
     case 2:
         // 删除学生成绩
         printf("删除学生成绩功能尚未完成！\n");
-		welcomeGraph();
+        printf("按任意键返回主界面...\n");
+        getchar();
+        welcomeGraph();
         break;
     case 3:
         // 修改学生成绩
         printf("修改学生成绩功能尚未完成！\n");
-		welcomeGraph();
+        printf("按任意键返回主界面...\n");
+        getchar();
+        welcomeGraph();
         break;
     case 4:
         // 查看学生信息
@@ -217,46 +234,69 @@ void adminGraph()
         printf("学生信息如下：\n\n");
 
         // 打印表头
-        printf("ID\t账号\t\t密码\t\t姓名\t\t性别\t\t年龄\t\t年级\t\t班级\n");
+        printf("ID\t姓名\t性别\t年龄\t年级\t班级\t学号\n");
 
         // 打印学生信息
         for (int i = 0; i < STUDENTMAXNUM; i++) {
             if (students[i].id == -1) break;
-            
-			int accountLen = strlen(students[i].account);
-            if (accountLen <= 7 && accountLen >= 0) {
-                printf("%d\t%s\t\t%s\t\t%s\t\t%s\t\t%s\t\t%s\t\t%s\n",
-                    students[i].id, students[i].account, students[i].password,
-                    students[i].name, students[i].gender, students[i].age,
-                    students[i].grade, students[i].classNum);
-            }
-            else if (accountLen >= 8) {
-                printf("%d\t%s\t%s\t\t%s\t\t%s\t\t%s\t\t%s\t\t%s\n",
-                    students[i].id, students[i].account, students[i].password,
-                    students[i].name, students[i].gender, students[i].age,
-                    students[i].grade, students[i].classNum);
-            }
+            printf("%d\t%s\t%s\t%s\t%s\t%s\t%s\n",
+                students[i].id,
+                students[i].info.name,
+                students[i].info.gender,
+                students[i].info.age,
+                students[i].info.grade,
+                students[i].info.classNum,
+                students[i].info.stuNum);
         }
 
-        printf("\n按任意键返回主界面...\n");
-        getchar(); // 等待用户按下任意键
-        welcomeGraph(); // 返回主界面
+        printf("按任意键返回主界面...\n");
+        getchar();
+        welcomeGraph();
         break;
 
     case 5:
         // 统计学生成绩
-        printf("统计学生成绩功能尚未完成！\n");
-		welcomeGraph();
+        system("cls"); // 清屏
+        printf("学生成绩如下：\n\n");
+
+        // 打印表头
+        printf("ID\t姓名\t高数\t线代\t程设\t概率论\t离散\t数据库\t计网\t操系\t计组\t算法\n");
+
+        // 打印学生信息
+        for (int i = 0; i < STUDENTMAXNUM; i++) {
+            if (students[i].id == -1) break;
+            printf("%d\t%s\t%.1f\t%.1f\t%.1f\t%.1f\t%.1f\t%.1f\t%.1f\t%.1f\t%.1f\t%.1f\n",
+				students[i].id,
+				students[i].info.name,
+				students[i].score.advancedMath,
+				students[i].score.linearAlgebra,
+				students[i].score.programming,
+				students[i].score.probability,
+				students[i].score.discreteMath,
+				students[i].score.database,
+				students[i].score.computerNetwork,
+				students[i].score.operatingSystem,
+				students[i].score.computerOrganization,
+				students[i].score.dataStructureAndAlgorithm
+            );
+        }
+        printf("按任意键返回主界面...\n");
+        getchar();
+        welcomeGraph();
         break;
     case 6:
         // 修改我的信息
         printf("修改我的信息功能尚未完成！\n");
-		welcomeGraph();
+        printf("按任意键返回主界面...\n");
+        getchar();
+        welcomeGraph();
         break;
     case 7:
         // 注销我的账号
         printf("注销我的账号功能尚未完成！\n");
-		welcomeGraph();
+        printf("按任意键返回主界面...\n");
+        getchar();
+        welcomeGraph();
         break;
     case 8:
         welcomeGraph();
@@ -290,17 +330,23 @@ void studentGraph()
     case 1:
         // 查看我的成绩
         printf("查看我的成绩功能尚未完成！\n");
-		welcomeGraph();
+        printf("按任意键返回主界面...\n");
+        getchar();
+        welcomeGraph();
         break;
     case 2:
         // 修改我的信息
         printf("修改我的信息功能尚未完成！\n");
-		welcomeGraph();
+        printf("按任意键返回主界面...\n");
+        getchar();
+        welcomeGraph();
         break;
     case 3:
         // 注销我的账号
         printf("注销我的账号功能尚未完成！\n");
-		welcomeGraph();
+        printf("按任意键返回主界面...\n");
+        getchar();
+        welcomeGraph();
         break;
     case 4:
         welcomeGraph();

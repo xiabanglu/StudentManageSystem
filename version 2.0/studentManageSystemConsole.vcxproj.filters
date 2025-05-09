@@ -44,5 +44,14 @@
     <ClInclude Include="errorcode.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="account.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="info.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="score.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

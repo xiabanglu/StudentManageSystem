@@ -1,3 +1,5 @@
-﻿  ui.cpp
-C:\Users\17954\source\repos\student-manage-system\version 2.0\ui.cpp(226,19): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+﻿  main.cpp
+  student.cpp
+  ui.cpp
+  正在生成代码...
   studentManageSystemConsole.vcxproj -> C:\Users\17954\source\repos\student-manage-system\version 2.0\x64\Debug\studentManageSystemConsole.exe
