@@ -6,274 +6,276 @@
 #include <wchar.h>
 #include <locale.h>
 
-//è®°å½•ä»¥ä½•ç§èº«ä»½ç™»å½•
-int flag = 0;//1è¡¨ç¤ºç®¡ç†å‘˜ï¼Œ2è¡¨ç¤ºå­¦ç”Ÿ
+//¼ÇÂ¼ÒÔºÎÖÖÉí·İµÇÂ¼
+int flag = 0;//1±íÊ¾¹ÜÀíÔ±£¬2±íÊ¾Ñ§Éú
 
-//è®°å½•å½“å‰è´¦å·
+//¼ÇÂ¼µ±Ç°ÕËºÅ
 Admin currentAdmin;
 Student currentStudent;
 
-//ç™»å½•æ£€æŸ¥
+//µÇÂ¼¼ì²é
 int LoginCheck(const wchar_t* username, const wchar_t* password) {
-    //ç®¡ç†å‘˜
-    for (int i = 0; i < AdminMaxNum && admins[i].id != -1; i++) {
-        if (wcscmp(username, admins[i].account) == 0 &&
-            wcscmp(password, admins[i].password) == 0) return 1;
-    }
-	//å­¦ç”Ÿ
-    for (int i = 0; i < StudentMaxNum && students[i].id != -1; i++) {
-        if (wcscmp(username, students[i].account) == 0 &&
-            wcscmp(password, students[i].password) == 0) return 2;
-    }
-	//æœªæ‰¾åˆ°
-    return 0; 
+	//¹ÜÀíÔ±
+	for (int i = 0; i < AdminMaxNum && admins[i].id != -1; i++) {
+		if (wcscmp(username, admins[i].account) == 0 &&
+			wcscmp(password, admins[i].password) == 0) return 1;
+	}
+	//Ñ§Éú
+	for (int i = 0; i < StudentMaxNum && students[i].id != -1; i++) {
+		if (wcscmp(username, students[i].account) == 0 &&
+			wcscmp(password, students[i].password) == 0) return 2;
+	}
+	//Î´ÕÒµ½
+	return 0;
 }
 
-//ç®¡ç†å‘˜ç•Œé¢
+//¹ÜÀíÔ±½çÃæ
 void AdminManageGraph() {
 	flag = 1;
 	cleardevice();
 	LoadBgk();
-    SetHeightText(30);
-    RECT r = { 0, 0, 800, 150 };
-    drawtext(L"æ¬¢è¿è¿›å…¥å­¦ç”Ÿç®¡ç†ç³»ç»Ÿ(ç®¡ç†å‘˜æƒé™)",&r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	SetHeightText(30);
+	RECT r = { 0, 0, 800, 150 };
+	drawtext(L"»¶Ó­½øÈëÑ§Éú¹ÜÀíÏµÍ³(¹ÜÀíÔ±È¨ÏŞ)", &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	HWND hnd_AdminManageGraph = GetHWnd();
+	SetWindowText(hnd_AdminManageGraph, _T("¹ÜÀíÔ±È¨ÏŞ"));
 
-    //ç»˜åˆ¶æŒ‰é’®
-    const int btnWidth = 200, btnHeight = 50;
-    const int btnX = 300;
-    DrawButton(btnX, 130, btnWidth, btnHeight, _T("å½•å…¥å­¦ç”Ÿä¿¡æ¯"),30);
-    DrawButton(btnX, 200, btnWidth, btnHeight, _T("åˆ é™¤å­¦ç”Ÿä¿¡æ¯"),30);
-    DrawButton(btnX, 270, btnWidth, btnHeight, _T("æŸ¥çœ‹å­¦ç”Ÿä¿¡æ¯"),30);
-    DrawButton(btnX, 340, btnWidth, btnHeight, _T("ä¿®æ”¹å­¦ç”Ÿä¿¡æ¯"),30);
-    DrawButton(btnX, 410, btnWidth, btnHeight, _T("æ³¨é”€æˆ‘çš„è´¦å·"),30);
-	DrawButton(btnX, 480, btnWidth, btnHeight, _T("è¿”å›"), 30);
+	//»æÖÆ°´Å¥
+	const int btnWidth = 200, btnHeight = 50;
+	const int btnX = 300;
+	DrawButton(btnX, 130, btnWidth, btnHeight, _T("Â¼ÈëÑ§ÉúĞÅÏ¢"), 30);
+	DrawButton(btnX, 200, btnWidth, btnHeight, _T("É¾³ıÑ§ÉúĞÅÏ¢"), 30);
+	DrawButton(btnX, 270, btnWidth, btnHeight, _T("²é¿´Ñ§ÉúĞÅÏ¢"), 30);
+	DrawButton(btnX, 340, btnWidth, btnHeight, _T("ĞŞ¸ÄÑ§ÉúĞÅÏ¢"), 30);
+	DrawButton(btnX, 410, btnWidth, btnHeight, _T("×¢ÏúÎÒµÄÕËºÅ"), 30);
+	DrawButton(btnX, 480, btnWidth, btnHeight, _T("·µ»Ø"), 30);
 
-	//ç‚¹å‡»äº‹ä»¶å¤„ç†
-    while (true) {
-        MOUSEMSG msg = GetMouseMsg();
-        if (msg.uMsg == WM_LBUTTONDOWN) {
-			//å½•å…¥å­¦ç”Ÿä¿¡æ¯
-            if (IsMouseInRect(btnX, 130, btnWidth, btnHeight)) {
-                int studentNum = CountStudentNum();
-
-				//æ£€æŸ¥å­¦ç”Ÿæ•°é‡
-                if (studentNum >= StudentMaxNum) {
-                    MessageBox(NULL, _T("å­¦ç”Ÿæ•°é‡å·²è¾¾ä¸Šé™"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-
-                Student newStudent;
-
-
-                //ç”¨æˆ·å
-                InputBox(newStudent.account, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥ç”¨æˆ·å:"), _T("æ·»åŠ å­¦ç”Ÿä¿¡æ¯ï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-                //ä¸èƒ½ä¸ºç©º
-				if (wcslen(newStudent.account) == 0) {
-					MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-					continue;
-				}
-				//ä¸èƒ½åŒ…å«é€—å·
-				if (wcschr(newStudent.account, L',')) {
-					MessageBox(NULL, _T("ç”¨æˆ·åä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-					continue;
-				}
-				//ä¸èƒ½é‡å¤
-				for (int i = 0; i < StudentMaxNum; i++) {
-					if (wcscmp(newStudent.account, students[i].account) == 0) {
-						MessageBox(NULL, _T("ç”¨æˆ·åå·²å­˜åœ¨ï¼Œè¯·é‡æ–°è¾“å…¥"), _T("é”™è¯¯"), MB_OK);
-						continue;
-					}
-				}
-
-
-                //å¯†ç 
-                InputBox(newStudent.password, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥å¯†ç :"), _T("æ·»åŠ å­¦ç”Ÿä¿¡æ¯ï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-                //ä¸èƒ½ä¸ºç©º
-                if (wcslen(newStudent.password) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-				//ä¸èƒ½åŒ…å«é€—å·
-				if (wcschr(newStudent.password, L',')) {
-					MessageBox(NULL, _T("å¯†ç ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-					continue;
-				}
-				//ä¸èƒ½é‡å¤
-				for (int i = 0; i < StudentMaxNum; i++) {
-					if (wcscmp(newStudent.password, students[i].password) == 0) {
-						MessageBox(NULL, _T("å¯†ç å·²å­˜åœ¨ï¼Œè¯·é‡æ–°è¾“å…¥"), _T("é”™è¯¯"), MB_OK);
-						continue;
-					}
-				}
-
-
-				//å§“å
-                InputBox(newStudent.name, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥å§“å:"), _T("æ·»åŠ å­¦ç”Ÿä¿¡æ¯ï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-                //ä¸èƒ½ä¸ºç©º
-                if (wcslen(newStudent.name) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-				//ä¸èƒ½åŒ…å«é€—å·
-				if (wcschr(newStudent.name, L',')) {
-					MessageBox(NULL, _T("å§“åä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-					continue;
-				}
-
-
-				//æ€§åˆ«
-                InputBox(newStudent.gender, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥æ€§åˆ«:"), _T("æ·»åŠ å­¦ç”Ÿä¿¡æ¯ï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-                //ä¸èƒ½ä¸ºç©º
-                if (wcslen(newStudent.gender) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-                //ä¸èƒ½åŒ…å«é€—å·
-                if (wcschr(newStudent.gender, L',')) {
-                    MessageBox(NULL, _T("æ€§åˆ«ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-
-
-				//å¹´é¾„
-                InputBox(newStudent.age, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥å¹´é¾„:"), _T("æ·»åŠ å­¦ç”Ÿä¿¡æ¯ï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-                //ä¸èƒ½ä¸ºç©º
-                if (wcslen(newStudent.age) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-				//ä¸èƒ½åŒ…å«é€—å·
-				if (wcschr(newStudent.age, L',')) {
-					MessageBox(NULL, _T("å¹´é¾„ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-					continue;
-				}
-
-
-				//å¹´çº§
-                InputBox(newStudent.grade, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥å¹´çº§:"), _T("æ·»åŠ å­¦ç”Ÿä¿¡æ¯ï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-                //ä¸èƒ½ä¸ºç©º
-                if (wcslen(newStudent.grade) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-				//ä¸èƒ½åŒ…å«é€—å·
-				if (wcschr(newStudent.grade, L',')) {
-					MessageBox(NULL, _T("å¹´çº§ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-					continue;
-				}
-
-
-				//ç­çº§
-                InputBox(newStudent.classNum, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥ç­çº§:"), _T("æ·»åŠ å­¦ç”Ÿä¿¡æ¯ï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-                //ä¸èƒ½ä¸ºç©º
-                if (wcslen(newStudent.classNum) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-				//ä¸èƒ½åŒ…å«é€—å·
-				if (wcschr(newStudent.classNum, L',')) {
-					MessageBox(NULL, _T("ç­çº§ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-					continue;
-				}
-
-
-                newStudent.id = studentNum;
-
-                students[studentNum] = newStudent;
-
-                // é‡æ–°åˆ†é…å­¦ç”ŸID
-                for (int i = 0; i <= studentNum; i++) {
-                    students[i].id = i;
-                }
-
-                SaveStudentToFile();
-                MessageBox(NULL, _T("å½•å…¥æˆåŠŸ"), _T("æç¤º"), MB_OK);
-            }
-            //åˆ é™¤å­¦ç”Ÿä¿¡æ¯
-            else if (IsMouseInRect(btnX, 200, btnWidth, btnHeight)) {
+	//µã»÷ÊÂ¼ş´¦Àí
+	while (true) {
+		MOUSEMSG msg = GetMouseMsg();
+		if (msg.uMsg == WM_LBUTTONDOWN) {
+			//Â¼ÈëÑ§ÉúĞÅÏ¢
+			if (IsMouseInRect(btnX, 130, btnWidth, btnHeight)) {
 				int studentNum = CountStudentNum();
 
-				//æ£€æŸ¥å­¦ç”Ÿæ•°é‡
-                if (studentNum == 0) {
-                    MessageBox(NULL, _T("æ²¡æœ‰å­¦ç”Ÿä¿¡æ¯å¯åˆ é™¤"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-
-				//æŒ‰ç…§ç”¨æˆ·ååˆ é™¤å­¦ç”Ÿä¿¡æ¯
-                wchar_t DelStudentAccount[MAX_STRING_LENGTH];
-
-                InputBox(DelStudentAccount, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥è¦åˆ é™¤çš„å­¦ç”Ÿçš„ç”¨æˆ·å:"), _T("åˆ é™¤å­¦ç”Ÿä¿¡æ¯ï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-                //ä¸èƒ½ä¸ºç©º
-                if (wcslen(DelStudentAccount) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-				//ä¸èƒ½åŒ…å«é€—å·
-				if (wcschr(DelStudentAccount, L',')) {
-					MessageBox(NULL, _T("ç”¨æˆ·åä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
+				//¼ì²éÑ§ÉúÊıÁ¿
+				if (studentNum >= StudentMaxNum) {
+					MessageBox(hnd_AdminManageGraph, _T("Ñ§ÉúÊıÁ¿ÒÑ´ïÉÏÏŞ"), _T("´íÎó"), MB_OK);
 					continue;
 				}
 
-                bool studentFound = false;
-                for (int i = 0; i < StudentMaxNum && students[i].id != -1; i++) {
-                    if (wcscmp(DelStudentAccount, students[i].account) == 0) {
-                        studentFound = true;
-                        
-                        for (int j = i; j < StudentMaxNum - 1; j++) {
-                            students[j] = students[j + 1];
-                        }
-                        students[--studentNum].id = -1;
+				Student newStudent;
 
-                        // é‡æ–°åˆ†é…å­¦ç”ŸID
-                        for (int i = 0; i < studentNum; i++) {
-                            students[i].id = i;
-                        }
 
-                        SaveStudentToFile();
-                        MessageBox(NULL, _T("åˆ é™¤æˆåŠŸ"), _T("æç¤º"), MB_OK);
-                        break;
-                    }
-                }
+				//ÓÃ»§Ãû
+				InputBox(newStudent.account, MAX_STRING_LENGTH, _T("ÇëÊäÈëÓÃ»§Ãû:"), _T("Ìí¼ÓÑ§ÉúĞÅÏ¢£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(newStudent.account) == 0) {
+					MessageBox(hnd_AdminManageGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜ°üº¬¶ººÅ
+				if (wcschr(newStudent.account, L',')) {
+					MessageBox(hnd_AdminManageGraph, _T("ÓÃ»§Ãû²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜÖØ¸´
+				for (int i = 0; i < StudentMaxNum; i++) {
+					if (wcscmp(newStudent.account, students[i].account) == 0) {
+						MessageBox(hnd_AdminManageGraph, _T("ÓÃ»§ÃûÒÑ´æÔÚ£¬ÇëÖØĞÂÊäÈë"), _T("´íÎó"), MB_OK);
+						continue;
+					}
+				}
 
-                if (!studentFound) {
-                    MessageBox(NULL, _T("æœªæ‰¾åˆ°è¯¥å­¦ç”Ÿè´¦å·"), _T("é”™è¯¯"), MB_OK);
-                }
-            }
-            //æŸ¥çœ‹å­¦ç”Ÿä¿¡æ¯
-            else if (IsMouseInRect(btnX, 270, btnWidth, btnHeight)) {
-				ViewStudentInfoGraph();
-                return;
-            }
-			//ä¿®æ”¹å­¦ç”Ÿä¿¡æ¯
-            else if (IsMouseInRect(btnX, 340, btnWidth, btnHeight)) {
+
+				//ÃÜÂë
+				InputBox(newStudent.password, MAX_STRING_LENGTH, _T("ÇëÊäÈëÃÜÂë:"), _T("Ìí¼ÓÑ§ÉúĞÅÏ¢£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(newStudent.password) == 0) {
+					MessageBox(hnd_AdminManageGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜ°üº¬¶ººÅ
+				if (wcschr(newStudent.password, L',')) {
+					MessageBox(hnd_AdminManageGraph, _T("ÃÜÂë²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜÖØ¸´
+				for (int i = 0; i < StudentMaxNum; i++) {
+					if (wcscmp(newStudent.password, students[i].password) == 0) {
+						MessageBox(hnd_AdminManageGraph, _T("ÃÜÂëÒÑ´æÔÚ£¬ÇëÖØĞÂÊäÈë"), _T("´íÎó"), MB_OK);
+						continue;
+					}
+				}
+
+
+				//ĞÕÃû
+				InputBox(newStudent.name, MAX_STRING_LENGTH, _T("ÇëÊäÈëĞÕÃû:"), _T("Ìí¼ÓÑ§ÉúĞÅÏ¢£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(newStudent.name) == 0) {
+					MessageBox(hnd_AdminManageGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜ°üº¬¶ººÅ
+				if (wcschr(newStudent.name, L',')) {
+					MessageBox(hnd_AdminManageGraph, _T("ĞÕÃû²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+
+
+				//ĞÔ±ğ
+				InputBox(newStudent.gender, MAX_STRING_LENGTH, _T("ÇëÊäÈëĞÔ±ğ:"), _T("Ìí¼ÓÑ§ÉúĞÅÏ¢£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(newStudent.gender) == 0) {
+					MessageBox(hnd_AdminManageGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜ°üº¬¶ººÅ
+				if (wcschr(newStudent.gender, L',')) {
+					MessageBox(hnd_AdminManageGraph, _T("ĞÔ±ğ²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+
+
+				//ÄêÁä
+				InputBox(newStudent.age, MAX_STRING_LENGTH, _T("ÇëÊäÈëÄêÁä:"), _T("Ìí¼ÓÑ§ÉúĞÅÏ¢£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(newStudent.age) == 0) {
+					MessageBox(hnd_AdminManageGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜ°üº¬¶ººÅ
+				if (wcschr(newStudent.age, L',')) {
+					MessageBox(hnd_AdminManageGraph, _T("ÄêÁä²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+
+
+				//Äê¼¶
+				InputBox(newStudent.grade, MAX_STRING_LENGTH, _T("ÇëÊäÈëÄê¼¶:"), _T("Ìí¼ÓÑ§ÉúĞÅÏ¢£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(newStudent.grade) == 0) {
+					MessageBox(hnd_AdminManageGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜ°üº¬¶ººÅ
+				if (wcschr(newStudent.grade, L',')) {
+					MessageBox(hnd_AdminManageGraph, _T("Äê¼¶²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+
+
+				//°à¼¶
+				InputBox(newStudent.classNum, MAX_STRING_LENGTH, _T("ÇëÊäÈë°à¼¶:"), _T("Ìí¼ÓÑ§ÉúĞÅÏ¢£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(newStudent.classNum) == 0) {
+					MessageBox(hnd_AdminManageGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜ°üº¬¶ººÅ
+				if (wcschr(newStudent.classNum, L',')) {
+					MessageBox(hnd_AdminManageGraph, _T("°à¼¶²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+
+
+				newStudent.id = studentNum;
+
+				students[studentNum] = newStudent;
+
+				// ÖØĞÂ·ÖÅäÑ§ÉúID
+				for (int i = 0; i <= studentNum; i++) {
+					students[i].id = i;
+				}
+
+				SaveStudentToFile();
+				MessageBox(hnd_AdminManageGraph, _T("Â¼Èë³É¹¦"), _T("ÌáÊ¾"), MB_OK);
+			}
+			//É¾³ıÑ§ÉúĞÅÏ¢
+			else if (IsMouseInRect(btnX, 200, btnWidth, btnHeight)) {
+				int studentNum = CountStudentNum();
+
+				//¼ì²éÑ§ÉúÊıÁ¿
+				if (studentNum == 0) {
+					MessageBox(hnd_AdminManageGraph, _T("Ã»ÓĞÑ§ÉúĞÅÏ¢¿ÉÉ¾³ı"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+
+				//°´ÕÕÓÃ»§ÃûÉ¾³ıÑ§ÉúĞÅÏ¢
+				wchar_t DelStudentAccount[MAX_STRING_LENGTH];
+
+				InputBox(DelStudentAccount, MAX_STRING_LENGTH, _T("ÇëÊäÈëÒªÉ¾³ıµÄÑ§ÉúµÄÓÃ»§Ãû:"), _T("É¾³ıÑ§ÉúĞÅÏ¢£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(DelStudentAccount) == 0) {
+					MessageBox(hnd_AdminManageGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜ°üº¬¶ººÅ
+				if (wcschr(DelStudentAccount, L',')) {
+					MessageBox(hnd_AdminManageGraph, _T("ÓÃ»§Ãû²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
 
 				bool studentFound = false;
-				InputBox(currentStudent.account, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥è¦ä¿®æ”¹çš„å­¦ç”Ÿçš„ç”¨æˆ·å:"), _T("ä¿®æ”¹å­¦ç”Ÿä¿¡æ¯ï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-				//ä¸èƒ½ä¸ºç©º
-                if (wcslen(currentStudent.account) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-				//ä¸èƒ½åŒ…å«é€—å·
-                if (wcschr(currentStudent.account, L',')) {
-                    MessageBox(NULL, _T("ç”¨æˆ·åä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
+				for (int i = 0; i < StudentMaxNum && students[i].id != -1; i++) {
+					if (wcscmp(DelStudentAccount, students[i].account) == 0) {
+						studentFound = true;
 
-                for (int i = 0;i < StudentMaxNum && students[i].id != -1;i++) {
-                    if (wcscmp(currentStudent.account, students[i].account) == 0) {
-                        studentFound = true;
-                        currentStudent = students[i];
-                        ModifyStudentInfoGraph();
-                        return;
-                    }
-                }
+						for (int j = i; j < StudentMaxNum - 1; j++) {
+							students[j] = students[j + 1];
+						}
+						students[--studentNum].id = -1;
+
+						// ÖØĞÂ·ÖÅäÑ§ÉúID
+						for (int i = 0; i < studentNum; i++) {
+							students[i].id = i;
+						}
+
+						SaveStudentToFile();
+						MessageBox(hnd_AdminManageGraph, _T("É¾³ı³É¹¦"), _T("ÌáÊ¾"), MB_OK);
+						break;
+					}
+				}
+
 				if (!studentFound) {
-					MessageBox(NULL, _T("æœªæ‰¾åˆ°è¯¥å­¦ç”Ÿè´¦å·"), _T("é”™è¯¯"), MB_OK);
+					MessageBox(hnd_AdminManageGraph, _T("Î´ÕÒµ½¸ÃÑ§ÉúÕËºÅ"), _T("´íÎó"), MB_OK);
+				}
+			}
+			//²é¿´Ñ§ÉúĞÅÏ¢
+			else if (IsMouseInRect(btnX, 270, btnWidth, btnHeight)) {
+				ViewStudentInfoGraph();
+				return;
+			}
+			//ĞŞ¸ÄÑ§ÉúĞÅÏ¢
+			else if (IsMouseInRect(btnX, 340, btnWidth, btnHeight)) {
+
+				bool studentFound = false;
+				InputBox(currentStudent.account, MAX_STRING_LENGTH, _T("ÇëÊäÈëÒªĞŞ¸ÄµÄÑ§ÉúµÄÓÃ»§Ãû:"), _T("ĞŞ¸ÄÑ§ÉúĞÅÏ¢£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(currentStudent.account) == 0) {
+					MessageBox(hnd_AdminManageGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
 					continue;
 				}
-            }
-			//æ³¨é”€æˆ‘çš„è´¦å·
+				//²»ÄÜ°üº¬¶ººÅ
+				if (wcschr(currentStudent.account, L',')) {
+					MessageBox(hnd_AdminManageGraph, _T("ÓÃ»§Ãû²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+
+				for (int i = 0;i < StudentMaxNum && students[i].id != -1;i++) {
+					if (wcscmp(currentStudent.account, students[i].account) == 0) {
+						studentFound = true;
+						currentStudent = students[i];
+						ModifyStudentInfoGraph();
+						return;
+					}
+				}
+				if (!studentFound) {
+					MessageBox(hnd_AdminManageGraph, _T("Î´ÕÒµ½¸ÃÑ§ÉúÕËºÅ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+			}
+			//×¢ÏúÎÒµÄÕËºÅ
 			else if (IsMouseInRect(btnX, 410, btnWidth, btnHeight)) {
 				int adminNum = CountAdminNum();
 
@@ -284,144 +286,146 @@ void AdminManageGraph() {
 						}
 						admins[--adminNum].id = -1;
 
-						// é‡æ–°åˆ†é…ç®¡ç†å‘˜ID
+						// ÖØĞÂ·ÖÅä¹ÜÀíÔ±ID
 						for (int i = 0; i < adminNum; i++) {
 							admins[i].id = i;
 						}
 
 						SaveAdminToFile();
-						MessageBox(NULL, _T("æ³¨é”€æˆåŠŸ"), _T("æç¤º"), MB_OK);
+						MessageBox(hnd_AdminManageGraph, _T("×¢Ïú³É¹¦"), _T("ÌáÊ¾"), MB_OK);
 						WelcomeGraph();
 						return;
 					}
 				}
 			}
-			//è¿”å›
-            else if (IsMouseInRect(btnX, 480, btnWidth, btnHeight)) {
-                WelcomeGraph();
-                return;
-            }
-        }
-    }
+			//·µ»Ø
+			else if (IsMouseInRect(btnX, 480, btnWidth, btnHeight)) {
+				WelcomeGraph();
+				return;
+			}
+		}
+	}
 }
 
-//å­¦ç”Ÿç•Œé¢
+//Ñ§Éú½çÃæ
 void StudentManageGraph() {
-    flag = 2;
+	flag = 2;
 	cleardevice();
 	LoadBgk();
-    SetHeightText(30);
-    RECT r = { 0, 0, 800, 150 };
-    drawtext(L"æ¬¢è¿è¿›å…¥å­¦ç”Ÿç®¡ç†ç³»ç»Ÿ(å­¦ç”Ÿæƒé™)", &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	SetHeightText(30);
+	RECT r = { 0, 0, 800, 150 };
+	drawtext(L"»¶Ó­½øÈëÑ§Éú¹ÜÀíÏµÍ³(Ñ§ÉúÈ¨ÏŞ)", &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	HWND hnd_StudentManageGraph = GetHWnd();
+	SetWindowText(hnd_StudentManageGraph, _T("Ñ§ÉúÈ¨ÏŞ"));
 
-    const int btnWidth = 200, btnHeight = 50;
-    const int btnX = 300;
-    DrawButton(btnX, 200, btnWidth, btnHeight, _T("æŸ¥çœ‹æˆ‘çš„ä¿¡æ¯"),30);
-    DrawButton(btnX, 270, btnWidth, btnHeight, _T("ä¿®æ”¹æˆ‘çš„ä¿¡æ¯"),30);
-    DrawButton(btnX, 340, btnWidth, btnHeight, _T("æ³¨é”€æˆ‘çš„è´¦å·"),30);
-	DrawButton(btnX, 410, btnWidth, btnHeight, _T("è¿”å›"),30);
+	const int btnWidth = 200, btnHeight = 50;
+	const int btnX = 300;
+	DrawButton(btnX, 200, btnWidth, btnHeight, _T("²é¿´ÎÒµÄĞÅÏ¢"), 30);
+	DrawButton(btnX, 270, btnWidth, btnHeight, _T("ĞŞ¸ÄÎÒµÄĞÅÏ¢"), 30);
+	DrawButton(btnX, 340, btnWidth, btnHeight, _T("×¢ÏúÎÒµÄÕËºÅ"), 30);
+	DrawButton(btnX, 410, btnWidth, btnHeight, _T("·µ»Ø"), 30);
 
-    while (true) {
-        MOUSEMSG msg = GetMouseMsg();
-        if (msg.uMsg == WM_LBUTTONDOWN) {
-			//æŸ¥çœ‹æˆ‘çš„ä¿¡æ¯
-            if (IsMouseInRect(btnX, 200, btnWidth, btnHeight)) {
-                cleardevice();
-                LoadBgk();
+	while (true) {
+		MOUSEMSG msg = GetMouseMsg();
+		if (msg.uMsg == WM_LBUTTONDOWN) {
+			//²é¿´ÎÒµÄĞÅÏ¢
+			if (IsMouseInRect(btnX, 200, btnWidth, btnHeight)) {
+				cleardevice();
+				LoadBgk();
 
-                SetHeightText(25);
-                settextcolor(BLACK);
+				SetHeightText(25);
+				settextcolor(BLACK);
 
-                // è¡¨å¤´å®šä¹‰
-                const TCHAR* headers[] = { _T("ID"), _T("è´¦å·"), _T("å¯†ç "), _T("å§“å"), _T("æ€§åˆ«"), _T("å¹´é¾„"), _T("å¹´çº§"), _T("ç­çº§") };
-                const int numCols = sizeof(headers) / sizeof(headers[0]);
+				// ±íÍ·¶¨Òå
+				const TCHAR* headers[] = { _T("ID"), _T("ÕËºÅ"), _T("ÃÜÂë"), _T("ĞÕÃû"), _T("ĞÔ±ğ"), _T("ÄêÁä"), _T("Äê¼¶"), _T("°à¼¶") };
+				const int numCols = sizeof(headers) / sizeof(headers[0]);
 
-                // è®¡ç®—è¡¨æ ¼ä½ç½®ï¼ˆå±…ä¸­æ˜¾ç¤ºï¼‰
-                const int tableX = 0;
-                const int tableY = 200;
-                const int cellWidth = 100;
-                const int cellHeight = 40;
-                const int tableWidth = cellWidth * numCols;
-                const int tableHeight = cellHeight * 2; // 2è¡Œ
+				// ¼ÆËã±í¸ñÎ»ÖÃ£¨¾ÓÖĞÏÔÊ¾£©
+				const int tableX = 0;
+				const int tableY = 200;
+				const int cellWidth = 100;
+				const int cellHeight = 40;
+				const int tableWidth = cellWidth * numCols;
+				const int tableHeight = cellHeight * 2; // 2ĞĞ
 
-                // ç»˜åˆ¶è¡¨å¤´ï¼ˆå¸¦èƒŒæ™¯è‰²ï¼‰
-                setfillcolor(RGB(200, 230, 255));
-                for (int col = 0; col < numCols; col++) {
-                    RECT rHeader = {
-                        tableX + col * cellWidth,
-                        tableY,
-                        tableX + (col + 1) * cellWidth,
-                        tableY + cellHeight
-                    };
-                    fillrectangle(rHeader.left, rHeader.top, rHeader.right, rHeader.bottom);
-                    drawtext(headers[col], &rHeader, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-                }
+				// »æÖÆ±íÍ·£¨´ø±³¾°É«£©
+				setfillcolor(RGB(200, 230, 255));
+				for (int col = 0; col < numCols; col++) {
+					RECT rHeader = {
+						tableX + col * cellWidth,
+						tableY,
+						tableX + (col + 1) * cellWidth,
+						tableY + cellHeight
+					};
+					fillrectangle(rHeader.left, rHeader.top, rHeader.right, rHeader.bottom);
+					drawtext(headers[col], &rHeader, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+				}
 
-                // ç»˜åˆ¶è¡¨æ ¼çº¿
-                setlinecolor(BLACK);
-                for (int row = 0; row <= 2; row++) {
-                    line(
-                        tableX,
-                        tableY + row * cellHeight,
-                        tableX + tableWidth,
-                        tableY + row * cellHeight
-                    );
-                }
-                for (int col = 0; col <= numCols; col++) {
-                    line(
-                        tableX + col * cellWidth,
-                        tableY,
-                        tableX + col * cellWidth,
-                        tableY + tableHeight
-                    );
-                }
+				// »æÖÆ±í¸ñÏß
+				setlinecolor(BLACK);
+				for (int row = 0; row <= 2; row++) {
+					line(
+						tableX,
+						tableY + row * cellHeight,
+						tableX + tableWidth,
+						tableY + row * cellHeight
+					);
+				}
+				for (int col = 0; col <= numCols; col++) {
+					line(
+						tableX + col * cellWidth,
+						tableY,
+						tableX + col * cellWidth,
+						tableY + tableHeight
+					);
+				}
 
-                // å¡«å……æ•°æ®ï¼ˆå±…ä¸­æ˜¾ç¤ºï¼‰
-                wchar_t idStr[20];
-                swprintf_s(idStr, L"%d", currentStudent.id);
+				// Ìî³äÊı¾İ£¨¾ÓÖĞÏÔÊ¾£©
+				wchar_t idStr[20];
+				swprintf_s(idStr, L"%d", currentStudent.id);
 
-                const wchar_t* fields[] = {
-                    idStr,
-                    currentStudent.account,
-                    currentStudent.password,
-                    currentStudent.name,
-                    currentStudent.gender,
-                    currentStudent.age,
-                    currentStudent.grade,
-                    currentStudent.classNum
-                };
+				const wchar_t* fields[] = {
+					idStr,
+					currentStudent.account,
+					currentStudent.password,
+					currentStudent.name,
+					currentStudent.gender,
+					currentStudent.age,
+					currentStudent.grade,
+					currentStudent.classNum
+				};
 
-                // ç»˜åˆ¶æ¯åˆ—æ•°æ®ï¼ˆå±…ä¸­ï¼‰
-                for (int col = 0; col < numCols; col++) {
-                    RECT rCell = {
-                        tableX + col * cellWidth,
-                        tableY + cellHeight,
-                        tableX + (col + 1) * cellWidth,
-                        tableY + 2 * cellHeight
-                    };
-                    drawtext(fields[col], &rCell, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-                }
+				// »æÖÆÃ¿ÁĞÊı¾İ£¨¾ÓÖĞ£©
+				for (int col = 0; col < numCols; col++) {
+					RECT rCell = {
+						tableX + col * cellWidth,
+						tableY + cellHeight,
+						tableX + (col + 1) * cellWidth,
+						tableY + 2 * cellHeight
+					};
+					drawtext(fields[col], &rCell, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+				}
 
-                // è¿”å›æŒ‰é’®ï¼ˆå³ä¸Šè§’ï¼‰
-                DrawButton(tableX + tableWidth - btnWidth, 500, btnWidth, btnHeight, _T("è¿”å›"), 30);
+				// ·µ»Ø°´Å¥£¨ÓÒÉÏ½Ç£©
+				DrawButton(tableX + tableWidth - btnWidth, 500, btnWidth, btnHeight, _T("·µ»Ø"), 30);
 
-                // äº‹ä»¶å¤„ç†
-                while (true) {
-                    MOUSEMSG msg = GetMouseMsg();
-                    if (msg.uMsg == WM_LBUTTONDOWN) {
-                        if (IsMouseInRect(tableX + tableWidth - btnWidth, 500, btnWidth, btnHeight)) {
-                            StudentManageGraph();
-                            return;
-                        }
-                    }
-                }
-            }
-			//ä¿®æ”¹æˆ‘çš„ä¿¡æ¯
-            else if (IsMouseInRect(btnX, 270, btnWidth, btnHeight)) {
+				// ÊÂ¼ş´¦Àí
+				while (true) {
+					MOUSEMSG msg = GetMouseMsg();
+					if (msg.uMsg == WM_LBUTTONDOWN) {
+						if (IsMouseInRect(tableX + tableWidth - btnWidth, 500, btnWidth, btnHeight)) {
+							StudentManageGraph();
+							return;
+						}
+					}
+				}
+			}
+			//ĞŞ¸ÄÎÒµÄĞÅÏ¢
+			else if (IsMouseInRect(btnX, 270, btnWidth, btnHeight)) {
 				ModifyStudentInfoGraph();
 				return;
-            }
-			//æ³¨é”€æˆ‘çš„è´¦å·
+			}
+			//×¢ÏúÎÒµÄÕËºÅ
 			else if (IsMouseInRect(btnX, 340, btnWidth, btnHeight)) {
 				int studentNum = CountStudentNum();
 
@@ -432,468 +436,472 @@ void StudentManageGraph() {
 						}
 						students[--studentNum].id = -1;
 
-						// é‡æ–°åˆ†é…å­¦ç”ŸID
+						// ÖØĞÂ·ÖÅäÑ§ÉúID
 						for (int i = 0; i < studentNum; i++) {
 							students[i].id = i;
 						}
 
 						SaveStudentToFile();
-						MessageBox(NULL, _T("æ³¨é”€æˆåŠŸ"), _T("æç¤º"), MB_OK);
+						MessageBox(hnd_StudentManageGraph, _T("×¢Ïú³É¹¦"), _T("ÌáÊ¾"), MB_OK);
 						WelcomeGraph();
 						return;
 					}
 				}
 			}
-            //è¿”å›
-            else if (IsMouseInRect(btnX, 410, btnWidth, btnHeight)) {
-                WelcomeGraph();
-                return;
-            }
-        }
-    }
+			//·µ»Ø
+			else if (IsMouseInRect(btnX, 410, btnWidth, btnHeight)) {
+				WelcomeGraph();
+				return;
+			}
+		}
+	}
 }
 
-//é€‰æ‹©æ³¨å†Œæ–¹å¼ç•Œé¢
+//Ñ¡Ôñ×¢²á·½Ê½½çÃæ
 void SigninChooseGraph() {
 	cleardevice();
 	LoadBgk();
-    SetHeightText(30);
-    RECT r = { 0, 0, 800, 150 };
-    drawtext(_T("è¯·é€‰æ‹©æ³¨å†Œæ–¹å¼"), &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	SetHeightText(30);
+	RECT r = { 0, 0, 800, 150 };
+	drawtext(_T("ÇëÑ¡Ôñ×¢²á·½Ê½"), &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	HWND hnd_SigninChooseGraph = GetHWnd();
+	SetWindowText(hnd_SigninChooseGraph, _T("×¢²á·½Ê½Ñ¡Ôñ"));
 
-	//ç»˜åˆ¶æŒ‰é’®
-    DrawButton(300, 200, 200, 50, _T("ç®¡ç†å‘˜"),30);
-    DrawButton(300, 300, 200, 50, _T("å­¦ç”Ÿ"),30);
-	DrawButton(300, 400, 200, 50, _T("è¿”å›"),30);
+	//»æÖÆ°´Å¥
+	DrawButton(300, 200, 200, 50, _T("¹ÜÀíÔ±"), 30);
+	DrawButton(300, 300, 200, 50, _T("Ñ§Éú"), 30);
+	DrawButton(300, 400, 200, 50, _T("·µ»Ø"), 30);
 
-	//ç‚¹å‡»äº‹ä»¶å¤„ç†
-    while (true) {
-        MOUSEMSG msg = GetMouseMsg();
-        if (msg.uMsg == WM_LBUTTONDOWN) {
-			//ç®¡ç†å‘˜
-            if (IsMouseInRect(300, 200, 200, 50)) {
-                int adminNum = CountAdminNum();
+	//µã»÷ÊÂ¼ş´¦Àí
+	while (true) {
+		MOUSEMSG msg = GetMouseMsg();
+		if (msg.uMsg == WM_LBUTTONDOWN) {
+			//¹ÜÀíÔ±
+			if (IsMouseInRect(300, 200, 200, 50)) {
+				int adminNum = CountAdminNum();
 
-				//æ£€æŸ¥ç®¡ç†å‘˜æ•°é‡
-                if (adminNum >= AdminMaxNum) {
-                    MessageBox(NULL, _T("ç®¡ç†å‘˜æ•°é‡å·²è¾¾ä¸Šé™"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
+				//¼ì²é¹ÜÀíÔ±ÊıÁ¿
+				if (adminNum >= AdminMaxNum) {
+					MessageBox(hnd_SigninChooseGraph, _T("¹ÜÀíÔ±ÊıÁ¿ÒÑ´ïÉÏÏŞ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
 
-                Admin newAdmin;
+				Admin newAdmin;
 
 
-				//ç”¨æˆ·å
-                InputBox(newAdmin.account, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥ç”¨æˆ·å:"), _T("æ³¨å†Œï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-				//ä¸èƒ½ä¸ºç©º
+				//ÓÃ»§Ãû
+				InputBox(newAdmin.account, MAX_STRING_LENGTH, _T("ÇëÊäÈëÓÃ»§Ãû:"), _T("×¢²á£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
 				if (wcslen(newAdmin.account) == 0) {
-					MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
+					MessageBox(hnd_SigninChooseGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
 					continue;
 				}
-				//ä¸èƒ½åŒ…å«é€—å·
+				//²»ÄÜ°üº¬¶ººÅ
 				if (wcschr(newAdmin.account, L',')) {
-					MessageBox(NULL, _T("ç”¨æˆ·åä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
+					MessageBox(hnd_SigninChooseGraph, _T("ÓÃ»§Ãû²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
 					continue;
 				}
-				//ä¸èƒ½é‡å¤
-                for (int i = 0; i < AdminMaxNum; i++) {
-                    if (wcscmp(newAdmin.account, admins[i].account) == 0) {
-                        MessageBox(NULL, _T("ç”¨æˆ·åå·²å­˜åœ¨ï¼Œè¯·é‡æ–°è¾“å…¥"), _T("é”™è¯¯"), MB_OK);
-                        continue;
-                    }
-                }
+				//²»ÄÜÖØ¸´
+				for (int i = 0; i < AdminMaxNum; i++) {
+					if (wcscmp(newAdmin.account, admins[i].account) == 0) {
+						MessageBox(hnd_SigninChooseGraph, _T("ÓÃ»§ÃûÒÑ´æÔÚ£¬ÇëÖØĞÂÊäÈë"), _T("´íÎó"), MB_OK);
+						continue;
+					}
+				}
 
 
-				//å¯†ç 
-                InputBox(newAdmin.password, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥å¯†ç :"), _T("æ³¨å†Œï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-				//ä¸èƒ½ä¸ºç©º
+				//ÃÜÂë
+				InputBox(newAdmin.password, MAX_STRING_LENGTH, _T("ÇëÊäÈëÃÜÂë:"), _T("×¢²á£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
 				if (wcslen(newAdmin.password) == 0) {
-					MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
+					MessageBox(hnd_SigninChooseGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
 					continue;
 				}
-				//ä¸èƒ½åŒ…å«é€—å·
+				//²»ÄÜ°üº¬¶ººÅ
 				if (wcschr(newAdmin.password, L',')) {
-					MessageBox(NULL, _T("å¯†ç ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
+					MessageBox(hnd_SigninChooseGraph, _T("ÃÜÂë²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
 					continue;
 				}
-				//ä¸èƒ½é‡å¤
+				//²»ÄÜÖØ¸´
 				for (int i = 0; i < AdminMaxNum; i++) {
 					if (wcscmp(newAdmin.password, admins[i].password) == 0) {
-						MessageBox(NULL, _T("å¯†ç å·²å­˜åœ¨ï¼Œè¯·é‡æ–°è¾“å…¥"), _T("é”™è¯¯"), MB_OK);
+						MessageBox(hnd_SigninChooseGraph, _T("ÃÜÂëÒÑ´æÔÚ£¬ÇëÖØĞÂÊäÈë"), _T("´íÎó"), MB_OK);
 						continue;
 					}
 				}
 
-                newAdmin.id = adminNum;
+				newAdmin.id = adminNum;
 
-                admins[adminNum] = newAdmin;
+				admins[adminNum] = newAdmin;
 
-                SaveAdminToFile();
-                MessageBox(NULL, _T("æ³¨å†ŒæˆåŠŸ"), _T("æç¤º"), MB_OK);
-            }
-			//å­¦ç”Ÿ
-            else if (IsMouseInRect(300, 300, 200, 50)) {
-                int studentNum = CountStudentNum();
+				SaveAdminToFile();
+				MessageBox(hnd_SigninChooseGraph, _T("×¢²á³É¹¦"), _T("ÌáÊ¾"), MB_OK);
+			}
+			//Ñ§Éú
+			else if (IsMouseInRect(300, 300, 200, 50)) {
+				int studentNum = CountStudentNum();
 
-                //æ£€æŸ¥å­¦ç”Ÿæ•°é‡
-                if (studentNum >= StudentMaxNum) {
-                    MessageBox(NULL, _T("å­¦ç”Ÿæ•°é‡å·²è¾¾ä¸Šé™"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-
-                Student newStudent;
-
-
-				//ç”¨æˆ·å
-                InputBox(newStudent.account, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥ç”¨æˆ·å:"), _T("æ³¨å†Œï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-                //ä¸èƒ½ä¸ºç©º
-                if (wcslen(newStudent.account) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-				//ä¸èƒ½åŒ…å«é€—å·
-				if (wcschr(newStudent.account, L',')) {
-					MessageBox(NULL, _T("ç”¨æˆ·åä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
+				//¼ì²éÑ§ÉúÊıÁ¿
+				if (studentNum >= StudentMaxNum) {
+					MessageBox(hnd_SigninChooseGraph, _T("Ñ§ÉúÊıÁ¿ÒÑ´ïÉÏÏŞ"), _T("´íÎó"), MB_OK);
 					continue;
 				}
-				//ä¸èƒ½é‡å¤
+
+				Student newStudent;
+
+
+				//ÓÃ»§Ãû
+				InputBox(newStudent.account, MAX_STRING_LENGTH, _T("ÇëÊäÈëÓÃ»§Ãû:"), _T("×¢²á£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(newStudent.account) == 0) {
+					MessageBox(hnd_SigninChooseGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜ°üº¬¶ººÅ
+				if (wcschr(newStudent.account, L',')) {
+					MessageBox(hnd_SigninChooseGraph, _T("ÓÃ»§Ãû²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜÖØ¸´
 				for (int i = 0; i < StudentMaxNum; i++) {
 					if (wcscmp(newStudent.account, students[i].account) == 0) {
-						MessageBox(NULL, _T("ç”¨æˆ·åå·²å­˜åœ¨ï¼Œè¯·é‡æ–°è¾“å…¥"), _T("é”™è¯¯"), MB_OK);
+						MessageBox(hnd_SigninChooseGraph, _T("ÓÃ»§ÃûÒÑ´æÔÚ£¬ÇëÖØĞÂÊäÈë"), _T("´íÎó"), MB_OK);
 						continue;
 					}
 				}
 
 
-				//å¯†ç 
-                InputBox(newStudent.password, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥å¯†ç :"), _T("æ³¨å†Œï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-                //ä¸èƒ½ä¸ºç©º
-                if (wcslen(newStudent.password) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-				//ä¸èƒ½åŒ…å«é€—å·
-                if (wcschr(newStudent.password, L',')) {
-                    MessageBox(NULL, _T("å¯†ç ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-				//ä¸èƒ½é‡å¤
+				//ÃÜÂë
+				InputBox(newStudent.password, MAX_STRING_LENGTH, _T("ÇëÊäÈëÃÜÂë:"), _T("×¢²á£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(newStudent.password) == 0) {
+					MessageBox(hnd_SigninChooseGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜ°üº¬¶ººÅ
+				if (wcschr(newStudent.password, L',')) {
+					MessageBox(hnd_SigninChooseGraph, _T("ÃÜÂë²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜÖØ¸´
 				for (int i = 0; i < StudentMaxNum; i++) {
 					if (wcscmp(newStudent.password, students[i].password) == 0) {
-						MessageBox(NULL, _T("å¯†ç å·²å­˜åœ¨ï¼Œè¯·é‡æ–°è¾“å…¥"), _T("é”™è¯¯"), MB_OK);
+						MessageBox(hnd_SigninChooseGraph, _T("ÃÜÂëÒÑ´æÔÚ£¬ÇëÖØĞÂÊäÈë"), _T("´íÎó"), MB_OK);
 						continue;
 					}
 				}
 
 
-				//å§“å
-                InputBox(newStudent.name, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥å§“å:"), _T("æ³¨å†Œï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-                //ä¸èƒ½ä¸ºç©º
-                if (wcslen(newStudent.name) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-				//ä¸èƒ½åŒ…å«é€—å·
+				//ĞÕÃû
+				InputBox(newStudent.name, MAX_STRING_LENGTH, _T("ÇëÊäÈëĞÕÃû:"), _T("×¢²á£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(newStudent.name) == 0) {
+					MessageBox(hnd_SigninChooseGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜ°üº¬¶ººÅ
 				if (wcschr(newStudent.name, L',')) {
-					MessageBox(NULL, _T("å§“åä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
+					MessageBox(hnd_SigninChooseGraph, _T("ĞÕÃû²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
 					continue;
 				}
 
 
-				//æ€§åˆ«
-                InputBox(newStudent.gender, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥æ€§åˆ«:"), _T("æ³¨å†Œï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-                //ä¸èƒ½ä¸ºç©º
-                if (wcslen(newStudent.gender) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-                //ä¸èƒ½åŒ…å«é€—å·
-                if (wcschr(newStudent.gender, L',')) {
-                    MessageBox(NULL, _T("æ€§åˆ«ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
+				//ĞÔ±ğ
+				InputBox(newStudent.gender, MAX_STRING_LENGTH, _T("ÇëÊäÈëĞÔ±ğ:"), _T("×¢²á£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(newStudent.gender) == 0) {
+					MessageBox(hnd_SigninChooseGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜ°üº¬¶ººÅ
+				if (wcschr(newStudent.gender, L',')) {
+					MessageBox(hnd_SigninChooseGraph, _T("ĞÔ±ğ²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
 
 
-				////å¹´é¾„
-                InputBox(newStudent.age, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥å¹´é¾„:"), _T("æ³¨å†Œï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-                //ä¸èƒ½ä¸ºç©º
-                if (wcslen(newStudent.age) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-				//ä¸èƒ½åŒ…å«é€—å·
+				////ÄêÁä
+				InputBox(newStudent.age, MAX_STRING_LENGTH, _T("ÇëÊäÈëÄêÁä:"), _T("×¢²á£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(newStudent.age) == 0) {
+					MessageBox(hnd_SigninChooseGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜ°üº¬¶ººÅ
 				if (wcschr(newStudent.age, L',')) {
-					MessageBox(NULL, _T("å¹´é¾„ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
+					MessageBox(hnd_SigninChooseGraph, _T("ÄêÁä²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
 					continue;
 				}
 
 
-				//å¹´çº§
-                InputBox(newStudent.grade, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥å¹´çº§:"), _T("æ³¨å†Œï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-                //ä¸èƒ½ä¸ºç©º
-                if (wcslen(newStudent.grade) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-				//ä¸èƒ½åŒ…å«é€—å·
+				//Äê¼¶
+				InputBox(newStudent.grade, MAX_STRING_LENGTH, _T("ÇëÊäÈëÄê¼¶:"), _T("×¢²á£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(newStudent.grade) == 0) {
+					MessageBox(hnd_SigninChooseGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜ°üº¬¶ººÅ
 				if (wcschr(newStudent.grade, L',')) {
-					MessageBox(NULL, _T("å¹´çº§ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
+					MessageBox(hnd_SigninChooseGraph, _T("Äê¼¶²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
 					continue;
 				}
 
 
-				//ç­çº§
-                InputBox(newStudent.classNum, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥ç­çº§:"), _T("æ³¨å†Œï¼ˆæœ€å¤š6ä¸ªå­—ç¬¦ï¼‰"), NULL);
-                //ä¸èƒ½ä¸ºç©º
-                if (wcslen(newStudent.classNum) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
-				//ä¸èƒ½åŒ…å«é€—å·
+				//°à¼¶
+				InputBox(newStudent.classNum, MAX_STRING_LENGTH, _T("ÇëÊäÈë°à¼¶:"), _T("×¢²á£¨×î¶à6¸ö×Ö·û£©"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(newStudent.classNum) == 0) {
+					MessageBox(hnd_SigninChooseGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
+				//²»ÄÜ°üº¬¶ººÅ
 				if (wcschr(newStudent.classNum, L',')) {
-					MessageBox(NULL, _T("ç­çº§ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
+					MessageBox(hnd_SigninChooseGraph, _T("°à¼¶²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
 					continue;
 				}
 
-                newStudent.id = studentNum;
+				newStudent.id = studentNum;
 
-                students[studentNum] = newStudent;
+				students[studentNum] = newStudent;
 
-                SaveStudentToFile();
-                MessageBox(NULL, _T("æ³¨å†ŒæˆåŠŸ"), _T("æç¤º"), MB_OK);
-            }
-			//è¿”å›
-            else if (IsMouseInRect(300, 400, 200, 50)) {
-                WelcomeGraph();
-                return;
-            }
-        }
-    }
+				SaveStudentToFile();
+				MessageBox(hnd_SigninChooseGraph, _T("×¢²á³É¹¦"), _T("ÌáÊ¾"), MB_OK);
+			}
+			//·µ»Ø
+			else if (IsMouseInRect(300, 400, 200, 50)) {
+				WelcomeGraph();
+				return;
+			}
+		}
+	}
 }
 
-//æŸ¥çœ‹å­¦ç”Ÿä¿¡æ¯ç•Œé¢
+//²é¿´Ñ§ÉúĞÅÏ¢½çÃæ
 void ViewStudentInfoGraph() {
-    static int page = 1;
-    cleardevice();
-    LoadBgk();
+	static int page = 1;
+	cleardevice();
+	LoadBgk();
 
-    SetHeightText(25);
-    settextcolor(BLACK);
+	SetHeightText(25);
+	settextcolor(BLACK);
 
-    // è¡¨å¤´å®šä¹‰
-    const TCHAR* headers[] = { _T("ID"), _T("è´¦å·"), _T("å¯†ç "), _T("å§“å"), _T("æ€§åˆ«"), _T("å¹´é¾„"), _T("å¹´çº§"), _T("ç­çº§") };
-    const int numCols = sizeof(headers) / sizeof(headers[0]);
+	// ±íÍ·¶¨Òå
+	const TCHAR* headers[] = { _T("ID"), _T("ÕËºÅ"), _T("ÃÜÂë"), _T("ĞÕÃû"), _T("ĞÔ±ğ"), _T("ÄêÁä"), _T("Äê¼¶"), _T("°à¼¶") };
+	const int numCols = sizeof(headers) / sizeof(headers[0]);
 
-    // è®¡ç®—è¡¨æ ¼ä½ç½®ï¼ˆå±…ä¸­æ˜¾ç¤ºï¼‰
-    const int tableX = 0;
-    const int tableY = 75;
-    const int cellWidth = 100;
-    const int cellHeight = 40;
-    const int tableWidth = cellWidth * numCols;
-    const int tableHeight = cellHeight * (TABLE_ROWS + 1);
+	// ¼ÆËã±í¸ñÎ»ÖÃ£¨¾ÓÖĞÏÔÊ¾£©
+	const int tableX = 0;
+	const int tableY = 75;
+	const int cellWidth = 100;
+	const int cellHeight = 40;
+	const int tableWidth = cellWidth * numCols;
+	const int tableHeight = cellHeight * (TABLE_ROWS + 1);
 
-    // ç»˜åˆ¶è¡¨å¤´ï¼ˆå¸¦èƒŒæ™¯è‰²ï¼‰
-    setfillcolor(RGB(200, 230, 255));
-    for (int col = 0; col < numCols; col++) {
-        RECT rHeader = {
-            tableX + col * cellWidth,
-            tableY,
-            tableX + (col + 1) * cellWidth,
-            tableY + cellHeight
-        };
-        fillrectangle(rHeader.left, rHeader.top, rHeader.right, rHeader.bottom);
-        drawtext(headers[col], &rHeader, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-    }
+	// »æÖÆ±íÍ·£¨´ø±³¾°É«£©
+	setfillcolor(RGB(200, 230, 255));
+	for (int col = 0; col < numCols; col++) {
+		RECT rHeader = {
+			tableX + col * cellWidth,
+			tableY,
+			tableX + (col + 1) * cellWidth,
+			tableY + cellHeight
+		};
+		fillrectangle(rHeader.left, rHeader.top, rHeader.right, rHeader.bottom);
+		drawtext(headers[col], &rHeader, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	}
 
-    // ç»˜åˆ¶è¡¨æ ¼çº¿
-    setlinecolor(BLACK);
-    for (int row = 0; row <= TABLE_ROWS + 1; row++) {
-        line(
-            tableX,
-            tableY + row * cellHeight,
-            tableX + tableWidth,
-            tableY + row * cellHeight
-        );
-    }
-    for (int col = 0; col <= numCols; col++) {
-        line(
-            tableX + col * cellWidth,
-            tableY,
-            tableX + col * cellWidth,
-            tableY + tableHeight
-        );
-    }
+	// »æÖÆ±í¸ñÏß
+	setlinecolor(BLACK);
+	for (int row = 0; row <= TABLE_ROWS + 1; row++) {
+		line(
+			tableX,
+			tableY + row * cellHeight,
+			tableX + tableWidth,
+			tableY + row * cellHeight
+		);
+	}
+	for (int col = 0; col <= numCols; col++) {
+		line(
+			tableX + col * cellWidth,
+			tableY,
+			tableX + col * cellWidth,
+			tableY + tableHeight
+		);
+	}
 
-    // å¡«å……æ•°æ®ï¼ˆå±…ä¸­æ˜¾ç¤ºï¼‰
-    int studentCount = CountStudentNum();
-    int totalPages = (studentCount + TABLE_ROWS - 1) / TABLE_ROWS;
-    if (totalPages == 0) totalPages = 1;
-    if (page > totalPages) page = totalPages;
+	// Ìî³äÊı¾İ£¨¾ÓÖĞÏÔÊ¾£©
+	int studentCount = CountStudentNum();
+	int totalPages = (studentCount + TABLE_ROWS - 1) / TABLE_ROWS;
+	if (totalPages == 0) totalPages = 1;
+	if (page > totalPages) page = totalPages;
 
-    int startIdx = (page - 1) * TABLE_ROWS;
-    int endIdx = min(startIdx + TABLE_ROWS, studentCount);
+	int startIdx = (page - 1) * TABLE_ROWS;
+	int endIdx = min(startIdx + TABLE_ROWS, studentCount);
 
-    for (int i = startIdx; i < endIdx; i++) {
-        int row = (i - startIdx) + 1;
-        wchar_t idStr[20];
-        swprintf_s(idStr, L"%d", students[i].id);
+	for (int i = startIdx; i < endIdx; i++) {
+		int row = (i - startIdx) + 1;
+		wchar_t idStr[20];
+		swprintf_s(idStr, L"%d", students[i].id);
 
-        const wchar_t* fields[] = {
-            idStr,
-            students[i].account,
-            students[i].password,
-            students[i].name,
-            students[i].gender,
-            students[i].age,
-            students[i].grade,
-            students[i].classNum
-        };
+		const wchar_t* fields[] = {
+			idStr,
+			students[i].account,
+			students[i].password,
+			students[i].name,
+			students[i].gender,
+			students[i].age,
+			students[i].grade,
+			students[i].classNum
+		};
 
-        // ç»˜åˆ¶æ¯åˆ—æ•°æ®ï¼ˆå±…ä¸­ï¼‰
-        for (int col = 0; col < numCols; col++) {
-            RECT rCell = {
-                tableX + col * cellWidth,
-                tableY + row * cellHeight,
-                tableX + (col + 1) * cellWidth,
-                tableY + (row + 1) * cellHeight
-            };
-            drawtext(fields[col], &rCell, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-        }
-    }
+		// »æÖÆÃ¿ÁĞÊı¾İ£¨¾ÓÖĞ£©
+		for (int col = 0; col < numCols; col++) {
+			RECT rCell = {
+				tableX + col * cellWidth,
+				tableY + row * cellHeight,
+				tableX + (col + 1) * cellWidth,
+				tableY + (row + 1) * cellHeight
+			};
+			drawtext(fields[col], &rCell, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		}
+	}
 
-    // é¡µç ä¿¡æ¯ï¼ˆåº•éƒ¨å±…ä¸­ï¼‰
-    wchar_t pageInfo[50];
-    swprintf_s(pageInfo, L"ç¬¬ %d é¡µ/å…± %d é¡µ", page, totalPages);
-    RECT rPage = { tableX, tableY + tableHeight + 20, tableX + tableWidth, tableY + tableHeight + 50 };
-    drawtext(pageInfo, &rPage, DT_CENTER | DT_VCENTER);
+	// Ò³ÂëĞÅÏ¢£¨µ×²¿¾ÓÖĞ£©
+	wchar_t pageInfo[50];
+	swprintf_s(pageInfo, L"µÚ %d Ò³/¹² %d Ò³", page, totalPages);
+	RECT rPage = { tableX, tableY + tableHeight + 20, tableX + tableWidth, tableY + tableHeight + 50 };
+	drawtext(pageInfo, &rPage, DT_CENTER | DT_VCENTER);
 
-    // ç¿»é¡µæŒ‰é’®ï¼ˆåŠ¨æ€æ˜¾ç¤ºï¼‰
-    const int btnWidth = 80;
-    const int btnHeight = 30;
-    const int btnY = tableY + tableHeight + 20;
+	// ·­Ò³°´Å¥£¨¶¯Ì¬ÏÔÊ¾£©
+	const int btnWidth = 80;
+	const int btnHeight = 30;
+	const int btnY = tableY + tableHeight + 20;
 
-    if (page > 1) {
-        DrawButton(tableX, btnY, btnWidth, btnHeight, _T("ä¸Šä¸€é¡µ"), 20);
-    }
-    if (page < totalPages) {
-        DrawButton(tableX + tableWidth - btnWidth, btnY, btnWidth, btnHeight, _T("ä¸‹ä¸€é¡µ"), 20);
-    }
+	if (page > 1) {
+		DrawButton(tableX, btnY, btnWidth, btnHeight, _T("ÉÏÒ»Ò³"), 20);
+	}
+	if (page < totalPages) {
+		DrawButton(tableX + tableWidth - btnWidth, btnY, btnWidth, btnHeight, _T("ÏÂÒ»Ò³"), 20);
+	}
 
-    // è¿”å›æŒ‰é’®ï¼ˆå³ä¸Šè§’ï¼‰
-    DrawButton(tableX + tableWidth - btnWidth, tableY - 50, btnWidth, btnHeight, _T("è¿”å›"), 20);
+	// ·µ»Ø°´Å¥£¨ÓÒÉÏ½Ç£©
+	DrawButton(tableX + tableWidth - btnWidth, tableY - 50, btnWidth, btnHeight, _T("·µ»Ø"), 20);
 
-    // äº‹ä»¶å¤„ç†
-    while (true) {
-        MOUSEMSG msg = GetMouseMsg();
-        if (msg.uMsg == WM_LBUTTONDOWN) {
-            if (IsMouseInRect(tableX + tableWidth - btnWidth, tableY - 50, btnWidth, btnHeight)) {
-                page = 1;
-                AdminManageGraph();
-                return;
-            }
-            else if (page > 1 && IsMouseInRect(tableX, btnY, btnWidth, btnHeight)) {
-                page--;
-                ViewStudentInfoGraph();
-                return;
-            }
-            else if (page < totalPages && IsMouseInRect(tableX + tableWidth - btnWidth, btnY, btnWidth, btnHeight)) {
-                page++;
-                ViewStudentInfoGraph();
-                return;
-            }
-        }
-    }
+	// ÊÂ¼ş´¦Àí
+	while (true) {
+		MOUSEMSG msg = GetMouseMsg();
+		if (msg.uMsg == WM_LBUTTONDOWN) {
+			if (IsMouseInRect(tableX + tableWidth - btnWidth, tableY - 50, btnWidth, btnHeight)) {
+				page = 1;
+				AdminManageGraph();
+				return;
+			}
+			else if (page > 1 && IsMouseInRect(tableX, btnY, btnWidth, btnHeight)) {
+				page--;
+				ViewStudentInfoGraph();
+				return;
+			}
+			else if (page < totalPages && IsMouseInRect(tableX + tableWidth - btnWidth, btnY, btnWidth, btnHeight)) {
+				page++;
+				ViewStudentInfoGraph();
+				return;
+			}
+		}
+	}
 }
 
-//ä¿®æ”¹å­¦ç”Ÿä¿¡æ¯ç•Œé¢
+//ĞŞ¸ÄÑ§ÉúĞÅÏ¢½çÃæ
 void ModifyStudentInfoGraph() {
-    cleardevice();
-    LoadBgk();
-    SetHeightText(30);
-    RECT r = { 0, 0, 800, 150 };
-    drawtext(_T("è¯·é€‰æ‹©ä½ è¦ä¿®æ”¹çš„ä¿¡æ¯ï¼š"), &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	cleardevice();
+	LoadBgk();
+	SetHeightText(30);
+	RECT r = { 0, 0, 800, 150 };
+	drawtext(_T("ÇëÑ¡ÔñÄãÒªĞŞ¸ÄµÄĞÅÏ¢£º"), &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	HWND hnd_ModifyStudentInfoGraph = GetHWnd();
+	SetWindowText(hnd_ModifyStudentInfoGraph, _T("Ñ§ÉúĞÅÏ¢ĞŞ¸Ä"));
 
-    //ç»˜åˆ¶æŒ‰é’®
-    const int btnWidth = 150, btnHeight = 40;
-    const int btnX = 300;
-    DrawButton(btnX, 130, btnWidth, btnHeight, _T("ç”¨æˆ·å"), 30);
-    DrawButton(btnX, 180, btnWidth, btnHeight, _T("å¯†ç "), 30);
-    DrawButton(btnX, 230, btnWidth, btnHeight, _T("å§“å"), 30);
-    DrawButton(btnX, 280, btnWidth, btnHeight, _T("å¹´é¾„"), 30);
-    DrawButton(btnX, 330, btnWidth, btnHeight, _T("æ€§åˆ«"), 30);
-    DrawButton(btnX, 380, btnWidth, btnHeight, _T("å¹´çº§"), 30);
-    DrawButton(btnX, 430, btnWidth, btnHeight, _T("ç­çº§"), 30);
-    DrawButton(btnX, 480, btnWidth, btnHeight, _T("è¿”å›"), 30);
+	//»æÖÆ°´Å¥
+	const int btnWidth = 150, btnHeight = 40;
+	const int btnX = 300;
+	DrawButton(btnX, 130, btnWidth, btnHeight, _T("ÓÃ»§Ãû"), 30);
+	DrawButton(btnX, 180, btnWidth, btnHeight, _T("ÃÜÂë"), 30);
+	DrawButton(btnX, 230, btnWidth, btnHeight, _T("ĞÕÃû"), 30);
+	DrawButton(btnX, 280, btnWidth, btnHeight, _T("ÄêÁä"), 30);
+	DrawButton(btnX, 330, btnWidth, btnHeight, _T("ĞÔ±ğ"), 30);
+	DrawButton(btnX, 380, btnWidth, btnHeight, _T("Äê¼¶"), 30);
+	DrawButton(btnX, 430, btnWidth, btnHeight, _T("°à¼¶"), 30);
+	DrawButton(btnX, 480, btnWidth, btnHeight, _T("·µ»Ø"), 30);
 
-    //ç‚¹å‡»äº‹ä»¶å¤„ç†
-    while (true) {
-        MOUSEMSG msg = GetMouseMsg();
-        if (msg.uMsg == WM_LBUTTONDOWN) {
-            //ä¿®æ”¹ç”¨æˆ·å
-            if (IsMouseInRect(btnX, 130, btnWidth, btnHeight)) {
-                for (int i = 0; i < StudentMaxNum; i++) {
-                    if (wcscmp(students[i].account, currentStudent.account) == 0 && wcscmp(students[i].password, currentStudent.password) == 0) {
-                        wchar_t newAccount[MAX_STRING_LENGTH];
-                        InputBox(newAccount, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥æ–°çš„ç”¨æˆ·å:"), _T("ä¿®æ”¹ç”¨æˆ·å"), NULL);
-                        //ä¸èƒ½ä¸ºç©º
-                        if (wcslen(newAccount) == 0) {
-                            MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-                        //ä¸èƒ½åŒ…å«é€—å·
-                        if (wcschr(newAccount, L',')) {
-                            MessageBox(NULL, _T("ç”¨æˆ·åä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-                        //ä¸èƒ½ä¸åŸç”¨æˆ·åç›¸åŒ
-                        if (wcscmp(newAccount, currentStudent.account) == 0) {
-                            MessageBox(NULL, _T("ç”¨æˆ·åä¸èƒ½ä¸åŸç”¨æˆ·åç›¸åŒ"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-                        //å·²ç»è¢«æ³¨å†Œ
-                        bool isDuplicate = false;
-                        for (int j = 0; j < StudentMaxNum; j++) {
-                            if (wcscmp(newAccount, students[j].account) == 0) {
-                                isDuplicate = true;
-                                break;
-                            }
-                        }
-                        if (isDuplicate) {
-                            MessageBox(NULL, _T("è¯¥ç”¨æˆ·åå·²è¢«ä½¿ç”¨ï¼Œè¯·é‡æ–°è¾“å…¥"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
+	//µã»÷ÊÂ¼ş´¦Àí
+	while (true) {
+		MOUSEMSG msg = GetMouseMsg();
+		if (msg.uMsg == WM_LBUTTONDOWN) {
+			//ĞŞ¸ÄÓÃ»§Ãû
+			if (IsMouseInRect(btnX, 130, btnWidth, btnHeight)) {
+				for (int i = 0; i < StudentMaxNum; i++) {
+					if (wcscmp(students[i].account, currentStudent.account) == 0 && wcscmp(students[i].password, currentStudent.password) == 0) {
+						wchar_t newAccount[MAX_STRING_LENGTH];
+						InputBox(newAccount, MAX_STRING_LENGTH, _T("ÇëÊäÈëĞÂµÄÓÃ»§Ãû:"), _T("ĞŞ¸ÄÓÃ»§Ãû"), NULL);
+						//²»ÄÜÎª¿Õ
+						if (wcslen(newAccount) == 0) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//²»ÄÜ°üº¬¶ººÅ
+						if (wcschr(newAccount, L',')) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("ÓÃ»§Ãû²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//²»ÄÜÓëÔ­ÓÃ»§ÃûÏàÍ¬
+						if (wcscmp(newAccount, currentStudent.account) == 0) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("ÓÃ»§Ãû²»ÄÜÓëÔ­ÓÃ»§ÃûÏàÍ¬"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//ÒÑ¾­±»×¢²á
+						bool isDuplicate = false;
+						for (int j = 0; j < StudentMaxNum; j++) {
+							if (wcscmp(newAccount, students[j].account) == 0) {
+								isDuplicate = true;
+								break;
+							}
+						}
+						if (isDuplicate) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("¸ÃÓÃ»§ÃûÒÑ±»Ê¹ÓÃ£¬ÇëÖØĞÂÊäÈë"), _T("´íÎó"), MB_OK);
+							continue;
+						}
 
-                        wcscpy_s(students[i].account, newAccount);
-                        MessageBox(NULL, _T("ä¿®æ”¹æˆåŠŸ"), _T("æç¤º"), MB_OK);
-                        SaveStudentToFile();
-                        //æ›´æ–°å½“å‰å­¦ç”Ÿä¿¡æ¯
-                        currentStudent = students[i];
-                        break;
-                    }
-                }
-            }
-            //ä¿®æ”¹å¯†ç 
-            else if (IsMouseInRect(btnX, 180, btnWidth, btnHeight)) {
-                for (int i = 0; i < StudentMaxNum; i++) {
-                    if (wcscmp(students[i].account, currentStudent.account) == 0 && wcscmp(students[i].password, currentStudent.password) == 0) {
-                        wchar_t newPassword[MAX_STRING_LENGTH];
-                        InputBox(newPassword, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥æ–°çš„å¯†ç :"), _T("ä¿®æ”¹å¯†ç "), NULL);
-                        //ä¸èƒ½ä¸ºç©º
-                        if (wcslen(newPassword) == 0) {
-                            MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-                        //ä¸èƒ½åŒ…å«é€—å·
-                        if (wcschr(newPassword, L',')) {
-                            MessageBox(NULL, _T("å¯†ç ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-                        //ä¸èƒ½ä¸åŸå¯†ç ç›¸åŒ
-                        if (wcscmp(newPassword, currentStudent.password) == 0) {
-                            MessageBox(NULL, _T("å¯†ç ä¸èƒ½ä¸åŸå¯†ç ç›¸åŒ"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-						//å·²ç»è¢«æ³¨å†Œ
+						wcscpy_s(students[i].account, newAccount);
+						MessageBox(hnd_ModifyStudentInfoGraph, _T("ĞŞ¸Ä³É¹¦"), _T("ÌáÊ¾"), MB_OK);
+						SaveStudentToFile();
+						//¸üĞÂµ±Ç°Ñ§ÉúĞÅÏ¢
+						currentStudent = students[i];
+						break;
+					}
+				}
+			}
+			//ĞŞ¸ÄÃÜÂë
+			else if (IsMouseInRect(btnX, 180, btnWidth, btnHeight)) {
+				for (int i = 0; i < StudentMaxNum; i++) {
+					if (wcscmp(students[i].account, currentStudent.account) == 0 && wcscmp(students[i].password, currentStudent.password) == 0) {
+						wchar_t newPassword[MAX_STRING_LENGTH];
+						InputBox(newPassword, MAX_STRING_LENGTH, _T("ÇëÊäÈëĞÂµÄÃÜÂë:"), _T("ĞŞ¸ÄÃÜÂë"), NULL);
+						//²»ÄÜÎª¿Õ
+						if (wcslen(newPassword) == 0) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//²»ÄÜ°üº¬¶ººÅ
+						if (wcschr(newPassword, L',')) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("ÃÜÂë²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//²»ÄÜÓëÔ­ÃÜÂëÏàÍ¬
+						if (wcscmp(newPassword, currentStudent.password) == 0) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("ÃÜÂë²»ÄÜÓëÔ­ÃÜÂëÏàÍ¬"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//ÒÑ¾­±»×¢²á
 						bool isDuplicate = false;
 						for (int j = 0; j < StudentMaxNum; j++) {
 							if (wcscmp(newPassword, students[j].password) == 0) {
@@ -902,263 +910,265 @@ void ModifyStudentInfoGraph() {
 							}
 						}
 						if (isDuplicate) {
-							MessageBox(NULL, _T("è¯¥å¯†ç å·²è¢«ä½¿ç”¨ï¼Œè¯·é‡æ–°è¾“å…¥"), _T("é”™è¯¯"), MB_OK);
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("¸ÃÃÜÂëÒÑ±»Ê¹ÓÃ£¬ÇëÖØĞÂÊäÈë"), _T("´íÎó"), MB_OK);
 							continue;
 						}
 
-                        wcscpy_s(students[i].password, newPassword);
-                        MessageBox(NULL, _T("ä¿®æ”¹æˆåŠŸ"), _T("æç¤º"), MB_OK);
-                        SaveStudentToFile();
-                        //æ›´æ–°å½“å‰å­¦ç”Ÿä¿¡æ¯
-                        currentStudent = students[i];
-                        break;
-                    }
-                }
-            }
-            //ä¿®æ”¹å§“å
-            else if (IsMouseInRect(btnX, 230, btnWidth, btnHeight)) {
-                for (int i = 0; i < StudentMaxNum; i++) {
-                    if (wcscmp(students[i].account, currentStudent.account) == 0 && wcscmp(students[i].password, currentStudent.password) == 0) {
-                        wchar_t newName[MAX_STRING_LENGTH];
-                        InputBox(newName, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥æ–°çš„å§“å:"), _T("ä¿®æ”¹å§“å"), NULL);
-                        //ä¸èƒ½ä¸ºç©º
-                        if (wcslen(newName) == 0) {
-                            MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-                        //ä¸èƒ½åŒ…å«é€—å·
-                        if (wcschr(newName, L',')) {
-                            MessageBox(NULL, _T("å§“åä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-                        //ä¸èƒ½ä¸åŸå§“åç›¸åŒ
-                        if (wcscmp(newName, currentStudent.name) == 0) {
-                            MessageBox(NULL, _T("å§“åä¸èƒ½ä¸åŸå§“åç›¸åŒ"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
+						wcscpy_s(students[i].password, newPassword);
+						MessageBox(hnd_ModifyStudentInfoGraph, _T("ĞŞ¸Ä³É¹¦"), _T("ÌáÊ¾"), MB_OK);
+						SaveStudentToFile();
+						//¸üĞÂµ±Ç°Ñ§ÉúĞÅÏ¢
+						currentStudent = students[i];
+						break;
+					}
+				}
+			}
+			//ĞŞ¸ÄĞÕÃû
+			else if (IsMouseInRect(btnX, 230, btnWidth, btnHeight)) {
+				for (int i = 0; i < StudentMaxNum; i++) {
+					if (wcscmp(students[i].account, currentStudent.account) == 0 && wcscmp(students[i].password, currentStudent.password) == 0) {
+						wchar_t newName[MAX_STRING_LENGTH];
+						InputBox(newName, MAX_STRING_LENGTH, _T("ÇëÊäÈëĞÂµÄĞÕÃû:"), _T("ĞŞ¸ÄĞÕÃû"), NULL);
+						//²»ÄÜÎª¿Õ
+						if (wcslen(newName) == 0) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//²»ÄÜ°üº¬¶ººÅ
+						if (wcschr(newName, L',')) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("ĞÕÃû²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//²»ÄÜÓëÔ­ĞÕÃûÏàÍ¬
+						if (wcscmp(newName, currentStudent.name) == 0) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("ĞÕÃû²»ÄÜÓëÔ­ĞÕÃûÏàÍ¬"), _T("´íÎó"), MB_OK);
+							continue;
+						}
 
-                        wcscpy_s(students[i].name, newName);
-                        MessageBox(NULL, _T("ä¿®æ”¹æˆåŠŸ"), _T("æç¤º"), MB_OK);
-                        SaveStudentToFile();
-                        //æ›´æ–°å½“å‰å­¦ç”Ÿä¿¡æ¯
-                        currentStudent = students[i];
-                        break;
-                    }
-                }
-            }
-            //ä¿®æ”¹å¹´é¾„
-            else if (IsMouseInRect(btnX, 280, btnWidth, btnHeight)) {
-                for (int i = 0; i < StudentMaxNum; i++) {
-                    if (wcscmp(students[i].account, currentStudent.account) == 0 && wcscmp(students[i].password, currentStudent.password) == 0) {
-                        wchar_t newAge[MAX_STRING_LENGTH];
-                        InputBox(newAge, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥æ–°çš„å¹´é¾„:"), _T("ä¿®æ”¹å¹´é¾„"), NULL);
-                        //ä¸èƒ½ä¸ºç©º
-                        if (wcslen(newAge) == 0) {
-                            MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-                        //ä¸èƒ½åŒ…å«é€—å·
-                        if (wcschr(newAge, L',')) {
-                            MessageBox(NULL, _T("å¹´é¾„ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-                        //ä¸èƒ½ä¸åŸå¹´é¾„ç›¸åŒ
-                        if (wcscmp(newAge, currentStudent.age) == 0) {
-                            MessageBox(NULL, _T("å¹´é¾„ä¸èƒ½ä¸åŸå¹´é¾„ç›¸åŒ"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
+						wcscpy_s(students[i].name, newName);
+						MessageBox(hnd_ModifyStudentInfoGraph, _T("ĞŞ¸Ä³É¹¦"), _T("ÌáÊ¾"), MB_OK);
+						SaveStudentToFile();
+						//¸üĞÂµ±Ç°Ñ§ÉúĞÅÏ¢
+						currentStudent = students[i];
+						break;
+					}
+				}
+			}
+			//ĞŞ¸ÄÄêÁä
+			else if (IsMouseInRect(btnX, 280, btnWidth, btnHeight)) {
+				for (int i = 0; i < StudentMaxNum; i++) {
+					if (wcscmp(students[i].account, currentStudent.account) == 0 && wcscmp(students[i].password, currentStudent.password) == 0) {
+						wchar_t newAge[MAX_STRING_LENGTH];
+						InputBox(newAge, MAX_STRING_LENGTH, _T("ÇëÊäÈëĞÂµÄÄêÁä:"), _T("ĞŞ¸ÄÄêÁä"), NULL);
+						//²»ÄÜÎª¿Õ
+						if (wcslen(newAge) == 0) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//²»ÄÜ°üº¬¶ººÅ
+						if (wcschr(newAge, L',')) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("ÄêÁä²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//²»ÄÜÓëÔ­ÄêÁäÏàÍ¬
+						if (wcscmp(newAge, currentStudent.age) == 0) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("ÄêÁä²»ÄÜÓëÔ­ÄêÁäÏàÍ¬"), _T("´íÎó"), MB_OK);
+							continue;
+						}
 
-                        wcscpy_s(students[i].age, newAge);
-                        MessageBox(NULL, _T("ä¿®æ”¹æˆåŠŸ"), _T("æç¤º"), MB_OK);
-                        SaveStudentToFile();
-                        //æ›´æ–°å½“å‰å­¦ç”Ÿä¿¡æ¯
-                        currentStudent = students[i];
-                        break;
-                    }
-                }
-            }
-            //ä¿®æ”¹æ€§åˆ«
-            else if (IsMouseInRect(btnX, 330, btnWidth, btnHeight)) {
-                for (int i = 0; i < StudentMaxNum; i++) {
-                    if (wcscmp(students[i].account, currentStudent.account) == 0 && wcscmp(students[i].password, currentStudent.password) == 0) {
-                        wchar_t newGender[MAX_STRING_LENGTH];
-                        InputBox(newGender, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥æ–°çš„æ€§åˆ«:"), _T("ä¿®æ”¹æ€§åˆ«"), NULL);
-                        //ä¸èƒ½ä¸ºç©º
-                        if (wcslen(newGender) == 0) {
-                            MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-                        //ä¸èƒ½åŒ…å«é€—å·
-                        if (wcschr(newGender, L',')) {
-                            MessageBox(NULL, _T("æ€§åˆ«ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-                        //ä¸èƒ½ä¸åŸæ€§åˆ«ç›¸åŒ
-                        if (wcscmp(newGender, currentStudent.gender) == 0) {
-                            MessageBox(NULL, _T("æ€§åˆ«ä¸èƒ½ä¸åŸæ€§åˆ«ç›¸åŒ"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
+						wcscpy_s(students[i].age, newAge);
+						MessageBox(hnd_ModifyStudentInfoGraph, _T("ĞŞ¸Ä³É¹¦"), _T("ÌáÊ¾"), MB_OK);
+						SaveStudentToFile();
+						//¸üĞÂµ±Ç°Ñ§ÉúĞÅÏ¢
+						currentStudent = students[i];
+						break;
+					}
+				}
+			}
+			//ĞŞ¸ÄĞÔ±ğ
+			else if (IsMouseInRect(btnX, 330, btnWidth, btnHeight)) {
+				for (int i = 0; i < StudentMaxNum; i++) {
+					if (wcscmp(students[i].account, currentStudent.account) == 0 && wcscmp(students[i].password, currentStudent.password) == 0) {
+						wchar_t newGender[MAX_STRING_LENGTH];
+						InputBox(newGender, MAX_STRING_LENGTH, _T("ÇëÊäÈëĞÂµÄĞÔ±ğ:"), _T("ĞŞ¸ÄĞÔ±ğ"), NULL);
+						//²»ÄÜÎª¿Õ
+						if (wcslen(newGender) == 0) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//²»ÄÜ°üº¬¶ººÅ
+						if (wcschr(newGender, L',')) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("ĞÔ±ğ²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//²»ÄÜÓëÔ­ĞÔ±ğÏàÍ¬
+						if (wcscmp(newGender, currentStudent.gender) == 0) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("ĞÔ±ğ²»ÄÜÓëÔ­ĞÔ±ğÏàÍ¬"), _T("´íÎó"), MB_OK);
+							continue;
+						}
 
-                        wcscpy_s(students[i].gender, newGender);
-                        MessageBox(NULL, _T("ä¿®æ”¹æˆåŠŸ"), _T("æç¤º"), MB_OK);
-                        SaveStudentToFile();
-                        //æ›´æ–°å½“å‰å­¦ç”Ÿä¿¡æ¯
-                        currentStudent = students[i];
-                        break;
-                    }
-                }
-            }
-            //ä¿®æ”¹å¹´çº§
-            else if (IsMouseInRect(btnX, 380, btnWidth, btnHeight)) {
-                for (int i = 0; i < StudentMaxNum; i++) {
-                    if (wcscmp(students[i].account, currentStudent.account) == 0 && wcscmp(students[i].password, currentStudent.password) == 0) {
-                        wchar_t newGrade[MAX_STRING_LENGTH];
-                        InputBox(newGrade, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥æ–°çš„å¹´çº§:"), _T("ä¿®æ”¹å¹´çº§"), NULL);
-                        //ä¸èƒ½ä¸ºç©º
-                        if (wcslen(newGrade) == 0) {
-                            MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-                        //ä¸èƒ½åŒ…å«é€—å·
-                        if (wcschr(newGrade, L',')) {
-                            MessageBox(NULL, _T("å¹´çº§ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-                        //ä¸èƒ½ä¸åŸå¹´çº§ç›¸åŒ
-                        if (wcscmp(newGrade, currentStudent.grade) == 0) {
-                            MessageBox(NULL, _T("å¹´çº§ä¸èƒ½ä¸åŸå¹´çº§ç›¸åŒ"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
+						wcscpy_s(students[i].gender, newGender);
+						MessageBox(hnd_ModifyStudentInfoGraph, _T("ĞŞ¸Ä³É¹¦"), _T("ÌáÊ¾"), MB_OK);
+						SaveStudentToFile();
+						//¸üĞÂµ±Ç°Ñ§ÉúĞÅÏ¢
+						currentStudent = students[i];
+						break;
+					}
+				}
+			}
+			//ĞŞ¸ÄÄê¼¶
+			else if (IsMouseInRect(btnX, 380, btnWidth, btnHeight)) {
+				for (int i = 0; i < StudentMaxNum; i++) {
+					if (wcscmp(students[i].account, currentStudent.account) == 0 && wcscmp(students[i].password, currentStudent.password) == 0) {
+						wchar_t newGrade[MAX_STRING_LENGTH];
+						InputBox(newGrade, MAX_STRING_LENGTH, _T("ÇëÊäÈëĞÂµÄÄê¼¶:"), _T("ĞŞ¸ÄÄê¼¶"), NULL);
+						//²»ÄÜÎª¿Õ
+						if (wcslen(newGrade) == 0) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//²»ÄÜ°üº¬¶ººÅ
+						if (wcschr(newGrade, L',')) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("Äê¼¶²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//²»ÄÜÓëÔ­Äê¼¶ÏàÍ¬
+						if (wcscmp(newGrade, currentStudent.grade) == 0) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("Äê¼¶²»ÄÜÓëÔ­Äê¼¶ÏàÍ¬"), _T("´íÎó"), MB_OK);
+							continue;
+						}
 
-                        wcscpy_s(students[i].grade, newGrade);
-                        MessageBox(NULL, _T("ä¿®æ”¹æˆåŠŸ"), _T("æç¤º"), MB_OK);
-                        SaveStudentToFile();
-                        //æ›´æ–°å½“å‰å­¦ç”Ÿä¿¡æ¯
-                        currentStudent = students[i];
-                        break;
-                    }
-                }
-            }
-            //ä¿®æ”¹ç­çº§
-            else if (IsMouseInRect(btnX, 430, btnWidth, btnHeight)) {
-                for (int i = 0; i < StudentMaxNum; i++) {
-                    if (wcscmp(students[i].account, currentStudent.account) == 0 && wcscmp(students[i].password, currentStudent.password) == 0) {
-                        wchar_t newClassNum[MAX_STRING_LENGTH];
-                        InputBox(newClassNum, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥æ–°çš„ç­çº§:"), _T("ä¿®æ”¹ç­çº§"), NULL);
-                        //ä¸èƒ½ä¸ºç©º
-                        if (wcslen(newClassNum) == 0) {
-                            MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-                        //ä¸èƒ½åŒ…å«é€—å·
-                        if (wcschr(newClassNum, L',')) {
-                            MessageBox(NULL, _T("ç­çº§ä¸èƒ½åŒ…å«é€—å·"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
-                        //ä¸èƒ½ä¸åŸç­çº§ç›¸åŒ
-                        if (wcscmp(newClassNum, currentStudent.classNum) == 0) {
-                            MessageBox(NULL, _T("ç­çº§ä¸èƒ½ä¸åŸç­çº§ç›¸åŒ"), _T("é”™è¯¯"), MB_OK);
-                            continue;
-                        }
+						wcscpy_s(students[i].grade, newGrade);
+						MessageBox(hnd_ModifyStudentInfoGraph, _T("ĞŞ¸Ä³É¹¦"), _T("ÌáÊ¾"), MB_OK);
+						SaveStudentToFile();
+						//¸üĞÂµ±Ç°Ñ§ÉúĞÅÏ¢
+						currentStudent = students[i];
+						break;
+					}
+				}
+			}
+			//ĞŞ¸Ä°à¼¶
+			else if (IsMouseInRect(btnX, 430, btnWidth, btnHeight)) {
+				for (int i = 0; i < StudentMaxNum; i++) {
+					if (wcscmp(students[i].account, currentStudent.account) == 0 && wcscmp(students[i].password, currentStudent.password) == 0) {
+						wchar_t newClassNum[MAX_STRING_LENGTH];
+						InputBox(newClassNum, MAX_STRING_LENGTH, _T("ÇëÊäÈëĞÂµÄ°à¼¶:"), _T("ĞŞ¸Ä°à¼¶"), NULL);
+						//²»ÄÜÎª¿Õ
+						if (wcslen(newClassNum) == 0) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//²»ÄÜ°üº¬¶ººÅ
+						if (wcschr(newClassNum, L',')) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("°à¼¶²»ÄÜ°üº¬¶ººÅ"), _T("´íÎó"), MB_OK);
+							continue;
+						}
+						//²»ÄÜÓëÔ­°à¼¶ÏàÍ¬
+						if (wcscmp(newClassNum, currentStudent.classNum) == 0) {
+							MessageBox(hnd_ModifyStudentInfoGraph, _T("°à¼¶²»ÄÜÓëÔ­°à¼¶ÏàÍ¬"), _T("´íÎó"), MB_OK);
+							continue;
+						}
 
-                        wcscpy_s(students[i].classNum, newClassNum);
-                        MessageBox(NULL, _T("ä¿®æ”¹æˆåŠŸ"), _T("æç¤º"), MB_OK);
-                        SaveStudentToFile();
-                        //æ›´æ–°å½“å‰å­¦ç”Ÿä¿¡æ¯
-                        currentStudent = students[i];
-                        break;
-                    }
-                }
-            }
-            //è¿”å›
-            else if (IsMouseInRect(btnX, 480, btnWidth, btnHeight)) {
+						wcscpy_s(students[i].classNum, newClassNum);
+						MessageBox(hnd_ModifyStudentInfoGraph, _T("ĞŞ¸Ä³É¹¦"), _T("ÌáÊ¾"), MB_OK);
+						SaveStudentToFile();
+						//¸üĞÂµ±Ç°Ñ§ÉúĞÅÏ¢
+						currentStudent = students[i];
+						break;
+					}
+				}
+			}
+			//·µ»Ø
+			else if (IsMouseInRect(btnX, 480, btnWidth, btnHeight)) {
 				if (flag == 1) {
 					AdminManageGraph();
-                    return;
+					return;
 				}
-                else if (flag == 2) {
-                    StudentManageGraph();
-                    return;
-                }
-            }
-        }
-    }
+				else if (flag == 2) {
+					StudentManageGraph();
+					return;
+				}
+			}
+		}
+	}
 }
 
-//æ¬¢è¿ç•Œé¢
+//»¶Ó­½çÃæ
 void WelcomeGraph() {
-    cleardevice();
-    LoadBgk();
-    SetHeightText(30);
-    RECT r = { 0, 0, 800, 150 };
-    drawtext(_T("æ¬¢è¿ä½¿ç”¨å­¦ç”Ÿç®¡ç†ç³»ç»Ÿ!"), &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	cleardevice();
+	LoadBgk();
+	SetHeightText(30);
+	RECT r = { 0, 0, 800, 150 };
+	drawtext(_T("»¶Ó­Ê¹ÓÃÑ§Éú¹ÜÀíÏµÍ³!"), &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	HWND hnd_WelcomeGraph = GetHWnd();
+	SetWindowText(hnd_WelcomeGraph, _T("»¶Ó­Ê¹ÓÃÑ§Éú¹ÜÀíÏµÍ³!"));
 
-	//ç»˜åˆ¶æŒ‰é’®
-    const int btnWidth = 200, btnHeight = 50;
-    const int btnX = 300;
-    DrawButton(btnX, 290, btnWidth, btnHeight, _T("ç™»å½•"), 30);
-    DrawButton(btnX, 360, btnWidth, btnHeight, _T("æ³¨å†Œ"), 30);
-    DrawButton(btnX, 430, btnWidth, btnHeight, _T("é€€å‡º"), 30);
+	//»æÖÆ°´Å¥
+	const int btnWidth = 200, btnHeight = 50;
+	const int btnX = 300;
+	DrawButton(btnX, 290, btnWidth, btnHeight, _T("µÇÂ¼"), 30);
+	DrawButton(btnX, 360, btnWidth, btnHeight, _T("×¢²á"), 30);
+	DrawButton(btnX, 430, btnWidth, btnHeight, _T("ÍË³ö"), 30);
 
-	//ç‚¹å‡»äº‹ä»¶å¤„ç†
-    while (true) {
-        MOUSEMSG msg = GetMouseMsg();
-        if (msg.uMsg == WM_LBUTTONDOWN) {
-            //ç™»å½•
-            if (IsMouseInRect(btnX, 290, btnWidth, btnHeight)) {
+	//µã»÷ÊÂ¼ş´¦Àí
+	while (true) {
+		MOUSEMSG msg = GetMouseMsg();
+		if (msg.uMsg == WM_LBUTTONDOWN) {
+			//µÇÂ¼
+			if (IsMouseInRect(btnX, 290, btnWidth, btnHeight)) {
 
-                wchar_t username[MAX_STRING_LENGTH], password[MAX_STRING_LENGTH];
+				wchar_t username[MAX_STRING_LENGTH], password[MAX_STRING_LENGTH];
 
-                InputBox(username, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥ç”¨æˆ·å:"), _T("ç™»å½•"), NULL);
-				//ä¸èƒ½ä¸ºç©º
+				InputBox(username, MAX_STRING_LENGTH, _T("ÇëÊäÈëÓÃ»§Ãû:"), _T("µÇÂ¼"), NULL);
+				//²»ÄÜÎª¿Õ
 				if (wcslen(username) == 0) {
-					MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
+					MessageBox(hnd_WelcomeGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
 					continue;
 				}
 
-                InputBox(password, MAX_STRING_LENGTH, _T("è¯·è¾“å…¥å¯†ç :"), _T("ç™»å½•"), NULL);
-				//ä¸èƒ½ä¸ºç©º
-                if (wcslen(password) == 0) {
-                    MessageBox(NULL, _T("ä¸èƒ½ä¸ºç©º"), _T("é”™è¯¯"), MB_OK);
-                    continue;
-                }
+				InputBox(password, MAX_STRING_LENGTH, _T("ÇëÊäÈëÃÜÂë:"), _T("µÇÂ¼"), NULL);
+				//²»ÄÜÎª¿Õ
+				if (wcslen(password) == 0) {
+					MessageBox(hnd_WelcomeGraph, _T("²»ÄÜÎª¿Õ"), _T("´íÎó"), MB_OK);
+					continue;
+				}
 
-                switch (LoginCheck(username, password)) {
-                case 1:
-                    MessageBox(NULL, _T("ç®¡ç†å‘˜ç™»å½•æˆåŠŸ"), _T("æç¤º"), MB_OK);
-					//è®°å½•å½“å‰ç®¡ç†å‘˜è´¦å·
+				switch (LoginCheck(username, password)) {
+				case 1:
+					MessageBox(hnd_WelcomeGraph, _T("¹ÜÀíÔ±µÇÂ¼³É¹¦"), _T("ÌáÊ¾"), MB_OK);
+					//¼ÇÂ¼µ±Ç°¹ÜÀíÔ±ÕËºÅ
 					for (int i = 0; i < AdminMaxNum; i++) {
 						if (wcscmp(admins[i].account, username) == 0 && wcscmp(admins[i].password, password) == 0) {
 							currentAdmin = admins[i];
 							break;
 						}
 					}
-                    AdminManageGraph();
-                    return;
-                case 2:
-                    MessageBox(NULL, _T("å­¦ç”Ÿç™»å½•æˆåŠŸ"), _T("æç¤º"), MB_OK);
-					//è®°å½•å½“å‰å­¦ç”Ÿè´¦å·
+					AdminManageGraph();
+					return;
+				case 2:
+					MessageBox(hnd_WelcomeGraph, _T("Ñ§ÉúµÇÂ¼³É¹¦"), _T("ÌáÊ¾"), MB_OK);
+					//¼ÇÂ¼µ±Ç°Ñ§ÉúÕËºÅ
 					for (int i = 0; i < StudentMaxNum; i++) {
 						if (wcscmp(students[i].account, username) == 0 && wcscmp(students[i].password, password) == 0) {
 							currentStudent = students[i];
 							break;
 						}
 					}
-                    StudentManageGraph();
-                    return;
-                case 0:
-                    MessageBox(NULL, _T("ç”¨æˆ·åæˆ–å¯†ç é”™è¯¯"), _T("é”™è¯¯"), MB_OK);
-                }
-            }
-            //æ³¨å†Œ
-            else if (IsMouseInRect(btnX, 360, btnWidth, btnHeight)) {
-                SigninChooseGraph();
-                return;
-            }
-            //é€€å‡º
-            else if (IsMouseInRect(btnX, 430, btnWidth, btnHeight)) {
-                exit(0);
-            }
-        }
-    }
+					StudentManageGraph();
+					return;
+				case 0:
+					MessageBox(hnd_WelcomeGraph, _T("ÓÃ»§Ãû»òÃÜÂë´íÎó"), _T("´íÎó"), MB_OK);
+				}
+			}
+			//×¢²á
+			else if (IsMouseInRect(btnX, 360, btnWidth, btnHeight)) {
+				SigninChooseGraph();
+				return;
+			}
+			//ÍË³ö
+			else if (IsMouseInRect(btnX, 430, btnWidth, btnHeight)) {
+				exit(0);
+			}
+		}
+	}
 }
