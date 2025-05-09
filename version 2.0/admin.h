@@ -15,4 +15,9 @@ typedef struct Admin
 // 管理员数组
 extern Admin admins[ADMINMAXNUM];
 
+//函数声明
+int countAdminNum();
+int loadAdminFromFile();
+int saveAdminToFile();
+
 #endif // ADMIN_H

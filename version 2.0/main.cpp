@@ -5,6 +5,8 @@
 
 int main()
 {
-    welcomeGraph();
+	loadAdminFromFile();
+	loadStudentFromFile();
+	adminGraph();
     return 0;
 }

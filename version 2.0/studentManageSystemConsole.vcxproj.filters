@@ -27,6 +27,9 @@
     <ClCompile Include="ui.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="errorCode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="admin.h">
@@ -36,6 +39,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ui.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="errorcode.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

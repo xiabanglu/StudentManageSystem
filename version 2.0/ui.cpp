@@ -2,9 +2,28 @@
 #include <stdlib.h>
 #include <string.h>
 #include "ui.h"
+#include "admin.h"
+#include "student.h"
+#include "errorCode.h"
 
 // 记录选择
 Selections select;
+
+//登录检查
+int LoginCheck(const char* username, const char* password) {
+    //管理员
+    for (int i = 0; i < ADMINMAXNUM && admins[i].id != -1; i++) {
+        if (strcmp(username, admins[i].account) == 0 &&
+            strcmp(password, admins[i].password) == 0) return 1;
+    }
+    //学生
+    for (int i = 0; i < STUDENTMAXNUM && students[i].id != -1; i++) {
+        if (strcmp(username, students[i].account) == 0 &&
+            strcmp(password, students[i].password) == 0) return 2;
+    }
+    //未找到
+    return 0;
+}
 
 // 欢迎主界面
 void welcomeGraph()
@@ -57,19 +76,7 @@ void loginInGraph()
     signInAccount[strcspn(signInAccount, "\n")] = '\0';
     signInPassword[strcspn(signInPassword, "\n")] = '\0';
 
-    // 账号密码录入正常
-    printf("test： 你输入的账号 密码：%s %s\n", signInAccount, signInPassword);
-
-    // 尚未完成
-    int test;
-    printf("test:  1进入管理员，2进入学生：\n");
-    scanf_s("%d", &test);
-
-    // 清除输入缓冲区的换行符
-    int ch = getchar();
-    (void)ch;
-
-    switch (test)
+    switch (LoginCheck(signInAccount,signInPassword))
     {
     case 1:
         adminGraph();
@@ -77,6 +84,8 @@ void loginInGraph()
     case 2:
         studentGraph();
         break;
+	case 0:
+		printf("登录失败，请检查账号密码是否正确！\n");
     }
 }
 
@@ -172,7 +181,7 @@ void adminGraph()
         "|    1.录入学生成绩     |\n"
         "|    2.删除学生成绩     |\n"
         "|    3.修改学生成绩     |\n"
-        "|    4.查看学生成绩     |\n"
+        "|    4.查看学生信息     |\n"
         "|    5.统计学生成绩     |\n"
         "|    6.修改我的信息     |\n"
         "|    7.注销我的账号     |\n"
@@ -203,10 +212,37 @@ void adminGraph()
 		welcomeGraph();
         break;
     case 4:
-        // 查看学生成绩
-        printf("查看学生成绩功能尚未完成！\n");
-		welcomeGraph();
+        // 查看学生信息
+        system("cls"); // 清屏
+        printf("学生信息如下：\n\n");
+
+        // 打印表头
+        printf("ID\t账号\t\t密码\t\t姓名\t\t性别\t\t年龄\t\t年级\t\t班级\n");
+
+        // 打印学生信息
+        for (int i = 0; i < STUDENTMAXNUM; i++) {
+            if (students[i].id == -1) break;
+            
+			int accountLen = strlen(students[i].account);
+            if (accountLen <= 7 && accountLen >= 0) {
+                printf("%d\t%s\t\t%s\t\t%s\t\t%s\t\t%s\t\t%s\t\t%s\n",
+                    students[i].id, students[i].account, students[i].password,
+                    students[i].name, students[i].gender, students[i].age,
+                    students[i].grade, students[i].classNum);
+            }
+            else if (accountLen >= 8) {
+                printf("%d\t%s\t%s\t\t%s\t\t%s\t\t%s\t\t%s\t\t%s\n",
+                    students[i].id, students[i].account, students[i].password,
+                    students[i].name, students[i].gender, students[i].age,
+                    students[i].grade, students[i].classNum);
+            }
+        }
+
+        printf("\n按任意键返回主界面...\n");
+        getchar(); // 等待用户按下任意键
+        welcomeGraph(); // 返回主界面
         break;
+
     case 5:
         // 统计学生成绩
         printf("统计学生成绩功能尚未完成！\n");
