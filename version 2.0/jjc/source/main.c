@@ -1,25 +1,37 @@
 #include "menu.h"
 #include "file.h"
-#include "search.h"
+#include "event.h"
+#include "login.h"
+#include <stdlib.h>
+#include "school.h"
+#include "grade.h"
+#include "class.h"
+#include "student.h"
 
-// 主函数
 int main()
 {
     printf("\033[1;32m-------------------------\033[0m\n");
-    school = createSchool("NUIST", _MAX_GRADE_NUM_); // 创建学校实例
-    for (int i = 0; i < _MAX_GRADE_NUM_; i++)
+
+    // 初始化
+    School *school = createSchool("NUIST", _MAX_GRADE_NUM_PER_SCHOOL_);
+    for (int i = 0; i < _MAX_GRADE_NUM_PER_SCHOOL_; i++)
     {
-        initGrade(&school->Grades[i], _MAX_CLASS_NUM_); // 初始化年级
-        for (int j = 0; j < _MAX_CLASS_NUM_; j++)
+        initGrade(&school->grades[i], _MAX_CLASS_NUM_PER_GRADE_);
+
+        for (int j = 0; j < _MAX_CLASS_NUM_PER_GRADE_; j++)
         {
-            initClass(&school->Grades[i]->Classes[j], _MAX_STUDENT_NUM_); // 初始化班级
+            initClass(&school->grades[i]->classes[j], _MAX_STUDENT_NUM_PER_CLASS_);
         }
     }
 
-    CompileFile(school, "data.txt"); // 从文件中编译学生信息
-    int is_quit = 0; // 退出标志
+    // 读取学生信息
+    loadStudentFromFile(school, "student.txt");
+
+    // 退出标志
+    int is_quit = 0;
+
     Menu *login_menu = create_login_menu(); // 创建登录菜单
-    Menu *menu = create_show_menu(); // 创建显示菜单
+    Menu *menu = create_show_menu();        // 创建显示菜单
 
     printf("please login:\n");
 

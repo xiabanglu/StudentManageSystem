@@ -1,38 +1,10 @@
 #pragma once
-#include "search.h"
+
+#include "student.h"
+#include "class.h"
+#include "school.h"
 #include "login.h"
 #include <string.h>
-
-// 删除学生的函数
-void deleteStudent_(School *school, int id)
-{
-    DeleteStudent(*getStudent(school, id)); // 从学校中删除指定ID的学生
-}
-
-// 更新学生信息的函数
-void updateStudent_(School *school, int id, char *name, int age, float score[7])
-{
-    Student **student = getStudent(school, id); // 获取指定ID的学生
-
-    if (student == NULL)
-    {
-        printf("Student not found\n"); // 如果学生未找到，打印提示信息
-        return;
-    }
-
-    (*student)->age = age; // 更新学生年龄
-    if ((*student)->name == NULL)
-    {
-        (*student)->name = (char *)malloc(sizeof(char) * 10); // 为学生姓名分配内存
-    }
-
-    strcpy((*student)->name, name); // 更新学生姓名
-
-    for (int i = 0; i < 7; i++)
-    {
-        (*student)->score[i] = score[i]; // 更新学生成绩
-    }
-}
 
 // 事件回调函数的联合体
 typedef union EventCallback
@@ -42,7 +14,7 @@ typedef union EventCallback
     void (*updateStudent)(School *school, int id, char *name, int age, float score[7]);
 
     Student **(*getStudent)(School *school, int id);
-    Class_ **(*getClass)(Grade *grade, int id);
+    Class **(*getClass)(Grade *grade, int id);
     Grade **(*getGrade)(School *school, int id);
     School *(*getSchool)(int id);
 
@@ -55,20 +27,20 @@ typedef union EventCallback
 typedef enum EventType
 {
     EVENT_REGISTER_STUDENT, // 注册学生事件
-    EVENT_LOGIN_USER, // 用户登录事件
-    EVENT_DELETE_STUDENT, // 删除学生事件
-    EVENT_UPDATE_STUDENT, // 更新学生事件
-    EVENT_GET_STUDENT, // 获取学生事件
-    EVENT_GET_CLASS, // 获取班级事件
-    EVENT_GET_GRADE, // 获取年级事件
-    EVENT_REGISTER_USER, // 注册用户事件
-    EVENT_DELETE_USER, // 删除用户事件
+    EVENT_LOGIN_USER,       // 用户登录事件
+    EVENT_DELETE_STUDENT,   // 删除学生事件
+    EVENT_UPDATE_STUDENT,   // 更新学生事件
+    EVENT_GET_STUDENT,      // 获取学生事件
+    EVENT_GET_CLASS,        // 获取班级事件
+    EVENT_GET_GRADE,        // 获取年级事件
+    EVENT_REGISTER_USER,    // 注册用户事件
+    EVENT_DELETE_USER,      // 删除用户事件
 } EventType;
 
 // 事件结构体
 typedef struct Event
 {
-    EventType event_type; // 事件类型
+    EventType event_type;   // 事件类型
     EventCallback callback; // 事件回调函数
 } Event;
 

@@ -40,13 +40,14 @@ void register_user(const char *file_path, const int id, const char *password)
         return;
     }
 
-    fprintf(file, "%d %s\n", id, password); // 将用户ID和密码写入文件
+    fprintf(file, "%d 1 %s\n", id, password); // 将用户ID和密码写入文件
     printf("User registered successfully!\n"); // 打印注册成功信息
     fclose(file); // 关闭文件
 }
 
 // 删除用户的函数
 void delete_user(const char *file_path, const int id)
+
 {
     FILE *file = fopen(file_path, "r"); // 打开用户文件进行读取
     if (file == NULL)

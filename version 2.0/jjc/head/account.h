@@ -3,8 +3,8 @@
 
 typedef struct Account
 {
-    char username[20];
-    char password[20];
+    char *username;
+    char *password;
 } Account;
 
 #endif // ACCOUNT_H
