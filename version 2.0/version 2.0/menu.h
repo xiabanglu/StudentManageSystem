@@ -27,21 +27,21 @@ typedef struct Menu
 
 // 登录菜单项
 static const MenuItem login_items[] = {
-    {"l - student login", 'l', handle_login},
-    {"r - register", 'r', handle_register},
-    {"k - delete user", 'k', handle_delete_user},
-    {NULL, '\0', NULL} // 结束标记
+    {"l - student login(学生登录)", 'l', handle_login},
+    {"r - register(注册)", 'r', handle_register},
+    {"k - delete user(删除用户)", 'k', handle_delete_user},
+    {NULL, '\0', NULL}
 };
 
 // 主菜单项
 static const MenuItem show_items[] = {
-    {"i - insert new record", 'i', handle_insert_record},
-    {"d - delete record", 'd', handle_delete_record},
-    {"u - update record", 'u', handle_update_record},
-    {"f - find record", 'f', handle_find_record},
-    {"q - quit", 'q', handle_quit},
-    {"a - show all records", 'a', handle_show_records},
-    {NULL, '\0', NULL} // 结束标记
+    {"i - insert new record(插入新纪录)", 'i', handle_insert_record},
+    {"d - delete record(删除记录)", 'd', handle_delete_record},
+    {"u - update record(更新记录)", 'u', handle_update_record},
+    {"f - find record(查询记录)", 'f', handle_find_record},
+    {"q - quit(退出)", 'q', handle_quit},
+    {"a - show all records(展示所有记录)", 'a', handle_show_records},
+    {NULL, '\0', NULL}
 };
 
 // 创建菜单
@@ -73,7 +73,7 @@ char getchoice(const char *greet, const MenuItem *items)
     do
     {
         printf("\033[1;32m-------------------------\033[0m\n");
-        printf("Menu: %s\n", greet);
+        printf("菜单: %s\n", greet);
 
         // 打印菜单项
         for (item = items; item->description != NULL; item++)
@@ -99,6 +99,8 @@ char getchoice(const char *greet, const MenuItem *items)
 
         printf("Incorrect choice, select again\n");
     } while (1);
+
+    return '0';
 }
 
 // 事件循环
@@ -110,26 +112,29 @@ void event_loop(Menu *menu, int *is_quit)
     do
     {
         selected = getchoice(menu->title, menu->items);
+
         printf("\033[1;32m-------------------------\033[0m\n");
 
         for (item = menu->items; item->description != NULL; item++)
         {
             if (selected == item->choice)
             {
-                item->handler();
+                
+                handle_login();
+                
                 if (selected == 'l' && rank)
                 {
-                    *is_quit = 1;
                     selected = 'q';
                 }
                 if (selected == 'q')
-                    *is_quit = 1;
+                {    *is_quit = 1;  }
                 break;
             }
         }
 
         printf("\033[1;32m-------------------------\033[0m\n");
     } while (selected != 'q');
+
 }
 
 #endif // MENU_H

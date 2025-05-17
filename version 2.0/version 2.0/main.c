@@ -1,7 +1,6 @@
 #include "menu.h"
 
 School *school = NULL;
-int rank = 0;
 
 int main()
 {
@@ -29,19 +28,18 @@ int main()
     Menu *login_menu = create_menu(MENU_LOGIN);
     Menu *show_menu = create_menu(MENU_SHOW);
 
-    printf("Please login:\n");
+    printf("请登录:\n");
 
     while (!is_quit)
     {
         event_loop(login_menu, &is_quit);
     }
-
     is_quit = 0;
-    printf("\033[1;34mWelcome to the Student Management System\033[0m\n");
+    printf("\033[1;34m欢迎使用学生成绩管理系统\033[0m\n");
 
     while (!is_quit)
     {
-        printf("\033[1;33mPlease select an option:\033[0m\n");
+        printf("\033[1;33m请选择操作:\033[0m\n");
         event_loop(show_menu, &is_quit);
         printf("\033[1;32m-------------------------\033[0m\n");
     }

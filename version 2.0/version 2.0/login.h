@@ -35,7 +35,7 @@ int login(const char *file_path, char *username, char *password)
 // 注册用户的函数
 void register_user(const char *file_path, char *username, const char *password)
 {
-    FILE *file = fopen(file_path, "a");
+    FILE *file = fopen(file_path, "r");
     if (file == NULL)
     {
         printf("Error opening file\n");
