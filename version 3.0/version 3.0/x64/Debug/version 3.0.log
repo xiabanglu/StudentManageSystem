@@ -1,0 +1,189 @@
+﻿  main.c
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\score.h(10,20): error C2143: 语法错误: 缺少“)”(在“*”的前面)
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\score.h(10,20): error C2143: 语法错误: 缺少“{”(在“*”的前面)
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\score.h(10,28): error C2059: 语法错误:“)”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\score.h(10,21): error C2054: 在“student”之后应输入“(”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(64,29): error C2143: 语法错误: 缺少“)”(在“*”的前面)
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(64,29): error C2143: 语法错误: 缺少“{”(在“*”的前面)
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(64,38): error C2059: 语法错误:“类型”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(64,44): error C2059: 语法错误:“)”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(96,29): error C2143: 语法错误: 缺少“)”(在“*”的前面)
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(96,29): error C2143: 语法错误: 缺少“{”(在“*”的前面)
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(96,38): error C2059: 语法错误:“类型”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(96,66): error C2059: 语法错误:“)”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(117,27): error C2143: 语法错误: 缺少“)”(在“*”的前面)
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(117,27): error C2143: 语法错误: 缺少“{”(在“*”的前面)
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(117,36): error C2059: 语法错误:“类型”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(117,42): error C2059: 语法错误:“)”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(135,27): error C2143: 语法错误: 缺少“)”(在“*”的前面)
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(135,27): error C2143: 语法错误: 缺少“{”(在“*”的前面)
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(135,36): error C2059: 语法错误:“类型”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\student.h(135,82): error C2059: 语法错误:“)”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\class.h(40,24): error C2143: 语法错误: 缺少“)”(在“*”的前面)
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\class.h(40,24): error C2143: 语法错误: 缺少“{”(在“*”的前面)
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\class.h(40,32): error C2059: 语法错误:“类型”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\class.h(40,43): error C2059: 语法错误:“)”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\class.h(62,17): warning C4013: “DeleteStudent”未定义；假设外部返回 int
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\grade.h(36,25): error C2143: 语法错误: 缺少“)”(在“*”的前面)
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\grade.h(36,25): error C2143: 语法错误: 缺少“{”(在“*”的前面)
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\grade.h(36,34): error C2059: 语法错误:“类型”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\grade.h(36,45): error C2059: 语法错误:“)”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\login.h(23,9): error C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\login.h(72,9): error C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(16,9): error C2371: “school”: 重定义；不同的基类型
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+      C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\grade.h(36,26):
+      参见“school”的声明
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(22,33): error C2223: “->size”的左侧必须指向结构/联合
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(24,37): error C2223: “->grades”的左侧必须指向结构/联合
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(26,36): error C2223: “->grades”的左侧必须指向结构/联合
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(44,5): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(45,5): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(82,5): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(92,11): warning C4477: “scanf”: 格式字符串“%d”需要类型“int *”的参数，但可变参数 4 拥有了类型“int”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(93,5): warning C4013: “registerStudent”未定义；假设外部返回 int
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(92,5): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(101,5): warning C4013: “deleteStudent”未定义；假设外部返回 int
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(100,5): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(110,11): warning C4477: “scanf”: 格式字符串“%d”需要类型“int *”的参数，但可变参数 4 拥有了类型“int”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(113,15): warning C4477: “scanf”: 格式字符串“%f”需要类型“float *”的参数，但可变参数 1 拥有了类型“double *”
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+      C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(113,15):
+      请考虑在格式字符串中使用“%lf”
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(115,5): warning C4013: “updateStudent”未定义；假设外部返回 int
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(110,5): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(113,9): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(129,24): warning C4013: “getStudent”未定义；假设外部返回 int
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(122,5): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\event.h(129,14): warning C4047: “初始化”:“Student *”与“int”的间接级别不同
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\menu.h(38,32): warning C4113: “void (__cdecl *)()”和“void (__cdecl *)(void)”的参数列表不同
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\menu.h(39,27): warning C4113: “void (__cdecl *)()”和“void (__cdecl *)(void)”的参数列表不同
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\menu.h(40,30): warning C4113: “void (__cdecl *)()”和“void (__cdecl *)(void)”的参数列表不同
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\menu.h(46,36): warning C4113: “void (__cdecl *)()”和“void (__cdecl *)(void)”的参数列表不同
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\menu.h(47,32): warning C4113: “void (__cdecl *)()”和“void (__cdecl *)(void)”的参数列表不同
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\menu.h(48,32): warning C4113: “void (__cdecl *)()”和“void (__cdecl *)(void)”的参数列表不同
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\menu.h(49,30): warning C4113: “void (__cdecl *)()”和“void (__cdecl *)(void)”的参数列表不同
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\menu.h(50,23): warning C4113: “void (__cdecl *)()”和“void (__cdecl *)(void)”的参数列表不同
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\menu.h(51,35): warning C4113: “void (__cdecl *)()”和“void (__cdecl *)(void)”的参数列表不同
+  (编译源文件“../version%202.0/version%202.0/main.c”)
+  
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\main.c(37,24): warning C4013: “create_login_menu”未定义；假设外部返回 int
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\main.c(38,18): warning C4013: “create_show_menu”未定义；假设外部返回 int
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\main.c(37,11): warning C4047: “初始化”:“Menu *”与“int”的间接级别不同
+C:\Users\17954\source\repos\student-manage-system\version 2.0\version 2.0\main.c(38,11): warning C4047: “初始化”:“Menu *”与“int”的间接级别不同

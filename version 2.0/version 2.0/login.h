@@ -70,7 +70,7 @@ void delete_user(const char *file_path, char *username)
     {
         char file_username[50];
         sscanf(line, "%s", file_username);
-        if (file_username != username)
+        if (strcmp(file_username, username) != 0)
         {
             fputs(line, temp_file);
         }

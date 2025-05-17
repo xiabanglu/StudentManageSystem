@@ -1,23 +1,19 @@
 #include "menu.h"
-#include "file.h"
-#include "event.h"
-#include "login.h"
-#include "log.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-
-#include "school.h"
-#include "grade.h"
-#include "class.h"
-#include "student.h"
+School *school = NULL;
+int rank = 0;
 
 int main()
 {
     printf("\033[1;32m-------------------------\033[0m\n");
 
-    // 初始化
-    School *school = createSchool("NUIST", _MAX_GRADE_NUM_PER_SCHOOL_);
+    school = createSchool("NUIST", _MAX_GRADE_NUM_PER_SCHOOL_);
+    if (school == NULL)
+    {
+        printf("Failed to create school\n");
+        return -1;
+    }
+
     for (int i = 0; i < _MAX_GRADE_NUM_PER_SCHOOL_; i++)
     {
         initGrade(&school->grades[i], _MAX_CLASS_NUM_PER_GRADE_);
@@ -28,29 +24,27 @@ int main()
         }
     }
 
-    // 读取学生信息
-    loadStudentFromFile(school, "student.txt");
-
-    // 退出标志
     int is_quit = 0;
 
-    Menu *login_menu = create_login_menu(); // 创建登录菜单
-    Menu *menu = create_show_menu();        // 创建显示菜单
+    Menu *login_menu = create_menu(MENU_LOGIN);
+    Menu *show_menu = create_menu(MENU_SHOW);
 
-    printf("please login:\n");
+    printf("Please login:\n");
 
-    while (!is_quit) // 登录循环
+    while (!is_quit)
     {
-        event_loop(login_menu, &is_quit); // 处理登录菜单事件
+        event_loop(login_menu, &is_quit);
     }
 
-    is_quit = 0; // 重置退出标志
+    is_quit = 0;
     printf("\033[1;34mWelcome to the Student Management System\033[0m\n");
 
-    while (!is_quit) // 主菜单循环
+    while (!is_quit)
     {
         printf("\033[1;33mPlease select an option:\033[0m\n");
-        event_loop(menu, &is_quit); // 处理主菜单事件
+        event_loop(show_menu, &is_quit);
         printf("\033[1;32m-------------------------\033[0m\n");
     }
+
+    return 0;
 }

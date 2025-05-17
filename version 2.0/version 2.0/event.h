@@ -1,20 +1,14 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include "school.h"
-#include "grade.h"
-#include "class.h"
-#include "student.h"
-
-#include "login.h"
-#include "log.h"
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include "login.h"
+#include "log.h"
+#include "search.h"
 
-School *school = NULL;
-int rank = 0;
+School *school;
+int rank;
 
 void handle_show_records()
 {
@@ -87,11 +81,17 @@ void handle_delete_user()
 void handle_insert_record()
 {
     int id;
-    Info *newStudent;
+    Info *newStudent = (Info *)malloc(sizeof(Info)); // 为 newStudent 分配内存
+    if (newStudent == NULL)
+    {
+        printf("Memory allocation failed\n");
+        return; // 检查内存分配是否成功
+    }
     printf("Enter student id, name, gender, age, formSchool: \n");
-    scanf("%d %s %s %d %s", &id, newStudent->name, newStudent->gender, newStudent->age, newStudent->schoolName);
+    scanf("%d %s %s %d %s", &id, newStudent->name, newStudent->gender, &newStudent->age, newStudent->schoolName);
     registerStudent(school, id, newStudent);
     Log("Student registered", INFO);
+    free(newStudent); // 使用完后释放内存
 }
 
 void handle_delete_record()
@@ -105,14 +105,20 @@ void handle_update_record()
 {
     int id;
     double score[10];
-    Info *newStudent;
+    Info *newStudent = (Info *)malloc(sizeof(Info)); // 为 newStudent 分配内存
+    if (newStudent == NULL)
+    {
+        printf("Memory allocation failed\n");
+        return; // 检查内存分配是否成功
+    }
     printf("Enter student id, name, gender, age, formSchool: \n");
-    scanf("%d %s %s %d %s", &id, newStudent->name, newStudent->gender, newStudent->age, newStudent->schoolName);
+    scanf("%d %s %s %d %s", &id, newStudent->name, newStudent->gender, &newStudent->age, newStudent->schoolName);
     for (int i = 0; i < 10; i++)
     {
-        scanf("%f", &score[i]);
+        scanf("%lf", &score[i]);
     }
     updateStudent(school, id, newStudent, score);
+    free(newStudent); // 使用完后释放内存
 }
 
 void handle_find_record()
@@ -126,7 +132,7 @@ void handle_find_record()
         getchar();
         return;
     }
-    Student *student = getStudent(school, id);
+    Student **student = getStudent(school, id);
     if (student == NULL)
     {
         Log("Student not found", ERROR);
@@ -134,10 +140,10 @@ void handle_find_record()
     }
     else
         Log("Student found", INFO);
-    printf("name: %s gender: %s age: %d fromSchool: %s\nscore: ", student->info.name, student->info.gender, student->info.age, student->info.schoolName);
+    printf("name: %s gender: %s age: %d fromSchool: %s\nscore: ", (*student)->info.name, (*student)->info.gender, (*student)->info.age, (*student)->info.schoolName);
     for (int i = 0; i < 10; i++)
     {
-        printf("%lf ", student->score[i]);
+        printf("%lf ", (*student)->score[i]);
     }
     printf("\n");
 }
@@ -145,10 +151,6 @@ void handle_find_record()
 void handle_quit()
 {
     printf("欢迎下次使用\n");
-}
-
-void handle_save(School *school, const char *filename)
-{
 }
 
 #endif // EVENT_H

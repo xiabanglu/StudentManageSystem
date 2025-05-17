@@ -3,14 +3,6 @@
 
 #include "event.h"
 
-#include "school.h"
-#include "grade.h"
-#include "class.h"
-#include "student.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-
 typedef struct MenuItem
 {
     const char *description;
