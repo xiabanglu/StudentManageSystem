@@ -7,14 +7,14 @@
 // 加载学生信息
 void loadStudentFromFile(School *school, const char *filename)
 {
-    FILE *file = fopen(filename, "a");
+    FILE *file = fopen(filename, "r");
     if (file == NULL)
     {
         printf("Error opening file\n");
         return;
     }
 
-    char line[256];                 
+    char line[256];
     while (fgets(line, sizeof(line), file))
     {
         int id;         // 学生ID

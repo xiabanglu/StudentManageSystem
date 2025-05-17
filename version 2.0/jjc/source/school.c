@@ -21,7 +21,7 @@ School *createSchool(const char *schoolName, int gradeCount)
     return school;
 }
 
-// 删除学校的函数
+// 删除学校
 void DeleteSchool(School *school)
 {
     if (school)

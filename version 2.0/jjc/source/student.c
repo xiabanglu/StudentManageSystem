@@ -19,15 +19,15 @@ StudentIndices explainStudentId(int id)
     id /= 100;
 
     // 年级id:2024
-    int gradeId = id % 100;
+    int gradeId = id;
 
-    StudentIndices i;
-    i.id = id;
-    i.studentId = studentId;
-    i.classId = classId;
-    i.gradeId = gradeId;
+    StudentIndices newIndice;
+    newIndice.id = id;
+    newIndice.studentId = studentId;
+    newIndice.classId = classId;
+    newIndice.gradeId = gradeId;
 
-    return i;
+    return newIndice;
 }
 
 // 通过id获取学生
@@ -36,10 +36,9 @@ Student **getStudent(School *school, int id)
     StudentIndices indices = explainStudentId(id);
 
     Grade **grade = getGrade(school, indices.gradeId);
-
     if (grade == NULL)
     {
-        printf("id is error: grade error!\n");
+        printf("id is error: grade is error!\n");
         return NULL;
     }
 
@@ -63,7 +62,7 @@ Student **getStudent(School *school, int id)
     return NULL;
 }
 
-// 注册学生(Info传待注册学生的info参数，成绩信息不应该在此处获得)
+// 注册学生(newStudentInfo为待注册学生的info参数，成绩信息不应该在此处获得)
 void registerStudent(School *school, int id, Info *newStudentInfo)
 {
     // 解析id并查找
@@ -88,7 +87,7 @@ void registerStudent(School *school, int id, Info *newStudentInfo)
 void deleteStudent(School *school, int id)
 {
 
-    Student *delStudent = *getStudent(school, id);
+    Student **delStudent = getStudent(school, id);
 
     if (delStudent)
     {
@@ -138,5 +137,5 @@ void updateStudent(School *school, int id, Info *newStudentInfo, double score[10
 
     // 重新计算并更新总分
     int newSum = getSum(*student);
-    (*student)->score[11] = newSum;
+    (*student)->score[10] = newSum;
 }
