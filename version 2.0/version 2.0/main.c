@@ -2,6 +2,7 @@
 #include "file.h"
 #include "event.h"
 #include "login.h"
+#include "log.h"
 
 #include <stdlib.h>
 #include <stdio.h>

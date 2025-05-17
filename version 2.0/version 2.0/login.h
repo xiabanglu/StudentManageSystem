@@ -1,84 +1,87 @@
-#pragma once
+#ifndef LOGIN_H
+#define LOGIN_H
 
 #include <string.h>
 #include <stdio.h>
 
 // 用户登录函数
-int login(const char *file_path, const int id, char *password)
+int login(const char *file_path, char *username, char *password)
 {
-    FILE *file = fopen(file_path, "r"); // 打开用户文件进行读取
+    FILE *file = fopen(file_path, "r");
     if (file == NULL)
     {
-        printf("Error opening file\n"); // 如果文件打开失败，打印错误信息
-        return -1;                      // 返回错误代码
+        printf("Error opening file\n");
+        return -1;
     }
 
-    char line[256];                         // 用于存储每一行的内容
-    while (fgets(line, sizeof(line), file)) // 逐行读取文件内容
+    char line[256];
+    while (fgets(line, sizeof(line), file))
     {
-        int file_id, flag;                                         // 文件中的用户ID和标志
-        char file_password[50];                                    // 文件中的用户密码
-        sscanf(line, "%d %d %s", &file_id, &flag, file_password);  // 解析用户信息
-        if (file_id == id && strcmp(file_password, password) == 0) // 检查ID和密码是否匹配
+        int flag;
+        char file_uesrname[50];
+        char file_password[50];
+        sscanf(line, "%s %s %d", file_uesrname, file_password, &flag);
+        if (strcmp(file_uesrname, username) == 0 && strcmp(file_password, password) == 0)
         {
-            fclose(file); // 关闭文件
-            return flag;  // 返回用户标志
+            fclose(file);
+            return flag;
         }
     }
 
-    fclose(file); // 关闭文件
-    return 0;     // 返回未找到用户
+    fclose(file);
+    return 0;
 }
 
 // 注册用户的函数
-void register_user(const char *file_path, const int id, const char *password)
+void register_user(const char *file_path, char *username, const char *password)
 {
-    FILE *file = fopen(file_path, "a"); // 以追加模式打开用户文件
+    FILE *file = fopen(file_path, "a");
     if (file == NULL)
     {
-        printf("Error opening file\n"); // 如果文件打开失败，打印错误信息
+        printf("Error opening file\n");
         return;
     }
 
-    fprintf(file, "%d 1 %s\n", id, password);  // 将用户ID和密码写入文件
-    printf("User registered successfully!\n"); // 打印注册成功信息
-    fclose(file);                              // 关闭文件
+    fprintf(file, "%s %s 1\n", username, password);
+    printf("User registered successfully!\n");
+    fclose(file);
 }
 
 // 删除用户的函数
-void delete_user(const char *file_path, const int id)
-
+void delete_user(const char *file_path, char *username)
 {
-    FILE *file = fopen(file_path, "r"); // 打开用户文件进行读取
+    FILE *file = fopen(file_path, "r");
     if (file == NULL)
     {
-        printf("Error opening file\n"); // 如果文件打开失败，打印错误信息
+        printf("Error opening file\n");
         return;
     }
 
-    FILE *temp_file = fopen("temp.txt", "w"); // 创建临时文件用于存储未删除的用户
+    FILE *temp_file = fopen("temp.txt", "w");
     if (temp_file == NULL)
     {
-        printf("Error opening temporary file\n"); // 如果临时文件打开失败，打印错误信息
-        fclose(file);                             // 关闭原文件
+        printf("Error opening temporary file\n");
+        fclose(file);
         return;
     }
 
-    char line[256];                         // 用于存储每一行的内容
-    while (fgets(line, sizeof(line), file)) // 逐行读取文件内容
+    char line[256];
+    while (fgets(line, sizeof(line), file))
     {
-        int file_id;                  // 文件中的用户ID
-        sscanf(line, "%d", &file_id); // 解析用户ID
-        if (file_id != id)            // 如果ID不匹配，则写入临时文件
+        char file_username[50];
+        sscanf(line, "%s", file_username);
+        if (file_username != username)
         {
             fputs(line, temp_file);
         }
     }
 
-    fclose(file);      // 关闭原文件
-    fclose(temp_file); // 关闭临时文件
+    fclose(file);
+    fclose(temp_file);
 
-    remove(file_path);                      // 删除原文件
-    rename("temp.txt", file_path);          // 将临时文件重命名为原文件名
-    printf("User deleted successfully!\n"); // 打印删除成功信息
+    remove(file_path);
+    rename("temp.txt", file_path);
+    printf("User deleted successfully!\n");
 }
+
+#endif // LOGIN_H

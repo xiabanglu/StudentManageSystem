@@ -1,20 +1,15 @@
-#ifndef __MENU_H__
-#define __MENU_H__
+#ifndef MENU_H
+#define MENU_H
 
 #include "event.h"
-#include "search.h"
+
+#include "school.h"
+#include "grade.h"
+#include "class.h"
+#include "student.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-
-// 全局变量
-int flag = 0;
-
-// 菜单类型枚举
-typedef enum MenuType
-{
-    MENU_LOGIN,
-    MENU_SHOW,
-} MenuType;
 
 typedef struct MenuItem
 {
@@ -22,6 +17,13 @@ typedef struct MenuItem
     char choice;
     void (*handler)(void);
 } MenuItem;
+
+// 菜单类型枚举
+typedef enum MenuType
+{
+    MENU_LOGIN,
+    MENU_SHOW,
+} MenuType;
 
 // 菜单结构体
 typedef struct Menu
@@ -46,6 +48,7 @@ static const MenuItem show_items[] = {
     {"u - update record", 'u', handle_update_record},
     {"f - find record", 'f', handle_find_record},
     {"q - quit", 'q', handle_quit},
+    {"a - show all records", 'a', handle_show_records},
     {NULL, '\0', NULL} // 结束标记
 };
 
@@ -106,6 +109,7 @@ char getchoice(const char *greet, const MenuItem *items)
     } while (1);
 }
 
+// 事件循环
 void event_loop(Menu *menu, int *is_quit)
 {
     char selected;
@@ -121,6 +125,11 @@ void event_loop(Menu *menu, int *is_quit)
             if (selected == item->choice)
             {
                 item->handler();
+                if (selected == 'l' && rank)
+                {
+                    *is_quit = 1;
+                    selected = 'q';
+                }
                 if (selected == 'q')
                     *is_quit = 1;
                 break;
@@ -131,4 +140,4 @@ void event_loop(Menu *menu, int *is_quit)
     } while (selected != 'q');
 }
 
-#endif
+#endif // MENU_H
