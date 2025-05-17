@@ -3,25 +3,15 @@
 #include "grade.h"
 #include "class.h"
 #include "student.h"
+#include "score.h"
 
-// 记录班级成绩的函数
-void recoding_score_class(Class *class, float *score[7])
+// 计算总分
+int getSum(Student *student)
 {
-    for (int i = 0; i < class->size; i++)
+    int sum = 0;
+    for (int i = 0; i < 10; i++)
     {
-        for (int j = 0; j < 7; j++)
-        {
-            ((int*)(&class->students[i]->score))[j];
-        }
+        sum += student->score[i];
     }
-}
-
-// 修改学生成绩的函数
-void change_score_student(School *school, int id, float score[7])
-{
-    Student **student = getStudent(school, id);
-    for (int i = 0; i < 7; i++)
-    {
-        (*student)->score[i] = score[i];
-    }
+    return sum;
 }

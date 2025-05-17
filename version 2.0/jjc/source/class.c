@@ -5,13 +5,13 @@
 #include "student.h"
 
 // 初始化班级
-void initClass(Class **class, int student_count)
+void initClass(Class **class, int studentCount)
 {
-    (*class)->students = (Student **)malloc(sizeof(Student *) * student_count);
-    (*class)->size = student_count;
-    (*class)->capacity = student_count;
+    (*class)->students = (Student **)malloc(sizeof(Student *) * studentCount);
+    (*class)->size = studentCount;
+    (*class)->capacity = studentCount;
 
-    for (int i = 0; i < student_count; i++)
+    for (int i = 0; i < studentCount; i++)
     {
         (*class)->students[i] = (Student *)malloc(sizeof(Student));
         (*class)->students[i]->indices.classId = (*class)->classId;

@@ -3,6 +3,7 @@
 #include "grade.h"
 #include "class.h"
 #include "student.h"
+#include "score.h"
 
 // 解释学生ID
 StudentIndices explainStudentId(int id)
@@ -134,4 +135,8 @@ void updateStudent(School *school, int id, Info *newStudentInfo, double score[10
     {
         (*student)->score[i] = score[i];
     }
+
+    // 重新计算并更新总分
+    int newSum = getSum(*student);
+    (*student)->score[11] = newSum;
 }

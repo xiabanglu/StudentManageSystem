@@ -2,7 +2,10 @@
 #include "file.h"
 #include "event.h"
 #include "login.h"
+
 #include <stdlib.h>
+#include <stdio.h>
+
 #include "school.h"
 #include "grade.h"
 #include "class.h"

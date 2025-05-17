@@ -3,7 +3,6 @@
 
 #include "account.h"
 #include "info.h"
-#include "score.h"
 
 // 班级学生最大数量
 #define _MAX_STUDENT_NUM_PER_CLASS_ 60
@@ -28,7 +27,7 @@ typedef struct StudentIndices
 	int gradeId;   // 年级ID 2024
 } StudentIndices;
 
-//函数声明
+// 函数声明
 StudentIndices explainStudentId(int id);
 Student **getStudent(School *school, int id);
 void registerStudent(School *school, int id, Info *newStudentInfo);
