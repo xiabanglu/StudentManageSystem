@@ -63,7 +63,6 @@ void handle_login()
             Log("Login as admin", INFO);
         }
 
-        printf("\033[34m欢迎进入学生管理系统 \033[0m\n");
     }
 }
 

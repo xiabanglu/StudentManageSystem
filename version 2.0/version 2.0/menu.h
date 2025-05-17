@@ -22,25 +22,23 @@ typedef struct Menu
 {
     const char *title;
     MenuType type;
-    const MenuItem *items; // 指向菜单项数组
+    const MenuItem *items;
 } Menu;
 
-// 登录菜单项
 static const MenuItem login_items[] = {
-    {"l - student login(学生登录)", 'l', handle_login},
-    {"r - register(注册)", 'r', handle_register},
-    {"k - delete user(删除用户)", 'k', handle_delete_user},
+    {"l - login     (登录)", 'l', handle_login},
+    {"r - register  (注册)", 'r', handle_register},
+    {"q - quit      (退出)", 'k', handle_quit},
     {NULL, '\0', NULL}
 };
 
-// 主菜单项
 static const MenuItem show_items[] = {
-    {"i - insert new record(插入新纪录)", 'i', handle_insert_record},
-    {"d - delete record(删除记录)", 'd', handle_delete_record},
-    {"u - update record(更新记录)", 'u', handle_update_record},
-    {"f - find record(查询记录)", 'f', handle_find_record},
-    {"q - quit(退出)", 'q', handle_quit},
-    {"a - show all records(展示所有记录)", 'a', handle_show_records},
+    {"i - insert record        (增)", 'i', handle_insert_record},
+    {"d - delete record        (删)", 'd', handle_delete_record},
+    {"u - update record        (改)", 'u', handle_update_record},
+    {"f - find single record   (查单个)", 'f', handle_find_record},
+    {"a - show all records     (查所有)", 'a', handle_show_records},
+    {"q - quit                 (退出)", 'q', handle_quit},
     {NULL, '\0', NULL}
 };
 
@@ -72,8 +70,8 @@ char getchoice(const char *greet, const MenuItem *items)
 
     do
     {
-        printf("\033[1;32m-------------------------\033[0m\n");
-        printf("菜单: %s\n", greet);
+        printf("\033[1;32m---------------------------------\033[0m\n");
+        printf("menu: %s\n", greet);
 
         // 打印菜单项
         for (item = items; item->description != NULL; item++)
@@ -113,7 +111,7 @@ void event_loop(Menu *menu, int *is_quit)
     {
         selected = getchoice(menu->title, menu->items);
 
-        printf("\033[1;32m-------------------------\033[0m\n");
+        printf("\033[1;32m---------------------------------\033[0m\n");
 
         for (item = menu->items; item->description != NULL; item++)
         {
@@ -132,7 +130,7 @@ void event_loop(Menu *menu, int *is_quit)
             }
         }
 
-        printf("\033[1;32m-------------------------\033[0m\n");
+        printf("\033[1;32m---------------------------------\033[0m\n");
     } while (selected != 'q');
 
 }
