@@ -25,10 +25,12 @@ int main()
         }
     }
 
+    // loadFromFile()
+
     int is_quit = 0;
 
     Menu *login_menu = create_menu(MENU_LOGIN);
-    Menu *show_menu = create_menu(MENU_SHOW);
+    Menu *show_menu = create_menu(MENU_FUNCTION);
 
     while (!is_quit)
     {
@@ -38,12 +40,21 @@ int main()
     }
     is_quit = 0;
 
+    if (rank != 1 || rank != 2 || rank != 3)
+    {
+        return 0;
+    }
+
     while (!is_quit)
     {
         printf("\033[1;33m请选择操作:\033[0m\n");
         event_loop(show_menu, &is_quit);
         printf("\033[1;32m---------------------------------\033[0m\n");
     }
+    is_quit = 0;
 
-    return 0;
+    if (rank != 1 || rank != 2 || rank != 3)
+    {
+        return 0;
+    }
 }
