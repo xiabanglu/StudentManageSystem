@@ -1,6 +1,3 @@
-#ifndef LOGIN_H
-#define LOGIN_H
-
 #include <string.h>
 #include <stdio.h>
 
@@ -31,5 +28,3 @@ int login(const char *file_path, char *username, char *password)
     fclose(file);
     return 0;
 }
-
-#endif // LOGIN_H

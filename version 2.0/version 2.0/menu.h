@@ -1,6 +1,3 @@
-#ifndef MENU_H
-#define MENU_H
-
 #include "event.h"
 
 // 菜单选项
@@ -29,20 +26,20 @@ typedef struct Menu
 // 暂定权限等级为 rank     1:普通用户    2：管理员    3：开发人员
 static const MenuItem login_items[] = {
     {"l - login     (登录)", 'l', handle_login},
-    {"r - register  (注册)", 'r', handle_register}, // 只能注册普通用户(权限rank：1)
+    {"r - register  (注册)", 'r', handle_register_user}, // 只能注册普通用户 (权限rank：1)
     {"q - quit      (退出)", 'q', handle_quit},
     {NULL, '\0', NULL}};
 
 static const MenuItem function_items[] = {
-    {"i - insert student        (增)", 'i', handle_insert_record},    // 所需权限rank: 2,3
-    {"d - delete student        (删)", 'd', handle_delete_record},    // 所需权限rank: 2,3
-    {"u - update student        (改)", 'u', handle_update_record},    // 所需权限rank: 2,3
-    {"s - show single student   (查单个)", 's', handle_show_record},  // 所需权限rank: 1,2,3
-    {"b - show all student      (查所有)", 'b', handle_show_records}, // 所需权限rank: 2,3
-    //{"c - score statistics      (成绩统计)", 'c', handle_score_statistics},     //所需权限rank: 2,3    接入scoreCounter.h
-    //{"r - register admin        (注册管理员)", 'r', handle_register_admin},     //所需权限rank: 3
-    {"e - delete user account   (注销普通用户账号)", 'e', handle_delete_user}, // 所需权限rank: 2,3
-    //{"a - delete admin account  (注销管理员账号)", 'a', handle_delete_admin},    //所需权限rank: 3
+    {"i - insert student        (增)", 'i', handle_insert_record},               // 所需权限rank: 2,3
+    {"d - delete student        (删)", 'd', handle_delete_record},               // 所需权限rank: 2,3
+    {"u - update student        (改)", 'u', handle_update_record},               // 所需权限rank: 2,3
+    {"s - show single student   (查单个)", 's', handle_show_record},             // 所需权限rank: 1,2,3
+    {"b - show all student      (查所有)", 'b', handle_show_records},            // 所需权限rank: 2,3
+    //{"c - score statistics      (成绩统计)", 'c', handle_score_statistics},    //所需权限rank: 2,3    接入scoreCounter.h
+    {"r - register admin        (注册管理员)", 'r', handle_register_admin},      //所需权限rank: 3
+    {"e - delete user account   (注销普通用户账号)", 'e', handle_delete_user},    // 所需权限rank: 2,3
+    {"a - delete admin account  (注销管理员账号)", 'a', handle_delete_admin},     //所需权限rank: 3
     {"q - quit                  (退出)", 'q', handle_quit},
     {NULL, '\0', NULL}};
 
@@ -139,5 +136,3 @@ void event_loop(Menu *menu, int *is_quit)
 
     } while (selected != 'q');
 }
-
-#endif // MENU_H

@@ -1,3 +1,6 @@
+// #include <stdio.h>
+
+// #include "file.h"
 #include "menu.h"
 
 School *school = NULL;
@@ -25,7 +28,8 @@ int main()
         }
     }
 
-    // loadFromFile()
+    // 加载学生信息
+    loadStudentFromFile("student.txt", school);
 
     int is_quit = 0;
 

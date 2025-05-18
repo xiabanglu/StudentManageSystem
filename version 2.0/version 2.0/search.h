@@ -1,6 +1,3 @@
-#ifndef SEARCH_H
-#define SEARCH_H
-
 #include <stdlib.h>
 #include <string.h>
 
@@ -138,7 +135,7 @@ void registerStudent(School *school, int id, Student *newStudent, double *score)
 		(*class)->students[ind.studentId - 1]->score[i] = score[i];
 	}
 
-	// save_register_student_to_file("student.txt", id, newStudent, score);
+	save_register_student_to_file("student.txt", id, newStudent, score);
 }
 
 // 删除学生
@@ -147,18 +144,18 @@ void deleteStudent(School *school, int id)
 	StudentIndices ind = explainStudentId(id);
 	Grade **grade = getGrade(school, ind.gradeId);
 	Class **class = getClass(*grade, ind.classId);
+
 	if (ind.studentId > (*class)->size)
 	{
-		Log("Error", WARING);
+		Log("Error find!(未找到该学生!)", WARING);
 	}
 	else
 	{
 		free((*class)->students[ind.studentId - 1]);
 		(*class)->students[ind.studentId - 1] = NULL;
 	}
-	Log("Student deleted", INFO);
 
-	// delete_student_from_file();
+	delete_student_from_file("student.txt", id);
 }
 
 // 更新学生信息或成绩
@@ -167,8 +164,7 @@ void updateStudent(School *school, int id, Student *newStudent, double *score)
 	Student **student = getStudent(school, id);
 	if (student == NULL)
 	{
-		printf("Student not found\n");
-		Log("Student not found", ERROR);
+		Log("Student not found!(未找到该学生!)", ERROR);
 		return;
 	}
 
@@ -190,9 +186,7 @@ void updateStudent(School *school, int id, Student *newStudent, double *score)
 		(*student)->score[i] = score[i];
 	}
 
-	Log("Student updated", INFO);
-
-	// update_student_from_file();
+	update_student_from_file("student.txt", id, newStudent, score);
 }
 
 // 获取年级
@@ -361,5 +355,3 @@ void FreeStudent(Student *student)
 		free(student);
 	}
 }
-
-#endif // SEARCH_H

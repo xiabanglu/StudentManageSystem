@@ -1,6 +1,3 @@
-#ifndef LOG_H
-#define LOG_H
-
 #include <stdio.h>
 
 typedef enum LOG_LEVEL
@@ -28,5 +25,3 @@ void Log(const char *message, LOG_LEVEL level)
         break;
     }
 }
-
-#endif // LOG_H
