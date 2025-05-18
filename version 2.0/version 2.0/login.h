@@ -32,10 +32,10 @@ int login(const char *file_path, char *username, char *password)
     return 0;
 }
 
-// 注册用户的函数
+// 用户注册的函数
 void register_user(const char *file_path, char *username, const char *password)
 {
-    FILE *file = fopen(file_path, "r");
+    FILE *file = fopen(file_path, "a");
     if (file == NULL)
     {
         printf("Error opening file\n");

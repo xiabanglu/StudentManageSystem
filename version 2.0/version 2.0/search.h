@@ -2,6 +2,7 @@
 #define SEARCH_H
 
 #include <stdlib.h>
+#include <string.h>
 #include "log.h"
 
 // 班级学生最大数量
@@ -48,22 +49,22 @@ typedef struct Student
 } Student;
 
 // 班级结构体
-typedef struct Class
+typedef struct Clazz
 {
     Student **students; // 学生指针数组
     int size;           // 班级学生数量
     int capacity;       // 班级最大容量
-    int schoolName;     // 学校
+    const char *schoolName; // 学校名称
     int gradeId;        // 年级ID
     int classId;        // 班级ID
-} Class;
+} Clazz;
 
 // 年级结构体
 typedef struct Grade
 {
-    Class **classes; // 班级指针数组
+    Clazz **classes; // 班级指针数组
     int size;        // 年级中班级数量
-    int schoolName;  // 学校
+    const char *schoolName;  // 学校名称
     int gradeId;     // 年级ID
 } Grade;
 
@@ -87,9 +88,10 @@ int getSum(Student *student);
 void initGrade(Grade **grade, int classCount);
 Grade **getGrade(School *school, int gradeId);
 void DeleteGrade(Grade *grade);
-void initClass(Class **class, int studentCount);
-Class **getClass(Grade *grade, int classId);
-void DeleteClass(Class *class);
+void initClazz(Clazz **clazz, int studentCount);
+Clazz **getClazz(Grade *grade, int classId);
+void DeleteClazz(Clazz *clazz);
+void traverseAllStudents(School *school);
 
 // 创建学校
 School *createSchool(const char *schoolName, int gradeCount)
@@ -162,21 +164,21 @@ Student **getStudent(School *school, int id)
 		return NULL;
 	}
 
-	Class **class = getClass(*grade, indices.classId);
-	if (class == NULL)
+	Clazz **clazz = getClazz(*grade, indices.classId);
+	if (clazz == NULL)
 	{
 		printf("id is error: class is error\n");
 		return NULL;
 	}
 
-	if (indices.studentId > (*class)->size)
+	if (indices.studentId > (*clazz)->size)
 	{
 		printf("id is error: student is error\n");
 		return NULL;
 	}
 	else
 	{
-		return &(*class)->students[indices.studentId - 1];
+		return &(*clazz)->students[indices.studentId - 1];
 	}
 
 	return NULL;
@@ -188,19 +190,19 @@ void registerStudent(School *school, int id, Info *newStudentInfo)
 	// 解析id并查找
 	StudentIndices ind = explainStudentId(id);
 	Grade **grade = getGrade(school, ind.gradeId);
-	Class **class = getClass(*grade, ind.classId);
+	Clazz **clazz = getClazz(*grade, ind.classId);
 
 	// 处理id
-	(*class)->students[ind.studentId - 1]->indices.id = id;
-	(*class)->students[ind.studentId - 1]->indices.studentId = ind.studentId;
-	(*class)->students[ind.studentId - 1]->indices.classId = ind.classId;
-	(*class)->students[ind.studentId - 1]->indices.gradeId = ind.gradeId;
+	(*clazz)->students[ind.studentId - 1]->indices.id = id;
+	(*clazz)->students[ind.studentId - 1]->indices.studentId = ind.studentId;
+	(*clazz)->students[ind.studentId - 1]->indices.classId = ind.classId;
+	(*clazz)->students[ind.studentId - 1]->indices.gradeId = ind.gradeId;
 
 	// 处理学生信息
-	strcpy((*class)->students[ind.studentId - 1]->info.name, newStudentInfo->name);
-	strcpy((*class)->students[ind.studentId - 1]->info.gender, newStudentInfo->gender);
-	(*class)->students[ind.studentId - 1]->info.age = newStudentInfo->age;
-	strcpy((*class)->students[ind.studentId - 1]->info.schoolName, newStudentInfo->schoolName);
+	strcpy((*clazz)->students[ind.studentId - 1]->info.name, newStudentInfo->name);
+	strcpy((*clazz)->students[ind.studentId - 1]->info.gender, newStudentInfo->gender);
+	(*clazz)->students[ind.studentId - 1]->info.age = newStudentInfo->age;
+	strcpy((*clazz)->students[ind.studentId - 1]->info.schoolName, newStudentInfo->schoolName);
 }
 
 // 删除学生
@@ -208,15 +210,15 @@ void deleteStudent(School *school, int id)
 {
 	StudentIndices ind = explainStudentId(id);
 	Grade **grade = getGrade(school, ind.gradeId);
-	Class **class = getClass(*grade, ind.classId);
-	if (ind.studentId > (*class)->size)
+	Clazz **clazz = getClazz(*grade, ind.classId);
+	if (ind.studentId > (*clazz)->size)
 	{
 		Log("Error", WARING);
 	}
 	else
 	{
-		free((*class)->students[ind.studentId - 1]);
-		(*class)->students[ind.studentId - 1] = NULL;
+		free((*clazz)->students[ind.studentId - 1]);
+		(*clazz)->students[ind.studentId - 1] = NULL;
 	}
 	Log("Student deleted", INFO);
 }
@@ -280,15 +282,15 @@ int getSum(Student *student)
 // 初始化年级
 void initGrade(Grade **grade, int classCount)
 {
-	(*grade)->classes = (Class **)malloc(sizeof(Class *) * classCount);
-	(*grade)->size = classCount;
+    (*grade)->classes = (Clazz **)malloc(sizeof(Clazz *) * classCount);
+    (*grade)->size = classCount;
 
-	for (int i = 0; i < classCount; i++)
-	{
-		(*grade)->classes[i] = (Class *)malloc(sizeof(Class));
-		(*grade)->classes[i]->classId = i + 1;
-		(*grade)->classes[i]->gradeId = (*grade)->gradeId;
-	}
+    for (int i = 0; i < classCount; i++)
+    {
+        (*grade)->classes[i] = (Clazz *)malloc(sizeof(Clazz));
+        (*grade)->classes[i]->classId = i + 1;
+        (*grade)->classes[i]->gradeId = (*grade)->gradeId;
+    }
 }
 
 // 获取年级
@@ -314,7 +316,7 @@ void DeleteGrade(Grade *grade)
 		{
 			for (int i = 0; i < grade->size; i++)
 			{
-				DeleteClass(grade->classes[i]);
+				DeleteClazz(grade->classes[i]);
 			}
 			free(grade->classes);
 		}
@@ -323,51 +325,67 @@ void DeleteGrade(Grade *grade)
 }
 
 // 初始化班级
-void initClass(Class **class, int studentCount)
+void initClazz(Clazz **clazz, int studentCount)
 {
-	(*class)->students = (Student **)malloc(sizeof(Student *) * studentCount);
-	(*class)->size = studentCount;
-	(*class)->capacity = studentCount;
+	(*clazz)->students = (Student **)malloc(sizeof(Student *) * studentCount);
+	(*clazz)->size = studentCount;
+	(*clazz)->capacity = studentCount;
 
 	for (int i = 0; i < studentCount; i++)
 	{
-		(*class)->students[i] = (Student *)malloc(sizeof(Student));
-		(*class)->students[i]->indices.classId = (*class)->classId;
-		(*class)->students[i]->indices.gradeId = (*class)->gradeId;
-		(*class)->students[i]->indices.id = (*class)->gradeId * 10000 + (*class)->classId * 100 + i + 1;
+		(*clazz)->students[i] = (Student *)malloc(sizeof(Student));
+		(*clazz)->students[i]->indices.classId = (*clazz)->classId;
+		(*clazz)->students[i]->indices.gradeId = (*clazz)->gradeId;
+		(*clazz)->students[i]->indices.id = (*clazz)->gradeId * 10000 + (*clazz)->classId * 100 + i + 1;
 	}
 }
 
 // 获取班级
-Class **getClass(Grade *grade, int classId)
+Clazz **getClazz(Grade *grade, int classId)
 {
-	for (int i = 0; i < grade->size; i++)
-	{
-		if (grade->classes[i]->classId == classId)
-		{
-			return &grade->classes[i];
-		}
-	}
+    for (int i = 0; i < grade->size; i++)
+    {
+        if (grade->classes[i]->classId == classId)
+        {
+            return &grade->classes[i];
+        }
+    }
 
-	return NULL;
+    return NULL;
 }
 
 // 删除班级
-void DeleteClass(Class *class)
+void DeleteClazz(Clazz *clazz)
 {
-	if (class)
-	{
-		if (class->students)
-		{
-			for (int i = 0; i < class->size; i++)
-			{
-				DeleteStudent(class->students[i]);
-			}
-			free(class->students);
-		}
-		free(class);
-	}
+    if (clazz)
+    {
+        if (clazz->students)
+        {
+            for (int i = 0; i < clazz->size; i++)
+            {
+                DeleteStudent(clazz->students[i]);
+            }
+            free(clazz->students);
+        }
+        free(clazz);
+    }
 }
 
+// 按年级、班级遍历所有学生
+void traverseAllStudents(School *school) {
+    for (int i = 0; i < school->size; i++) {
+        Grade *grade = school->grades[i];
+        for (int j = 0; j < grade->size; j++) {
+            Clazz *clazz = grade->classes[j];
+            for (int k = 0; k < clazz->size; k++) {
+                Student *student = clazz->students[k];
+                if (student != NULL) {
+                    // 这里可以处理student，比如打印信息
+                    // printf("%s\n", student->info.name);
+                }
+            }
+        }
+    }
+}
 
 #endif // SEARCH_H

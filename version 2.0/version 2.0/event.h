@@ -7,7 +7,7 @@
 #include "log.h"
 #include "search.h"
 
-School *school;
+extern School *school;
 int rank = 0;
 
 void handle_show_records()
@@ -17,10 +17,10 @@ void handle_show_records()
     {
         for (int j = 0; j < school->grades[i]->size; j++)
         {
-            Class *class = school->grades[i]->classes[j];
-            for (int k = 0; k < class->size; k++)
+            Clazz *clazz = school->grades[i]->classes[j];
+            for (int k = 0; k < clazz->size; k++)
             {
-                Student *student = class->students[k];
+                Student *student = clazz->students[k];
                 if (student == NULL)
                     continue;
                 printf("ID: %d, 姓名: %s, 性别: %s, 年龄: %d, 所属学校:%s\n", student->indices.id, student->info.name, student->info.gender, student->info.age, student->info.schoolName);

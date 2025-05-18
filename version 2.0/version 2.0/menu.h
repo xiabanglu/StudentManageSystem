@@ -28,7 +28,7 @@ typedef struct Menu
 static const MenuItem login_items[] = {
     {"l - login     (登录)", 'l', handle_login},
     {"r - register  (注册)", 'r', handle_register},
-    {"q - quit      (退出)", 'k', handle_quit},
+    {"q - quit      (退出)", 'q', handle_quit},
     {NULL, '\0', NULL}
 };
 
@@ -117,13 +117,7 @@ void event_loop(Menu *menu, int *is_quit)
         {
             if (selected == item->choice)
             {
-                
-                handle_login();
-                
-                if (selected == 'l' && rank)
-                {
-                    selected = 'q';
-                }
+                if (item->handler) item->handler();
                 if (selected == 'q')
                 {    *is_quit = 1;  }
                 break;
