@@ -41,8 +41,8 @@ static const MenuItem function_items[] = {
     {"b - show all student      (查所有)", 'b', handle_show_records}, // 所需权限rank: 2,3
     //{"c - score statistics      (成绩统计)", 'c', handle_score_statistics},     //所需权限rank: 2,3    接入scoreCounter.h
     //{"r - register admin        (注册管理员)", 'r', handle_register_admin},     //所需权限rank: 3
-    {"d - delete user account   (注销普通用户账号)", 'd', handle_delete_user}, // 所需权限rank: 2,3
-    //{"d - delete admin account  (注销管理员账号)", 'd', handle_delete_admin},    //所需权限rank: 3
+    {"e - delete user account   (注销普通用户账号)", 'e', handle_delete_user}, // 所需权限rank: 2,3
+    //{"a - delete admin account  (注销管理员账号)", 'a', handle_delete_admin},    //所需权限rank: 3
     {"q - quit                  (退出)", 'q', handle_quit},
     {NULL, '\0', NULL}};
 
