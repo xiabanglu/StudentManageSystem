@@ -1,9 +1,7 @@
-// #include <stdio.h>
-
-// #include "file.h"
 #include "menu.h"
 
 School *school = NULL;
+int rank = 0;
 
 int main()
 {
@@ -32,33 +30,39 @@ int main()
     loadStudentFromFile("student.txt", school);
 
     int is_quit = 0;
-
     Menu *login_menu = create_menu(MENU_LOGIN);
-    Menu *show_menu = create_menu(MENU_FUNCTION);
+    Menu *function_menu = create_menu(MENU_FUNCTION);
 
     while (!is_quit)
     {
-        printf("\033[1;33m请选择操作:\033[0m\n");
-        event_loop(login_menu, &is_quit);
-        printf("\033[1;32m---------------------------------\033[0m\n");
-    }
-    is_quit = 0;
+        rank = 0;                                   // 重置权限状态
+        Menu *login_menu = create_menu(MENU_LOGIN); // 每次循环创建新的登录菜单
+        int login_quit = 0;
+        printf("\033[1;33m=== 登录界面 ===\033[0m\n");
+        event_loop(login_menu, &login_quit, 1); // 登录循环
 
-    if (rank != 1 || rank != 2 || rank != 3)
-    {
-        return 0;
+        free(login_menu); // 释放登录菜单内存
+
+        if (login_quit)
+        {
+            is_quit = 1; // 登录界面按q退出程序
+            continue;
+        }
+
+        if (rank > 0)
+        { // 登录成功
+            Menu *function_menu = create_menu(MENU_FUNCTION);
+            int func_quit = 0;
+            printf("\033[1;33m=== 功能菜单 ===\033[0m\n");
+            while (!func_quit)
+            {
+                event_loop(function_menu, &func_quit, 0); // 功能循环
+            }
+            free(function_menu); // 释放功能菜单内存
+        }
     }
 
-    while (!is_quit)
-    {
-        printf("\033[1;33m请选择操作:\033[0m\n");
-        event_loop(show_menu, &is_quit);
-        printf("\033[1;32m---------------------------------\033[0m\n");
-    }
-    is_quit = 0;
-
-    if (rank != 1 || rank != 2 || rank != 3)
-    {
-        return 0;
-    }
+    FreeSchool(school);
+    Log("系统已安全退出", INFO);
+    return 0;
 }

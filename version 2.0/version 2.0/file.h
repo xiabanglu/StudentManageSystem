@@ -33,11 +33,15 @@ void loadStudentFromFile(const char *file_path, School *school)
 
         // 解析学生ID结构
         StudentIndices indices = explainStudentId(id);
-        if (indices.gradeId <= 0 || indices.gradeId > _MAX_GRADE_NUM_PER_SCHOOL_ ||
+        
+        // 加强ID格式验证
+        if (indices.gradeId < 2024 || indices.gradeId > 2030 || // 假设年级范围2024-2030
             indices.classId <= 0 || indices.classId > _MAX_CLASS_NUM_PER_GRADE_ ||
-            indices.studentId <= 0 || indices.studentId > _MAX_STUDENT_NUM_PER_CLASS_)
+            indices.studentId <= 0 || indices.studentId > _MAX_STUDENT_NUM_PER_CLASS_) 
         {
-            Log("Invalid student ID format!(ID格式错误!)", WARING);
+            char warn_msg[100];
+            sprintf(warn_msg, "无效ID格式! 原始数据:%s", line);
+            Log(warn_msg, WARING);
             continue;
         }
 

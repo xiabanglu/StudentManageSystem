@@ -31,22 +31,22 @@ static const MenuItem login_items[] = {
     {NULL, '\0', NULL}};
 
 static const MenuItem function_items[] = {
-    {"i - insert student        (增)", 'i', handle_insert_record},               // 所需权限rank: 2,3
-    {"d - delete student        (删)", 'd', handle_delete_record},               // 所需权限rank: 2,3
-    {"u - update student        (改)", 'u', handle_update_record},               // 所需权限rank: 2,3
-    {"s - show single student   (查单个)", 's', handle_show_record},             // 所需权限rank: 1,2,3
-    {"b - show all student      (查所有)", 'b', handle_show_records},            // 所需权限rank: 2,3
+    {"i - insert student        (增)", 'i', handle_insert_record},    // 所需权限rank: 2,3
+    {"d - delete student        (删)", 'd', handle_delete_record},    // 所需权限rank: 2,3
+    {"u - update student        (改)", 'u', handle_update_record},    // 所需权限rank: 2,3
+    {"s - show single student   (查单个)", 's', handle_show_record},  // 所需权限rank: 1,2,3
+    {"b - show all student      (查所有)", 'b', handle_show_records}, // 所需权限rank: 2,3
     //{"c - score statistics      (成绩统计)", 'c', handle_score_statistics},    //所需权限rank: 2,3    接入scoreCounter.h
-    {"r - register admin        (注册管理员)", 'r', handle_register_admin},      //所需权限rank: 3
-    {"e - delete user account   (注销普通用户账号)", 'e', handle_delete_user},    // 所需权限rank: 2,3
-    {"a - delete admin account  (注销管理员账号)", 'a', handle_delete_admin},     //所需权限rank: 3
+    {"r - register admin        (注册管理员)", 'r', handle_register_admin},    // 所需权限rank: 3
+    {"e - delete user account   (注销普通用户账号)", 'e', handle_delete_user}, // 所需权限rank: 2,3
+    {"a - delete admin account  (注销管理员账号)", 'a', handle_delete_admin},  // 所需权限rank: 3
     {"q - quit                  (退出)", 'q', handle_quit},
     {NULL, '\0', NULL}};
 
 // 函数声明
 Menu *create_menu(MenuType type);
 char getchoice(const char *greet, const MenuItem *items);
-void event_loop(Menu *menu, int *is_quit);
+void event_loop(Menu *menu, int *is_quit, int is_login_menu);
 
 // 创建菜单
 Menu *create_menu(MenuType type)
@@ -109,7 +109,7 @@ char getchoice(const char *greet, const MenuItem *items)
 }
 
 // 事件循环
-void event_loop(Menu *menu, int *is_quit)
+void event_loop(Menu *menu, int *is_quit, int is_login_menu)
 {
     char selected;
     const MenuItem *item;
@@ -117,7 +117,6 @@ void event_loop(Menu *menu, int *is_quit)
     do
     {
         selected = getchoice(menu->title, menu->items);
-
         printf("\033[1;32m---------------------------------\033[0m\n");
 
         for (item = menu->items; item->description != NULL; item++)
@@ -126,13 +125,23 @@ void event_loop(Menu *menu, int *is_quit)
             {
                 if (item->handler)
                     item->handler();
+
+                // 处理退出逻辑
                 if (selected == 'q')
                 {
-                    *is_quit = 1;
+                    if (is_login_menu)
+                    {
+                        Log("正在退出系统...", INFO);
+                        *is_quit = 1; // 登录界面退出程序
+                    }
+                    else
+                    {
+                        Log("返回登录界面...", INFO);
+                        *is_quit = 1; // 功能界面返回登录
+                    }
                 }
                 break;
             }
         }
-
-    } while (selected != 'q');
+    } while (!(*is_quit)); // 当is_quit被设为1时退出循环
 }

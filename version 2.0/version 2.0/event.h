@@ -3,11 +3,9 @@
 
 #include "file.h"
 #include "login.h"
-// #include "log.h"
-// #include "search.h"
 
 extern School *school;
-int rank = 0;
+extern int rank;
 
 // 函数声明
 void handle_login();
@@ -37,31 +35,24 @@ void handle_login()
 
     if (rank == -1)
     {
-        Log("File is error!(不存在该文件!)", ERROR);
+        Log("用户文件损坏或不存在!", ERROR);
         rank = 0;
         return;
     }
 
     if (rank == 0)
     {
-        Log("Login failed!(登录失败!)", ERROR);
+        Log("用户名或密码错误!", ERROR);
         return;
     }
-    else
-    {
-        if (rank == 1)
-        {
-            Log("Login successful!(登录成功!)", INFO);
-        }
-        else if (rank == 2)
-        {
-            Log("Login as admin(管理员权限)", INFO);
-        }
-        else if (rank == 3)
-        {
-            Log("Login as developer(开发人员权限)", INFO);
-        }
-    }
+
+    // 成功登录提示
+    char success_msg[50];
+    sprintf(success_msg, "%s 登录成功，权限等级: %d",
+            (rank == 1) ? "用户" : (rank == 2) ? "管理员"
+                                               : "开发者",
+            rank);
+    Log(success_msg, INFO);
 }
 
 void handle_register_user()
@@ -279,5 +270,10 @@ void handle_delete_admin()
 
 void handle_quit()
 {
-    Log("欢迎下次使用！", INFO);
+    // 功能菜单退出时自动重置rank
+    if (rank > 0)
+    {
+        Log("正在返回登录界面...", INFO);
+        rank = 0; // 重置权限等级
+    }
 }
