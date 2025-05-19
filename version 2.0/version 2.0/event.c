@@ -12,7 +12,7 @@ void handle_login()
     printf("密码:\n");
     scanf("%s", password);
 
-    rank = login("user.txt", username, password);
+    rank = login("account.txt", username, password);
 
     if (rank == -1)
     {
@@ -46,7 +46,7 @@ void handle_register_user()
     printf("密码:\n");
     scanf("%s", password);
 
-    save_register_user_to_file("user.txt", username, password);
+    save_user_to_file("account.txt", username, password);
 }
 
 void handle_insert_record()
@@ -208,7 +208,7 @@ void handle_register_admin()
     printf("密码:\n");
     scanf("%s", password);
 
-    save_register_admin_to_file("user.txt", username, password);
+    save_admin_to_file("account.txt", username, password);
 }
 
 void handle_delete_user()
@@ -227,7 +227,7 @@ void handle_delete_user()
     printf("密码:\n");
     scanf("%s", password);
 
-    delete_user_from_file("user.txt", username, password);
+    delete_user_from_file("account.txt", username, password);
 }
 
 void handle_delete_admin()
@@ -246,7 +246,7 @@ void handle_delete_admin()
     printf("密码:\n");
     scanf("%s", password);
 
-    delete_admin_from_file("user.txt", username, password);
+    delete_admin_from_file("account.txt", username, password);
 }
 
 void handle_quit()

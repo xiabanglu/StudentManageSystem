@@ -6,7 +6,11 @@ void loadStudentFromFile(const char *file_path, School *school)
     FILE *file = fopen(file_path, "r");
     if (file == NULL)
     {
-        Log("Failed to open student file!(打开文件失败!)", ERROR);
+        // 创建空文件
+        file = fopen(file_path, "w");
+        if (file)
+            fclose(file);
+        Log("未找到学生文件，已自动创建空文件", WARING);
         return;
     }
 
@@ -31,38 +35,38 @@ void loadStudentFromFile(const char *file_path, School *school)
         // 解析学生ID结构
         StudentIndices indices = explainStudentId(id);
 
-        // 加强ID格式验证
-        if (indices.gradeId < 2024 || indices.gradeId > 2030 || // 假设年级范围2024-2030
-            indices.classId <= 0 || indices.classId > _MAX_CLASS_NUM_PER_GRADE_ ||
-            indices.studentId <= 0 || indices.studentId > _MAX_STUDENT_NUM_PER_CLASS_)
-        {
-            char warn_msg[100];
-            sprintf(warn_msg, "无效ID格式! 原始数据:%s", line);
-            Log(warn_msg, WARING);
-            continue;
-        }
-
-        // 定位年级和班级
+        // 动态获取或创建年级
         Grade **grade_ptr = getGrade(school, indices.gradeId);
         if (grade_ptr == NULL)
         {
-            Log("Grade not found!(未找到年级!)", ERROR);
-            continue;
+            // 动态添加新年级
+            addGradeToSchool(school, indices.gradeId);
+            grade_ptr = getGrade(school, indices.gradeId);
         }
+
+        // 动态获取或创建班级
         Class **class_ptr = getClass(*grade_ptr, indices.classId);
         if (class_ptr == NULL)
         {
-            Log("Class not found!(未找到班级!)", ERROR);
-            continue;
+            // 动态添加新班级
+            addClassToGrade(*grade_ptr, indices.classId);
+            class_ptr = getClass(*grade_ptr, indices.classId);
+        }
+
+        // 确保学生位置有效
+        if (indices.studentId > (*class_ptr)->capacity)
+        {
+            // 扩容班级容量
+            resizeClass(*class_ptr, indices.studentId);
         }
 
         // 创建学生对象并填充数据
         Student *student = (*class_ptr)->students[indices.studentId - 1];
-        student->indices = indices;
-        strcpy(student->info.name, name);
-        strcpy(student->info.gender, gender);
-        student->info.age = age;
-        strcpy(student->info.schoolName, schoolName);
+        if (student == NULL)
+        {
+            student = (Student *)malloc(sizeof(Student));
+            (*class_ptr)->students[indices.studentId - 1] = student;
+        }
         for (int i = 0; i < 10; i++)
         {
             student->score[i] = score[i];
@@ -73,8 +77,8 @@ void loadStudentFromFile(const char *file_path, School *school)
     Log("Student data loaded successfully!(学生数据成功加载!)", INFO);
 }
 
-// 保存注册user信息
-void save_register_user_to_file(const char *file_path, char *username, char *password)
+// 保存user信息
+void save_user_to_file(const char *file_path, char *username, char *password)
 {
     FILE *file = fopen(file_path, "a");
     if (file == NULL)
@@ -136,8 +140,8 @@ void delete_user_from_file(const char *file_path, char *username, char *password
     Log("User deleted successfully!(成功注销普通用户！)", INFO);
 }
 
-// 保存注册admin信息
-void save_register_admin_to_file(const char *file_path, char *username, const char *password)
+// 保存admin信息
+void save_admin_to_file(const char *file_path, char *username, const char *password)
 {
     FILE *file = fopen(file_path, "a");
     if (file == NULL)
@@ -199,8 +203,8 @@ void delete_admin_from_file(const char *file_path, char *username, char *passwor
     Log("Admin deleted successfully!(成功注销管理员！)", INFO);
 }
 
-// 保存学生信息
-void save_register_student_to_file(const char *file_path, int id, Student *newStudent, double *score)
+// 保存一条学生信息
+void save_student_to_file(const char *file_path, int id, Student *newStudent, double *score)
 {
     FILE *file = fopen(file_path, "a");
     if (file == NULL)
@@ -218,7 +222,7 @@ void save_register_student_to_file(const char *file_path, int id, Student *newSt
     fclose(file);
 }
 
-// 删去文件中某条学生数据
+// 删去某条学生数据
 void delete_student_from_file(const char *file_path, int id)
 {
     FILE *file = fopen(file_path, "r");
@@ -266,10 +270,10 @@ void delete_student_from_file(const char *file_path, int id)
     }
 }
 
-// 更新文件中某条学生数据
+// 更新某条学生数据
 void update_student_from_file(const char *file_path, int id, Student *newStudent, double *score)
 {
     delete_student_from_file(file_path, id);
-    save_register_student_to_file(file_path, id, newStudent, score);
+    save_student_to_file(file_path, id, newStudent, score);
     Log("Student updated!(成功更新信息!)", INFO);
 }

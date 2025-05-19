@@ -3,10 +3,6 @@
 
 #include "common.h"
 
-// 班级学生最大数量
-#define _MAX_STUDENT_NUM_PER_CLASS_ 60
-// 年级最大班级数量
-#define _MAX_CLASS_NUM_PER_GRADE_ 20
 // 学校最大年级数量
 #define _MAX_GRADE_NUM_PER_SCHOOL_ 4
 
@@ -79,10 +75,16 @@ Student **getStudent(School *school, int id);
 void initGrade(Grade **grade, int classCount);
 void initClass(Class **class, int studentCount);
 
-School *createSchool(const char *schoolName, int gradeCount);
 void FreeSchool(School *school);
 void FreeGrade(Grade *grade);
 void FreeClass(Class *class);
 void FreeStudent(Student *student);
+
+School *createSchool(const char *schoolName, int gradeCount);
+void addGradeToSchool(School *school, int gradeId);
+Grade *createGrade(int gradeId);
+void addClassToGrade(Grade *grade, int classId);
+Class *createClass(int classId);
+void resizeClass(Class *cls, int new_size);
 
 #endif

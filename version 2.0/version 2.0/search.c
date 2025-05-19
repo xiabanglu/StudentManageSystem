@@ -1,27 +1,15 @@
 #include "search.h"
+#include "file.h"
 
 // 解释学生ID
 StudentIndices explainStudentId(int id)
 {
-	// 示例: id = 20240101
-
-	// 学号: 01
-	int studentId = id % 100;
-	id /= 100;
-
-	// 班级id:01
-	int classId = id % 100;
-	id /= 100;
-
-	// 年级id:2024
-	int gradeId = id;
-
 	StudentIndices newIndice;
+	// 示例ID:20240101 → 年级2024，班级01，学生01
+	newIndice.gradeId = id / 10000;		  // 前4位（2024）
+	newIndice.classId = (id / 100) % 100; // 中间2位（01）
+	newIndice.studentId = id % 100;		  // 后2位（01）
 	newIndice.id = id;
-	newIndice.studentId = studentId;
-	newIndice.classId = classId;
-	newIndice.gradeId = gradeId;
-
 	return newIndice;
 }
 
@@ -50,7 +38,7 @@ void registerStudent(School *school, int id, Student *newStudent, double *score)
 		(*class)->students[ind.studentId - 1]->score[i] = score[i];
 	}
 
-	save_register_student_to_file("student.txt", id, newStudent, score);
+	save_student_to_file("student.txt", id, newStudent, score);
 }
 
 // 删除学生
@@ -194,23 +182,6 @@ void initClass(Class **class, int studentCount)
 	}
 }
 
-// 创建学校
-School *createSchool(const char *schoolName, int gradeCount)
-{
-	School *school = (School *)malloc(sizeof(School));
-	school->size = gradeCount;
-	school->schoolName = schoolName;
-
-	school->grades = (Grade **)malloc(sizeof(Grade *) * gradeCount);
-	for (int i = 0; i < gradeCount; i++)
-	{
-		school->grades[i] = (Grade *)malloc(sizeof(Grade));
-		school->grades[i]->gradeId = i + 1;
-	}
-
-	return school;
-}
-
 // 删除学校内存
 void FreeSchool(School *school)
 {
@@ -269,4 +240,69 @@ void FreeStudent(Student *student)
 	{
 		free(student);
 	}
+}
+
+// 创建学校
+School *createSchool(const char *schoolName, int gradeCount)
+{
+	School *school = (School *)malloc(sizeof(School));
+	school->size = gradeCount;
+	school->schoolName = schoolName;
+
+	school->grades = (Grade **)malloc(sizeof(Grade *) * gradeCount);
+	for (int i = 0; i < gradeCount; i++)
+	{
+		school->grades[i] = (Grade *)malloc(sizeof(Grade));
+		school->grades[i]->gradeId = i + 1;
+	}
+
+	return school;
+}
+
+// 动态添加年级到学校
+void addGradeToSchool(School *school, int gradeId)
+{
+	school->grades = realloc(school->grades, (school->size + 1) * sizeof(Grade *));
+	school->grades[school->size] = createGrade(gradeId);
+	school->size++;
+}
+
+// 创建年级
+Grade *createGrade(int gradeId)
+{
+	Grade *grade = (Grade *)malloc(sizeof(Grade));
+	grade->gradeId = gradeId;
+	grade->classes = NULL;
+	grade->size = 0;
+	return grade;
+}
+
+// 动态添加班级到年级
+void addClassToGrade(Grade *grade, int classId)
+{
+	grade->classes = realloc(grade->classes, (grade->size + 1) * sizeof(Class *));
+	grade->classes[grade->size] = createClass(classId);
+	grade->size++;
+}
+
+// 创建班级
+Class *createClass(int classId)
+{
+	Class *cls = (Class *)malloc(sizeof(Class));
+	cls->classId = classId;
+	cls->students = NULL;
+	cls->size = 0;
+	cls->capacity = 0;
+	return cls;
+}
+
+// 扩容班级容量
+void resizeClass(Class *cls, int new_size)
+{
+	cls->students = realloc(cls->students, new_size * sizeof(Student *));
+	for (int i = cls->capacity; i < new_size; i++)
+	{
+		cls->students[i] = NULL;
+	}
+	cls->capacity = new_size;
 }

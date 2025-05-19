@@ -22,16 +22,6 @@ int main()
         return -1;
     }
 
-    // 初始化年级和班级
-    for (int i = 0; i < _MAX_GRADE_NUM_PER_SCHOOL_; i++)
-    {
-        initGrade(&school->grades[i], _MAX_CLASS_NUM_PER_GRADE_);
-        for (int j = 0; j < _MAX_CLASS_NUM_PER_GRADE_; j++)
-        {
-            initClass(&school->grades[i]->classes[j], _MAX_STUDENT_NUM_PER_CLASS_);
-        }
-    }
-
     // 加载学生数据
     loadStudentFromFile("student.txt", school);
 
@@ -61,3 +51,5 @@ int main()
     Log("系统已安全退出", INFO);
     return 0;
 }
+
+// gcc main.c event.c file.c login.c menu.c search.c log.c -o main.exe
