@@ -4,10 +4,11 @@ void Log(const char *message, LOG_LEVEL level)
 {
     time_t now = time(NULL);
     struct tm *t = localtime(&now);
-    
-    switch (level) {
+
+    switch (level)
+    {
     case INFO:
-        printf("\033[32m[%02d:%02d:%02d INFO] %s\033[0m\n", 
+        printf("\033[32m[%02d:%02d:%02d INFO] %s\033[0m\n",
                t->tm_hour, t->tm_min, t->tm_sec, message);
         break;
     case WARING:

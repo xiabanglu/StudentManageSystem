@@ -35,7 +35,6 @@ int main()
     // 加载学生数据
     loadStudentFromFile("student.txt", school);
 
-
     // 创建菜单(只需创建一次)
     Menu *login_menu = create_menu(MENU_LOGIN);
     Menu *function_menu = create_menu(MENU_FUNCTION);
