@@ -1,6 +1,81 @@
 #include "menu.h"
 #include "event.h"
 
+// 颜色定义
+#define COLOR_RESET "\033[0m"
+#define COLOR_CYAN "\033[1;36m"
+#define COLOR_YELLOW "\033[1;33m"
+#define COLOR_GREEN "\033[1;32m"
+#define COLOR_RED "\033[1;31m"
+#define COLOR_WHITE "\033[1;37m"
+
+// 显示登陆菜单
+void display_menu_login()
+{
+    printf("\033[1;36m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\033[0m\n");
+    printf("\033[1;36m┃          \033[1;33m学生成绩管理系统\033[1;36m          ┃\033[0m\n");
+    printf("\033[1;36m┃        \033[1;33mLogin Menu (登录菜单)     \033[1;36m  ┃\033[0m\n");
+    printf("\033[1;36m┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫\033[0m\n");
+    printf("\033[1;36m┃                                    ┃\033[0m\n");
+    printf("\033[1;36m┃    \033[1;32m[l] ────>  login      (登录)    \033[1;36m┃\033[0m\n");
+    printf("\033[1;36m┃                                    ┃\033[0m\n");
+    printf("\033[1;36m┃    \033[1;32m[r] ────>  register   (注册)    \033[1;36m┃\033[0m\n");
+    printf("\033[1;36m┃                                    ┃\033[0m\n");
+    printf("\033[1;36m┃    \033[1;31m[q] ────>  quit       (退出)    \033[1;36m┃\033[0m\n");
+    printf("\033[1;36m┃                                    ┃\033[0m\n");
+    printf("\033[1;36m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\033[0m\n");
+}
+
+// 打印功能菜单框架
+void print_menu_frame()
+{
+    printf(COLOR_CYAN "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓" COLOR_RESET "\n");
+    printf(COLOR_CYAN "┃                    " COLOR_YELLOW "学生成绩管理系统" COLOR_CYAN "                     ┃" COLOR_RESET "\n");
+    printf(COLOR_CYAN "┃                " COLOR_YELLOW "Function Menu (功能菜单)     " COLOR_CYAN "            ┃" COLOR_RESET "\n");
+    printf(COLOR_CYAN "┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫" COLOR_RESET "\n");
+    printf(COLOR_CYAN "┃                                                         ┃" COLOR_RESET "\n");
+}
+
+// 打印菜单底部
+void print_menu_footer()
+{
+    printf(COLOR_CYAN "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" COLOR_RESET "\n");
+}
+
+// 打印菜单项
+void print_menu_item(const char *content, const char *color)
+{
+    char temp = content[1];
+    printf(COLOR_CYAN "┃   ");
+    printf("%s", color);
+    printf("%-55s", content); // 50字符宽度保持对齐
+    if (temp != 'q')
+    {
+        printf(COLOR_CYAN "   ┃" COLOR_RESET "\n");
+    }
+    else
+    {
+        printf(COLOR_CYAN "   ┃" COLOR_RESET "\n");
+    }
+    printf(COLOR_CYAN "┃" COLOR_RESET "                                                         " COLOR_CYAN "┃" COLOR_RESET "\n");
+}
+
+// 显示功能菜单
+void display_menu_function()
+{
+    print_menu_frame();
+    print_menu_item("[i] ────>  insert student        (添加学生信息)", COLOR_GREEN);
+    print_menu_item("[d] ────>  delete student        (删除学生信息)", COLOR_GREEN);
+    print_menu_item("[u] ────>  update student        (修改学生信息)", COLOR_GREEN);
+    print_menu_item("[s] ────>  show single student   (查询单个学生)", COLOR_GREEN);
+    print_menu_item("[b] ────>  show all students     (显示所有学生)", COLOR_GREEN);
+    print_menu_item("[r] ────>  register admin        (注册管理员)", COLOR_GREEN);
+    print_menu_item("[e] ────>  delete user account   (注销普通用户账号)", COLOR_GREEN);
+    print_menu_item("[a] ────>  delete admin account  (注销管理员账号)", COLOR_GREEN);
+    print_menu_item("[q] ────>  quit                  (退出)", COLOR_RED);
+    print_menu_footer();
+}
+
 // 暂定权限等级为 rank     1:普通用户    2：管理员    3：开发人员
 static const MenuItem login_items[] = {
     {COLOR_YELLOW "l - login     (登录)" COLOR_RESET, 'l', handle_login},
