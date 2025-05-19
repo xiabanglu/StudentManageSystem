@@ -15,7 +15,7 @@ void loadStudentFromFile(const char *file_path, School *school)
     }
 
     char line[256];
-    while (fgets(line, sizeof(line), file))
+    while (fgets(line, sizeof(line), file) != NULL)
     {
         // 解析学生数据
         int id, age;
@@ -60,13 +60,24 @@ void loadStudentFromFile(const char *file_path, School *school)
             resizeClass(*class_ptr, indices.studentId);
         }
 
-        // 创建学生对象并填充数据
+        // 修改后的学生对象创建逻辑
         Student *student = (*class_ptr)->students[indices.studentId - 1];
         if (student == NULL)
         {
             student = (Student *)malloc(sizeof(Student));
+            // 初始化内存
+            memset(student, 0, sizeof(Student));
             (*class_ptr)->students[indices.studentId - 1] = student;
         }
+
+        // 填充数据前添加初始化
+        student->indices = indices;
+        strcpy(student->info.name, name);
+        strcpy(student->info.gender, gender);
+        student->info.age = age;
+        strcpy(student->info.schoolName, schoolName);
+
+        // 成绩赋值
         for (int i = 0; i < 10; i++)
         {
             student->score[i] = score[i];

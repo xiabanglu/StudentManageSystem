@@ -108,7 +108,7 @@ void event_loop(Menu *menu, int *is_quit, int is_login_menu)
                     if (is_login_menu)
                     {
                         Log("正在退出系统...", INFO);
-                        *is_quit = 1; // 登录界面退出程序
+                        *is_quit = 2; // 登录界面退出程序
                     }
                     else
                     {
@@ -121,5 +121,5 @@ void event_loop(Menu *menu, int *is_quit, int is_login_menu)
         }
 
         printf("\033[1;32m---------------------------------\033[0m\n");
-    } while (selected != 'q');
+    } while (!*is_quit);
 }

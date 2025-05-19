@@ -10,6 +10,24 @@
 extern struct School *school;
 extern int rank;
 
+// 颜色代码宏定义
+#define COLOR_RESET   "\033[0m"
+#define COLOR_RED     "\033[31m"
+#define COLOR_GREEN   "\033[32m"
+#define COLOR_YELLOW  "\033[33m"
+#define COLOR_BLUE    "\033[34m"
+#define COLOR_MAGENTA "\033[35m"
+#define COLOR_CYAN    "\033[36m"
+
+// 样式宏
+#define BOLD_ON       "\033[1m"
+#define BOLD_OFF      "\033[22m"
+#define BLINK         "\033[5m"
+
+// 界面元素模板
+#define HEADER_LINE   COLOR_CYAN "─────────────────────────────────────────────────" COLOR_RESET
+#define INPUT_PROMPT  COLOR_GREEN "➤ " COLOR_RESET
+
 // 日志级别枚举
 typedef enum LOG_LEVEL
 {

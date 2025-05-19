@@ -163,6 +163,10 @@ void handle_show_record()
         printf("%lf ", (*student)->score[i]);
     }
     printf("\n");
+    printf("\n操作完成，按任意键返回菜单...");
+    while (getchar() != '\n')
+        ;      // 清空输入缓冲区
+    getchar(); // 等待用户输入
 }
 
 void handle_show_records()
@@ -189,6 +193,10 @@ void handle_show_records()
             }
         }
     }
+    printf("\n操作完成，按任意键返回菜单...");
+    while (getchar() != '\n')
+        ;      // 清空输入缓冲区
+    getchar(); // 等待用户输入
 }
 
 // void handle_score_statistics(){}

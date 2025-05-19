@@ -10,9 +10,9 @@ int rank = 0;
 int main()
 {
     // 初始化界面
-    printf("\033[1;32m---------------------------------\033[0m\n");
-    printf("\033[1;34m欢迎使用学生成绩管理系统!\033[0m\n");
-    printf("\033[1;34m(Welcome to student manage system!)\033[0m\n");
+    printf(HEADER_LINE "\n");
+    printf(COLOR_GREEN "欢迎使用学生管理系统\n" COLOR_RESET);
+    printf(COLOR_GREEN "Welcome to student manage system\n" COLOR_RESET);
 
     // 初始化学校数据结构
     school = createSchool("NUIST", _MAX_GRADE_NUM_PER_SCHOOL_);
@@ -28,20 +28,33 @@ int main()
     // 创建菜单(只需创建一次)
     Menu *login_menu = create_menu(MENU_LOGIN);
     Menu *function_menu = create_menu(MENU_FUNCTION);
-    int is_quit = 0;
+    // int is_quit = 0;
 
-    while (!is_quit)
+    while (1)
     {
-        event_loop(login_menu, &is_quit, 1);
-    }
+        // 登录菜单循环
+        int login_quit = 0;
+        while (!login_quit)
+        {
+            event_loop(login_menu, &login_quit, 1);
+            if (login_quit == 1 && rank == 0)
+            { // 退出程序
+                FreeSchool(school);
+                return 0;
+            }
+        }
 
-    is_quit = 0;
-
-    while (!is_quit)
-    {
-        printf("\033[1;33mPlease select an option:\033[0m\n");
-        event_loop(function_menu, &is_quit, 0);
-        printf("\033[1;32m-------------------------\033[0m\n");
+        // 功能菜单循环
+        int func_quit = 0;
+        while (!func_quit && rank > 0)
+        {
+            event_loop(function_menu, &func_quit, 0);
+            if (func_quit)
+            {
+                rank = 0;       // 重置权限
+                login_quit = 0; // 返回登录菜单
+            }
+        }
     }
 
     // 释放资源

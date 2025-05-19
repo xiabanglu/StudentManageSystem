@@ -1,4 +1,3 @@
 xiabanglu 123456 1
 zhangyue 123456 2
 wangtao 123456 3
-xiabanglu 123456 1
