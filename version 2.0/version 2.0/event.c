@@ -163,12 +163,12 @@ void handle_show_record()
         Log("Student found!(该学生信息如下:)", INFO);
     }
 
-    printf(COLOR_BLUE "姓名: %s 性别: %s 年龄: %d 所属学校: %s\n各科分数\n: " COLOR_RESET, (*student)->info.name,
+    printf(COLOR_BLUE "姓名: %s 性别: %s 年龄: %d 所属学校: %s\n各科分数:\n" COLOR_RESET, (*student)->info.name,
            (*student)->info.gender, (*student)->info.age, (*student)->info.schoolName);
 
     for (int i = 0; i < 10; i++)
     {
-        printf(COLOR_BLUE"%lf "COLOR_RESET, (*student)->score[i]);
+        printf(COLOR_BLUE "%.2lf " COLOR_RESET, (*student)->score[i]);
     }
     printf("\n");
 }
@@ -191,7 +191,7 @@ void handle_show_records()
                 Student *student = school->grades[i]->classes[j]->students[k];
                 if (student == NULL)
                     continue;
-                printf(COLOR_BLUE"ID: %d, 姓名: %s, 性别: %s, 年龄: %d, 所属学校:%s\n"COLOR_RESET, student->indices.id,
+                printf(COLOR_BLUE "ID: %d, 姓名: %s, 性别: %s, 年龄: %d, 所属学校:%s\n" COLOR_RESET, student->indices.id,
                        student->info.name, student->info.gender, student->info.age, student->info.schoolName);
             }
         }
