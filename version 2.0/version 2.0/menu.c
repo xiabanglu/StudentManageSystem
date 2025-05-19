@@ -59,6 +59,8 @@ char getchoice(const char *greet, const MenuItem *items)
             printf(COLOR_YELLOW "%s\n" COLOR_RESET, item->description);
         }
 
+        printf(HEADER_LINE "\n");
+
         // 获取输入
         selected = getchar();
         while (selected == '\n')
