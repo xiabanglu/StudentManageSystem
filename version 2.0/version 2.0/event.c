@@ -6,17 +6,18 @@ void handle_login()
 {
     char username[20];
     char password[20];
-    printf("请依次输入: \n");
-    printf("用户名:\n");
+    printf(COLOR_BLUE "请依次输入: \n" COLOR_RESET);
+    printf(HEADER_LINE "\n");
+    printf(COLOR_BLUE "用户名:\n" COLOR_RESET);
     scanf("%s", username);
-    printf("密码:\n");
+    printf(COLOR_BLUE "密码:\n" COLOR_RESET);
     scanf("%s", password);
 
     rank = login("account.txt", username, password);
 
     if (rank == -1)
     {
-        Log("用户文件损坏或不存在!", ERROR);
+        Log("用户文件不存在!", ERROR);
         rank = 0;
         return;
     }
@@ -40,10 +41,11 @@ void handle_register_user()
 {
     char username[20];
     char password[20];
-    printf("请依次输入: \n");
-    printf("用户名:\n");
+    printf(COLOR_BLUE "请依次输入: \n" COLOR_RESET);
+    printf(HEADER_LINE "\n");
+    printf(COLOR_BLUE "用户名:\n" COLOR_RESET);
     scanf("%s", username);
-    printf("密码:\n");
+    printf(COLOR_BLUE "密码:\n" COLOR_RESET);
     scanf("%s", password);
 
     save_user_to_file("account.txt", username, password);
@@ -67,13 +69,14 @@ void handle_insert_record()
         return;
     }
 
-    printf("请按照格式输入: \n");
-    printf("ID 姓名 性别 年龄 所属学校: \n");
+    printf(COLOR_BLUE "请按照格式输入: \n" COLOR_RESET);
+    printf(HEADER_LINE "\n");
+    printf(COLOR_BLUE "ID 姓名 性别 年龄 所属学校: \n" COLOR_RESET);
     scanf("%d %s %s %d %s",
           &id, newStudent->info.name, newStudent->info.gender,
           &newStudent->info.age, newStudent->info.schoolName);
 
-    printf("请依次录入十次成绩(空格间隔每门成绩): \n");
+    printf(COLOR_BLUE "请依次录入十次成绩(空格间隔每门成绩): \n" COLOR_RESET);
     scanf("%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf ", &score[0], &score[1], &score[2],
           &score[3], &score[4], &score[5], &score[6], &score[7], &score[8], &score[9]);
 
@@ -90,7 +93,8 @@ void handle_delete_record()
     }
 
     int id;
-    printf("请输入ID: \n");
+    printf(COLOR_BLUE "请输入ID: \n" COLOR_RESET);
+    printf(HEADER_LINE "\n");
     scanf("%d", &id);
 
     deleteStudent(school, id);
@@ -114,13 +118,14 @@ void handle_update_record()
         return;
     }
 
-    printf("请按照格式输入: \n");
-    printf("ID 姓名 性别 年龄 所属学校: \n");
+    printf(COLOR_BLUE "请按照格式输入: \n" COLOR_RESET);
+    printf(HEADER_LINE "\n");
+    printf(COLOR_BLUE "ID 姓名 性别 年龄 所属学校: \n" COLOR_RESET);
     scanf("%d %s %s %d %s",
           &id, newStudent->info.name, newStudent->info.gender,
           &newStudent->info.age, newStudent->info.schoolName);
 
-    printf("请依次录入十次成绩(空格间隔每门成绩): \n");
+    printf(COLOR_BLUE "请依次录入十次成绩(空格间隔每门成绩): \n" COLOR_RESET);
     scanf("%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf ", &score[0], &score[1], &score[2],
           &score[3], &score[4], &score[5], &score[6], &score[7], &score[8], &score[9]);
 
@@ -137,7 +142,8 @@ void handle_show_record()
     }
 
     int id;
-    printf("请输入ID: \n");
+    printf(COLOR_BLUE "请输入ID: \n" COLOR_RESET);
+    printf(HEADER_LINE "\n");
     scanf("%d", &id);
 
     if (id <= 0)
@@ -153,20 +159,18 @@ void handle_show_record()
         return;
     }
     else
+    {
         Log("Student found!(该学生信息如下:)", INFO);
+    }
 
-    printf("姓名: %s 性别: %s 年龄: %d 所属学校: %s\n各科分数\n: ", (*student)->info.name,
+    printf(COLOR_BLUE "姓名: %s 性别: %s 年龄: %d 所属学校: %s\n各科分数\n: " COLOR_RESET, (*student)->info.name,
            (*student)->info.gender, (*student)->info.age, (*student)->info.schoolName);
 
     for (int i = 0; i < 10; i++)
     {
-        printf("%lf ", (*student)->score[i]);
+        printf(COLOR_BLUE"%lf "COLOR_RESET, (*student)->score[i]);
     }
     printf("\n");
-    printf("\n操作完成，按任意键返回菜单...");
-    while (getchar() != '\n')
-        ;      // 清空输入缓冲区
-    getchar(); // 等待用户输入
 }
 
 void handle_show_records()
@@ -182,21 +186,17 @@ void handle_show_records()
     {
         for (int j = 0; j < school->grades[i]->size; j++)
         {
-            Class *class = school->grades[i]->classes[j];
-            for (int k = 0; k < class->size; k++)
+            for (int k = 0; k < school->grades[i]->classes[j]->size; k++)
             {
-                Student *student = class->students[k];
+                Student *student = school->grades[i]->classes[j]->students[k];
                 if (student == NULL)
                     continue;
-                printf("ID: %d, 姓名: %s, 性别: %s, 年龄: %d, 所属学校:%s\n", student->indices.id,
+                printf(COLOR_BLUE"ID: %d, 姓名: %s, 性别: %s, 年龄: %d, 所属学校:%s\n"COLOR_RESET, student->indices.id,
                        student->info.name, student->info.gender, student->info.age, student->info.schoolName);
             }
         }
     }
-    printf("\n操作完成，按任意键返回菜单...");
-    while (getchar() != '\n')
-        ;      // 清空输入缓冲区
-    getchar(); // 等待用户输入
+    printf("\n");
 }
 
 // void handle_score_statistics(){}
@@ -208,12 +208,14 @@ void handle_register_admin()
         Log("Your authority is insufficient!(你的权限不够！)", ERROR);
         return;
     }
+
     char username[20];
     char password[20];
-    printf("请依次输入: \n");
-    printf("用户名:\n");
+    printf(COLOR_BLUE "请依次输入: \n" COLOR_RESET);
+    printf(HEADER_LINE "\n");
+    printf(COLOR_BLUE "用户名:\n" COLOR_RESET);
     scanf("%s", username);
-    printf("密码:\n");
+    printf(COLOR_BLUE "密码:\n" COLOR_RESET);
     scanf("%s", password);
 
     save_admin_to_file("account.txt", username, password);
@@ -229,10 +231,11 @@ void handle_delete_user()
 
     char username[20];
     char password[20];
-    printf("请依次输入: \n");
-    printf("用户名:\n");
+    printf(COLOR_BLUE "请依次输入: \n" COLOR_RESET);
+    printf(HEADER_LINE "\n");
+    printf(COLOR_BLUE "用户名:\n" COLOR_RESET);
     scanf("%s", username);
-    printf("密码:\n");
+    printf(COLOR_BLUE "密码:\n" COLOR_RESET);
     scanf("%s", password);
 
     delete_user_from_file("account.txt", username, password);
@@ -248,10 +251,11 @@ void handle_delete_admin()
 
     char username[20];
     char password[20];
-    printf("请依次输入: \n");
-    printf("用户名:\n");
+    printf(COLOR_BLUE "请依次输入: \n" COLOR_RESET);
+    printf(HEADER_LINE "\n");
+    printf(COLOR_BLUE "用户名:\n" COLOR_RESET);
     scanf("%s", username);
-    printf("密码:\n");
+    printf(COLOR_BLUE "密码:\n" COLOR_RESET);
     scanf("%s", password);
 
     delete_admin_from_file("account.txt", username, password);
@@ -262,7 +266,6 @@ void handle_quit()
     // 功能菜单退出时自动重置rank
     if (rank > 0)
     {
-        Log("正在返回登录界面...", INFO);
         rank = 0; // 重置权限等级
     }
 }

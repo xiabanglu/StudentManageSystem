@@ -6,7 +6,6 @@ int login(const char *file_path, char *username, char *password)
     FILE *file = fopen(file_path, "r");
     if (file == NULL)
     {
-        printf("Error opening file\n");
         return -1;
     }
 

@@ -6,13 +6,19 @@
 // 学校最大年级数量
 #define _MAX_GRADE_NUM_PER_SCHOOL_ 4
 
+// 年级最大班级数量
+#define _MAX_CLASS_NUM_PER_GRADE_ 20
+
+// 班级最大学生数量
+#define _MAX_STUDENT_NUM_PER_CLASS_ 60
+
 // 学生信息结构体
 typedef struct Info
 {
-	char name[50];
+	char name[10];
 	char gender[10];
 	int age;
-	char schoolName[50];
+	char schoolName[15];
 } Info;
 
 // 学生解析ID结构体
@@ -31,15 +37,14 @@ typedef struct Student
 {
 	StudentIndices indices; // id信息
 	Info info;				// 学生信息
-	double score[11];		// 成绩信息
+	double score[10];		// 成绩信息
 } Student;
 
 // 班级结构体
 typedef struct Class
 {
-	Student **students;		// 学生指针数组
+	Student **students;
 	int size;				// 班级学生数量
-	int capacity;			// 班级最大容量
 	const char *schoolName; // 所属学校名称
 	int gradeId;			// 年级ID
 	int classId;			// 班级ID
@@ -48,7 +53,7 @@ typedef struct Class
 // 年级结构体
 typedef struct Grade
 {
-	Class **classes;		// 班级指针数组
+	Class **classes;
 	int size;				// 年级中班级数量
 	const char *schoolName; // 所属学校名称
 	int gradeId;			// 年级ID
@@ -59,7 +64,7 @@ typedef struct School
 {
 	Grade **grades;			// 年级指针数组
 	int size;				// 学校年级数量
-	const char *schoolName; // 所属学校名称
+	const char *schoolName; // 学校名称
 } School;
 
 // 函数声明
@@ -68,23 +73,9 @@ void registerStudent(School *school, int id, Student *newStudent, double *score)
 void deleteStudent(School *school, int id);
 void updateStudent(School *school, int id, Student *newStudent, double *score);
 
-Grade **getGrade(School *school, int gradeId);
-Class **getClass(Grade *grade, int classId);
 Student **getStudent(School *school, int id);
 
-void initGrade(Grade **grade, int classCount);
-void initClass(Class **class, int studentCount);
-
-void FreeSchool(School *school);
-void FreeGrade(Grade *grade);
-void FreeClass(Class *class);
-void FreeStudent(Student *student);
-
-School *createSchool(const char *schoolName, int gradeCount);
-void addGradeToSchool(School *school, int gradeId);
-Grade *createGrade(int gradeId);
-void addClassToGrade(Grade *grade, int classId);
-Class *createClass(int classId);
-void resizeClass(Class *cls, int new_size);
+School *initSchool(const char *schoolName, int maxGrade, int maxClass, int maxStudent);
+void freeSchool(School *school);
 
 #endif

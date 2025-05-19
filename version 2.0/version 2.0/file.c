@@ -6,86 +6,65 @@ void loadStudentFromFile(const char *file_path, School *school)
     FILE *file = fopen(file_path, "r");
     if (file == NULL)
     {
-        // 创建空文件
-        file = fopen(file_path, "w");
-        if (file)
-            fclose(file);
-        Log("未找到学生文件，已自动创建空文件", WARING);
+        Log("无法加载学生文件!", ERROR);
         return;
     }
 
-    char line[256];
-    while (fgets(line, sizeof(line), file) != NULL)
+    char line[512];
+    while (fgets(line, sizeof(line), file))
     {
-        // 解析学生数据
         int id, age;
         char name[50], gender[10], schoolName[50];
-        double score[10];
+        double scores[10];
 
+        // 解析学生数据
         int parsed = sscanf(line, "%d %s %s %d %s %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
                             &id, name, gender, &age, schoolName,
-                            &score[0], &score[1], &score[2], &score[3], &score[4],
-                            &score[5], &score[6], &score[7], &score[8], &score[9]);
+                            &scores[0], &scores[1], &scores[2], &scores[3], &scores[4],
+                            &scores[5], &scores[6], &scores[7], &scores[8], &scores[9]);
+
         if (parsed != 15)
         {
-            Log("Invalid data format in student file!(文本格式错误!)", WARING);
+            Log("学生数据格式错误!", ERROR);
             continue;
         }
 
-        // 解析学生ID结构
+        // 解释ID获取索引
         StudentIndices indices = explainStudentId(id);
+        int grade_idx = indices.gradeId - 2024;  // 年级索引
+        int class_idx = indices.classId - 1;     // 班级索引
+        int student_idx = indices.studentId - 1; // 学生索引
 
-        // 动态获取或创建年级
-        Grade **grade_ptr = getGrade(school, indices.gradeId);
-        if (grade_ptr == NULL)
+        // 检查索引有效性
+        if (grade_idx < 0 || grade_idx >= school->size)
         {
-            // 动态添加新年级
-            addGradeToSchool(school, indices.gradeId);
-            grade_ptr = getGrade(school, indices.gradeId);
+            Log("无效年级!", ERROR);
+            continue;
+        }
+        Grade *grade = school->grades[grade_idx];
+        if (class_idx < 0 || class_idx >= grade->size)
+        {
+            Log("无效班级!", ERROR);
+            continue;
+        }
+        Class *cls = grade->classes[class_idx];
+        if (student_idx < 0 || student_idx >= cls->size)
+        {
+            Log("无效学生位置!", ERROR);
+            continue;
         }
 
-        // 动态获取或创建班级
-        Class **class_ptr = getClass(*grade_ptr, indices.classId);
-        if (class_ptr == NULL)
-        {
-            // 动态添加新班级
-            addClassToGrade(*grade_ptr, indices.classId);
-            class_ptr = getClass(*grade_ptr, indices.classId);
-        }
-
-        // 确保学生位置有效
-        if (indices.studentId > (*class_ptr)->capacity)
-        {
-            // 扩容班级容量
-            resizeClass(*class_ptr, indices.studentId);
-        }
-
-        // 修改后的学生对象创建逻辑
-        Student *student = (*class_ptr)->students[indices.studentId - 1];
-        if (student == NULL)
-        {
-            student = (Student *)malloc(sizeof(Student));
-            // 初始化内存
-            memset(student, 0, sizeof(Student));
-            (*class_ptr)->students[indices.studentId - 1] = student;
-        }
-
-        // 填充数据前添加初始化
-        student->indices = indices;
-        strcpy(student->info.name, name);
-        strcpy(student->info.gender, gender);
-        student->info.age = age;
-        strcpy(student->info.schoolName, schoolName);
-
-        // 成绩赋值
-        for (int i = 0; i < 10; i++)
-        {
-            student->score[i] = score[i];
-        }
+        // 填充内存数据
+        Student *stu = cls->students[student_idx];
+        stu->indices = indices;
+        strcpy(stu->info.name, name);
+        strcpy(stu->info.gender, gender);
+        stu->info.age = age;
+        strcpy(stu->info.schoolName, schoolName);
+        memcpy(stu->score, scores, sizeof(double) * 10);
     }
-
     fclose(file);
-    Log("Student data loaded successfully!(学生数据成功加载!)", INFO);
+    Log("学生数据加载完成!", INFO);
 }
 
 // 保存user信息
