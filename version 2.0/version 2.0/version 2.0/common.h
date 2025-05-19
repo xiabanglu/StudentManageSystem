@@ -11,7 +11,8 @@ extern struct School *school;
 extern int rank;
 
 // 日志级别枚举
-typedef enum LOG_LEVEL {
+typedef enum LOG_LEVEL
+{
     INFO,
     WARING,
     ERROR
