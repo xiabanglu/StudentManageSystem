@@ -1,27 +1,5 @@
+#include "menu.h"
 #include "event.h"
-
-// 菜单选项
-typedef struct MenuItem
-{
-    const char *description; // 菜单描述
-    char choice;             // 选择开关
-    void (*handler)(void);   // 回调函数
-} MenuItem;
-
-// 菜单类型枚举
-typedef enum MenuType
-{
-    MENU_LOGIN,    // 登录
-    MENU_FUNCTION, // 功能
-} MenuType;
-
-// 菜单结构体
-typedef struct Menu
-{
-    const char *title;     // 菜单名
-    MenuType type;         // 菜单类型
-    const MenuItem *items; // 菜单选项
-} Menu;
 
 // 暂定权限等级为 rank     1:普通用户    2：管理员    3：开发人员
 static const MenuItem login_items[] = {
@@ -42,11 +20,6 @@ static const MenuItem function_items[] = {
     {"a - delete admin account  (注销管理员账号)", 'a', handle_delete_admin},  // 所需权限rank: 3
     {"q - quit                  (退出)", 'q', handle_quit},
     {NULL, '\0', NULL}};
-
-// 函数声明
-Menu *create_menu(MenuType type);
-char getchoice(const char *greet, const MenuItem *items);
-void event_loop(Menu *menu, int *is_quit, int is_login_menu);
 
 // 创建菜单
 Menu *create_menu(MenuType type)
@@ -123,9 +96,12 @@ void event_loop(Menu *menu, int *is_quit, int is_login_menu)
         {
             if (selected == item->choice)
             {
-                if (item->handler)
-                    item->handler();
-
+                item->handler();
+                if (selected == 'l' && rank)
+                {
+                    *is_quit = 1;
+                    selected = 'q';
+                }
                 // 处理退出逻辑
                 if (selected == 'q')
                 {
@@ -143,5 +119,7 @@ void event_loop(Menu *menu, int *is_quit, int is_login_menu)
                 break;
             }
         }
-    } while (!(*is_quit)); // 当is_quit被设为1时退出循环
+
+        printf("\033[1;32m---------------------------------\033[0m\n");
+    } while (selected != 'q');
 }

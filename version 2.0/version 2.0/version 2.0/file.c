@@ -1,7 +1,4 @@
-#include <string.h>
-#include <stdio.h>
-
-#include "search.h"
+#include "file.h"
 
 // 程序入口初始化信息
 void loadStudentFromFile(const char *file_path, School *school)
@@ -269,11 +266,10 @@ void delete_student_from_file(const char *file_path, int id)
     }
 }
 
-
 // 更新文件中某条学生数据
 void update_student_from_file(const char *file_path, int id, Student *newStudent, double *score)
 {
-    delete_student_from_file("student.txt", id);
-    save_register_student_to_file("student.txt", id, newStudent, score);
+    delete_student_from_file(file_path, id);
+    save_register_student_to_file(file_path, id, newStudent, score);
     Log("Student updated!(成功更新信息!)", INFO);
 }

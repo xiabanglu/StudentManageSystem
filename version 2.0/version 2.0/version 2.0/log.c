@@ -1,12 +1,4 @@
-#include <stdio.h>
-#include <time.h>
-
-typedef enum LOG_LEVEL
-{
-    INFO,
-    WARING,
-    ERROR
-} LOG_LEVEL;
+#include "log.h"
 
 void Log(const char *message, LOG_LEVEL level)
 {

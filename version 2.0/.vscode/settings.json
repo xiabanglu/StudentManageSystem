@@ -3,6 +3,8 @@
         "typeinfo": "c",
         "school.h": "c",
         "stdlib.h": "c",
-        "file.h": "c"
-    }
+        "file.h": "c",
+        "search.h": "c"
+    },
+    "jdk.advanced.disable.nbjavac": false
 }

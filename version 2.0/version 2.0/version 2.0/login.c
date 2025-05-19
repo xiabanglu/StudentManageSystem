@@ -1,5 +1,4 @@
-#include <string.h>
-#include <stdio.h>
+#include "login.h"
 
 // 登录验证
 int login(const char *file_path, char *username, char *password)
