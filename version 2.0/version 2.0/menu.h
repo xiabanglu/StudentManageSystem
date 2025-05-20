@@ -30,5 +30,10 @@ typedef struct Menu
 Menu *create_menu(MenuType type);
 char getchoice(const char *greet, const MenuItem *items);
 void event_loop(Menu *menu, int *is_quit, MenuType type);
+void display_menu_login();
+void display_menu_function();
+void print_menu_item(const char *content, const char *color);
+void print_menu_footer();
+void print_menu_frame();
 
 #endif

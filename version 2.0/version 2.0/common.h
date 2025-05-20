@@ -18,6 +18,7 @@ extern int rank;
 #define COLOR_BLUE "\033[34m"
 #define COLOR_CYAN "\033[36m"
 #define COLOR_PINK "\033[35m"
+#define COLOR_WHITE "\033[1;37m"
 
 // 样式宏
 #define BOLD_ON "\033[1m"
@@ -25,8 +26,8 @@ extern int rank;
 #define BLINK "\033[5m"
 
 // 界面元素模板
-#define HEADER_LINE COLOR_CYAN "─────────────────────────────────────────────────" COLOR_RESET
-#define INPUT_PROMPT COLOR_GREEN "➤ " COLOR_RESET
+#define HEADER_LINE COLOR_CYAN "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" COLOR_RESET
+#define INPUT_PROMPT COLOR_YELLOW "➤ " COLOR_RESET
 
 // 日志级别枚举
 typedef enum LOG_LEVEL
@@ -36,7 +37,7 @@ typedef enum LOG_LEVEL
     ERROR
 } LOG_LEVEL;
 
-// 公共函数声明
+// 函数声明
 void Log(const char *message, LOG_LEVEL level);
 
 #endif

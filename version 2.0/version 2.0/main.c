@@ -11,8 +11,10 @@ int main()
 {
     // 初始化界面
     printf(HEADER_LINE "\n");
-    printf(COLOR_YELLOW "欢迎使用学生管理系统\n" COLOR_RESET);
-    printf(COLOR_YELLOW "Welcome to student manage system\n" COLOR_RESET);
+
+    //printf(           "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    printf(COLOR_YELLOW "                  欢迎使用学生管理系统!\n" COLOR_RESET);
+    printf(COLOR_YELLOW "            Welcome to student manage system!\n" COLOR_RESET);
 
     // 初始化学校
     school = initSchool("NUIST", _MAX_GRADE_NUM_PER_SCHOOL_, _MAX_CLASS_NUM_PER_GRADE_, _MAX_STUDENT_NUM_PER_CLASS_);

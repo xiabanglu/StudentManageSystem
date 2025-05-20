@@ -6,10 +6,12 @@ void handle_login()
 {
     char username[20];
     char password[20];
-    printf(COLOR_PINK "Please enter as required(请按要求输入):\n" COLOR_RESET);
-    printf(COLOR_PINK "username(用户名):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW"Please enter as required(请按要求输入):\n\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW"username(用户名):\n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%s", username);
-    printf(COLOR_PINK "password(密码):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW"password(密码):\n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%s", password);
     printf(HEADER_LINE "\n");
 
@@ -41,10 +43,12 @@ void handle_register_user()
 {
     char username[20];
     char password[20];
-    printf(COLOR_PINK "Please enter as required(请按要求输入):\n" COLOR_RESET);
-    printf(COLOR_PINK "username(用户名):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW"Please enter as required(请按要求输入):\n\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW"username(用户名):\n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%s", username);
-    printf(COLOR_PINK "password(密码):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW"password(密码):\n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%s", password);
     printf(HEADER_LINE "\n");
 
@@ -69,13 +73,15 @@ void handle_insert_record()
         return;
     }
 
-    printf(COLOR_PINK "Please enter as required(请按要求输入):\n" COLOR_RESET);
-    printf(COLOR_PINK "ID 姓名 性别 年龄 所属学校: \n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "Please enter as required(请按格式输入):\n\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "ID 姓名 性别 年龄 所属学校: \n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%d %s %s %d %s",
           &id, newStudent->info.name, newStudent->info.gender,
           &newStudent->info.age, newStudent->info.schoolName);
 
-    printf(COLOR_PINK "请依次录入十次成绩(空格间隔每门成绩): \n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "请依次录入十次成绩(空格间隔每门成绩): \n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf ", &score[0], &score[1], &score[2],
           &score[3], &score[4], &score[5], &score[6], &score[7], &score[8], &score[9]);
     printf(HEADER_LINE "\n");
@@ -93,7 +99,8 @@ void handle_delete_record()
     }
 
     int id;
-    printf(COLOR_PINK "Please enter id(请输入ID): \n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "Please enter id(请输入ID): \n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%d", &id);
     printf(HEADER_LINE "\n");
 
@@ -114,17 +121,19 @@ void handle_update_record()
 
     if (newStudent == NULL)
     {
-        Log("Memory allocation failure!(内存分配失败!)", ERROR);
+        Log("Memory allocation failure(内存分配失败)!", ERROR);
         return;
     }
 
-    printf(COLOR_PINK "Please enter as required(请按要求输入):\n" COLOR_RESET);
-    printf(COLOR_PINK "ID 姓名 性别 年龄 所属学校: \n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "Please enter as required(请按格式输入):\n\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "ID 姓名 性别 年龄 所属学校: \n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%d %s %s %d %s",
           &id, newStudent->info.name, newStudent->info.gender,
           &newStudent->info.age, newStudent->info.schoolName);
 
-    printf(COLOR_PINK "请依次录入十次成绩(空格间隔每门成绩): \n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "请依次录入十次成绩(空格间隔每门成绩): \n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf ", &score[0], &score[1], &score[2],
           &score[3], &score[4], &score[5], &score[6], &score[7], &score[8], &score[9]);
     printf(HEADER_LINE "\n");
@@ -142,7 +151,8 @@ void handle_show_record()
     }
 
     int id;
-    printf(COLOR_PINK "Please enter id(请输入ID): \n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "Please enter id(请输入ID): \n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%d", &id);
     printf(HEADER_LINE "\n");
 
@@ -177,7 +187,7 @@ void handle_show_records()
 {
     if (rank != 2 && rank != 3)
     {
-        Log("Your authority is insufficient!(你的权限不够！)", ERROR);
+        Log("Your authority is insufficient(你的权限不够)!", ERROR);
         return;
     }
 
@@ -211,10 +221,12 @@ void handle_register_admin()
 
     char username[20];
     char password[20];
-    printf(COLOR_PINK "Please enter as required(请按要求输入):\n" COLOR_RESET);
-    printf(COLOR_PINK "username(用户名):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW"Please enter as required(请按要求输入):\n\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW"username(用户名):\n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%s", username);
-    printf(COLOR_PINK "password(密码):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW"password(密码):\n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%s", password);
     printf(HEADER_LINE "\n");
 
@@ -231,10 +243,12 @@ void handle_delete_user()
 
     char username[20];
     char password[20];
-    printf(COLOR_PINK "Please enter as required(请按要求输入):\n" COLOR_RESET);
-    printf(COLOR_PINK "username(用户名):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW"Please enter as required(请按要求输入):\n\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW"username(用户名):\n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%s", username);
-    printf(COLOR_PINK "password(密码):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW"password(密码):\n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%s", password);
     printf(HEADER_LINE "\n");
 
@@ -251,10 +265,12 @@ void handle_delete_admin()
 
     char username[20];
     char password[20];
-    printf(COLOR_PINK "Please enter as required(请按要求输入):\n" COLOR_RESET);
-    printf(COLOR_PINK "username(用户名):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW"Please enter as required(请按要求输入):\n\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW"username(用户名):\n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%s", username);
-    printf(COLOR_PINK "password(密码):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW"password(密码):\n" COLOR_RESET);
+    printf(INPUT_PROMPT);
     scanf("%s", password);
     printf(HEADER_LINE "\n");
 
