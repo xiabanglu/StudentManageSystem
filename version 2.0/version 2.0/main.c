@@ -12,7 +12,6 @@ int main()
     // 初始化界面
     printf(HEADER_LINE "\n");
 
-    //printf(           "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     printf(COLOR_YELLOW "                  欢迎使用学生管理系统!\n" COLOR_RESET);
     printf(COLOR_YELLOW "            Welcome to student manage system!\n" COLOR_RESET);
 

@@ -152,6 +152,7 @@ School *initSchool(const char *schoolName, int maxGrade, int maxClass, int maxSt
 			for (int k = 0; k < school->grades[i]->classes[j]->size; k++)
 			{
 				school->grades[i]->classes[j]->students[k] = (Student *)malloc(sizeof(Student));
+				school->grades[i]->classes[j]->students[k]->indices.id = 0;
 			}
 		}
 	}

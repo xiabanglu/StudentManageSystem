@@ -13,6 +13,11 @@ void loadStudentFromFile(const char *file_path, School *school)
     char line[512];
     while (fgets(line, sizeof(line), file))
     {
+        // 检查是否为空行
+        if (line[0] == '\n')
+        {
+            break; // 如果是空行，停止读取
+        }
         int id, age;
         char name[50], gender[10], schoolName[50];
         double scores[10];
@@ -57,6 +62,7 @@ void loadStudentFromFile(const char *file_path, School *school)
         // 填充内存数据
         Student *stu = cls->students[student_idx];
         stu->indices = indices;
+        stu->indices.id = id;
         strcpy(stu->info.name, name);
         strcpy(stu->info.gender, gender);
         stu->info.age = age;
@@ -203,7 +209,7 @@ void save_student_to_file(const char *file_path, int id, Student *newStudent, do
         return;
     }
 
-    fprintf(file, "%d %s %s %d %s %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n",
+    fprintf(file, "%d %s %s %d %s %.0lf %.0lf %.0lf %.0lf %.0lf %.0lf %.0lf %.0lf %.0lf %.0lf\n",
             id, newStudent->info.name, newStudent->info.gender, newStudent->info.age, newStudent->info.schoolName,
             score[0], score[1], score[2], score[3], score[4], score[5],
             score[6], score[7], score[8], score[9]);

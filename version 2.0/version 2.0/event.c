@@ -6,11 +6,11 @@ void handle_login()
 {
     char username[20];
     char password[20];
-    printf(INPUT_PROMPT COLOR_YELLOW"Please enter as required(请按要求输入):\n\n" COLOR_RESET);
-    printf(INPUT_PROMPT COLOR_YELLOW"username(用户名):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "Please enter as required(请按要求输入):\n\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "username(用户名):\n" COLOR_RESET);
     printf(INPUT_PROMPT);
     scanf("%s", username);
-    printf(INPUT_PROMPT COLOR_YELLOW"password(密码):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "password(密码):\n" COLOR_RESET);
     printf(INPUT_PROMPT);
     scanf("%s", password);
     printf(HEADER_LINE "\n");
@@ -43,11 +43,11 @@ void handle_register_user()
 {
     char username[20];
     char password[20];
-    printf(INPUT_PROMPT COLOR_YELLOW"Please enter as required(请按要求输入):\n\n" COLOR_RESET);
-    printf(INPUT_PROMPT COLOR_YELLOW"username(用户名):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "Please enter as required(请按要求输入):\n\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "username(用户名):\n" COLOR_RESET);
     printf(INPUT_PROMPT);
     scanf("%s", username);
-    printf(INPUT_PROMPT COLOR_YELLOW"password(密码):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "password(密码):\n" COLOR_RESET);
     printf(INPUT_PROMPT);
     scanf("%s", password);
     printf(HEADER_LINE "\n");
@@ -87,6 +87,7 @@ void handle_insert_record()
     printf(HEADER_LINE "\n");
 
     registerStudent(school, id, newStudent, score);
+    
     free(newStudent);
 }
 
@@ -172,8 +173,7 @@ void handle_show_record()
     {
         Log("Student found(该学生信息如下):", INFO);
     }
-    printf(HEADER_LINE "\n");
-    printf("姓名: %s 性别: %s 年龄: %d 所属学校: %s\n各科分数:\n" , (*student)->info.name,
+    printf("姓名: %s 性别: %s 年龄: %d 所属学校: %s\n各科分数:\n", (*student)->info.name,
            (*student)->info.gender, (*student)->info.age, (*student)->info.schoolName);
 
     for (int i = 0; i < 10; i++)
@@ -199,10 +199,16 @@ void handle_show_records()
             for (int k = 0; k < school->grades[i]->classes[j]->size; k++)
             {
                 Student *student = school->grades[i]->classes[j]->students[k];
-                if (student == NULL)
-                    continue;
-                printf("ID: %d, 姓名: %s, 性别: %s, 年龄: %d, 所属学校:%s\n", student->indices.id,
-                       student->info.name, student->info.gender, student->info.age, student->info.schoolName);
+                // 仅显示有效ID的学生
+                if (student != NULL && student->indices.id != 0)
+                {
+                    printf("ID: %d, 姓名: %s, 性别: %s, 年龄: %d, 所属学校:%s\n",
+                           student->indices.id,
+                           student->info.name,
+                           student->info.gender,
+                           student->info.age,
+                           student->info.schoolName);
+                }
             }
         }
     }
@@ -221,11 +227,11 @@ void handle_register_admin()
 
     char username[20];
     char password[20];
-    printf(INPUT_PROMPT COLOR_YELLOW"Please enter as required(请按要求输入):\n\n" COLOR_RESET);
-    printf(INPUT_PROMPT COLOR_YELLOW"username(用户名):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "Please enter as required(请按要求输入):\n\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "username(用户名):\n" COLOR_RESET);
     printf(INPUT_PROMPT);
     scanf("%s", username);
-    printf(INPUT_PROMPT COLOR_YELLOW"password(密码):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "password(密码):\n" COLOR_RESET);
     printf(INPUT_PROMPT);
     scanf("%s", password);
     printf(HEADER_LINE "\n");
@@ -243,11 +249,11 @@ void handle_delete_user()
 
     char username[20];
     char password[20];
-    printf(INPUT_PROMPT COLOR_YELLOW"Please enter as required(请按要求输入):\n\n" COLOR_RESET);
-    printf(INPUT_PROMPT COLOR_YELLOW"username(用户名):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "Please enter as required(请按要求输入):\n\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "username(用户名):\n" COLOR_RESET);
     printf(INPUT_PROMPT);
     scanf("%s", username);
-    printf(INPUT_PROMPT COLOR_YELLOW"password(密码):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "password(密码):\n" COLOR_RESET);
     printf(INPUT_PROMPT);
     scanf("%s", password);
     printf(HEADER_LINE "\n");
@@ -265,11 +271,11 @@ void handle_delete_admin()
 
     char username[20];
     char password[20];
-    printf(INPUT_PROMPT COLOR_YELLOW"Please enter as required(请按要求输入):\n\n" COLOR_RESET);
-    printf(INPUT_PROMPT COLOR_YELLOW"username(用户名):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "Please enter as required(请按要求输入):\n\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "username(用户名):\n" COLOR_RESET);
     printf(INPUT_PROMPT);
     scanf("%s", username);
-    printf(INPUT_PROMPT COLOR_YELLOW"password(密码):\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "password(密码):\n" COLOR_RESET);
     printf(INPUT_PROMPT);
     scanf("%s", password);
     printf(HEADER_LINE "\n");

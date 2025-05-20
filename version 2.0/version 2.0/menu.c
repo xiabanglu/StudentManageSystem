@@ -79,6 +79,7 @@ char getchoice(const char *greet, const MenuItem *items)
             }
         }
 
+        printf(HEADER_LINE "\n");
         Log("no this choice(没有这个选项)", WARING);
     } while (1);
 
