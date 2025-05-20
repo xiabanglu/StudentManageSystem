@@ -108,32 +108,36 @@ void delete_user_from_file(const char *file_path, char *username, char *password
     }
 
     char line[256];
+    int found = 0; // 添加一个标志来检查是否找到用户
     while (fgets(line, sizeof(line), file))
     {
-        int flag;
         char file_username[50];
         char file_password[50];
-        sscanf(line, "%s %s %d", file_username, file_password, &flag);
-        if (strcmp(file_username, username) != 0 && strcmp(file_password, password) != 0)
+        sscanf(line, "%s %s", file_username, file_password);
+        if (strcmp(file_username, username) != 0 || strcmp(file_password, password) != 0)
         {
             fputs(line, temp_file);
         }
         else
         {
-            if (flag != 1)
-            {
-                Log("Your authority is insufficient(你的权限不够)!", ERROR);
-                return;
-            }
+            found = 1; // 找到要删除的用户
         }
     }
 
     fclose(file);
     fclose(temp_file);
 
-    remove(file_path);
-    rename("temp.txt", file_path);
-    Log("User deleted successfully(成功注销user)!", INFO);
+    if (found) // 只有在找到用户的情况下才执行删除和重命名
+    {
+        remove(file_path);
+        rename("temp.txt", file_path);
+        Log("User deleted successfully(成功注销user)!", INFO);
+    }
+    else
+    {
+        remove("temp.txt"); // 如果没有找到用户，删除临时文件
+        Log("User not found(未找到用户)!", WARING);
+    }
 }
 
 // 保存admin信息
@@ -171,32 +175,36 @@ void delete_admin_from_file(const char *file_path, char *username, char *passwor
     }
 
     char line[256];
+    int found = 0; // 添加一个标志来检查是否找到管理员
     while (fgets(line, sizeof(line), file))
     {
-        int flag;
         char file_username[50];
         char file_password[50];
-        sscanf(line, "%s %s %d", file_username, file_password, &flag);
-        if (strcmp(file_username, username) != 0 && strcmp(file_password, password) != 0)
+        sscanf(line, "%s %s", file_username, file_password);
+        if (strcmp(file_username, username) != 0 || strcmp(file_password, password) != 0)
         {
             fputs(line, temp_file);
         }
         else
         {
-            if (flag != 2)
-            {
-                Log("Your authority is insufficient(你的权限不够)!", ERROR);
-                return;
-            }
+            found = 1; // 找到要删除的管理员
         }
     }
 
     fclose(file);
     fclose(temp_file);
 
-    remove(file_path);
-    rename("temp.txt", file_path);
-    Log("Admin deleted successfully(成功注销admin)!", INFO);
+    if (found) // 只有在找到管理员的情况下才执行删除和重命名
+    {
+        remove(file_path);
+        rename("temp.txt", file_path);
+        Log("Admin deleted successfully(成功注销admin)!", INFO);
+    }
+    else
+    {
+        remove("temp.txt"); // 如果没有找到管理员，删除临时文件
+        Log("Admin not found(未找到管理员)!", WARING);
+    }
 }
 
 // 保存一条学生信息
@@ -209,7 +217,7 @@ void save_student_to_file(const char *file_path, int id, Student *newStudent, do
         return;
     }
 
-    fprintf(file, "%d %s %s %d %s %.0lf %.0lf %.0lf %.0lf %.0lf %.0lf %.0lf %.0lf %.0lf %.0lf\n",
+    fprintf(file, "%d %s %s %d %s %.1lf %.1lf %.1lf %.1lf %.1lf %.1lf %.1lf %.1lf %.1lf %.1lf\n",
             id, newStudent->info.name, newStudent->info.gender, newStudent->info.age, newStudent->info.schoolName,
             score[0], score[1], score[2], score[3], score[4], score[5],
             score[6], score[7], score[8], score[9]);
@@ -319,7 +327,7 @@ void update_student_from_file(const char *file_path, int id, Student *newStudent
         return;
     }
 
-    fprintf(file, "%d %s %s %d %s %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n",
+    fprintf(file, "%d %s %s %d %s %.1lf %.1lf %.1lf %.1lf %.1lf %.1lf %.1lf %.1lf %.1lf %.1lf\n",
             id, newStudent->info.name, newStudent->info.gender, newStudent->info.age, newStudent->info.schoolName,
             score[0], score[1], score[2], score[3], score[4], score[5],
             score[6], score[7], score[8], score[9]);

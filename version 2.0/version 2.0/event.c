@@ -82,12 +82,12 @@ void handle_insert_record()
 
     printf(INPUT_PROMPT COLOR_YELLOW "请依次录入十次成绩(空格间隔每门成绩): \n" COLOR_RESET);
     printf(INPUT_PROMPT);
-    scanf("%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf ", &score[0], &score[1], &score[2],
+    scanf("%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &score[0], &score[1], &score[2],
           &score[3], &score[4], &score[5], &score[6], &score[7], &score[8], &score[9]);
     printf(HEADER_LINE "\n");
 
     registerStudent(school, id, newStudent, score);
-    
+
     free(newStudent);
 }
 
@@ -135,7 +135,7 @@ void handle_update_record()
 
     printf(INPUT_PROMPT COLOR_YELLOW "请依次录入十次成绩(空格间隔每门成绩): \n" COLOR_RESET);
     printf(INPUT_PROMPT);
-    scanf("%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf ", &score[0], &score[1], &score[2],
+    scanf("%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", &score[0], &score[1], &score[2],
           &score[3], &score[4], &score[5], &score[6], &score[7], &score[8], &score[9]);
     printf(HEADER_LINE "\n");
 
@@ -173,7 +173,7 @@ void handle_show_record()
     {
         Log("Student found(该学生信息如下):", INFO);
     }
-    printf("姓名: %s 性别: %s 年龄: %d 所属学校: %s\n各科分数:\n", (*student)->info.name,
+    printf("姓名: %s 性别: %s 年龄: %d 所属学校: %s\n各科分数:", (*student)->info.name,
            (*student)->info.gender, (*student)->info.age, (*student)->info.schoolName);
 
     for (int i = 0; i < 10; i++)
@@ -202,7 +202,7 @@ void handle_show_records()
                 // 仅显示有效ID的学生
                 if (student != NULL && student->indices.id != 0)
                 {
-                    printf("ID: %d, 姓名: %s, 性别: %s, 年龄: %d, 所属学校:%s\n",
+                    printf("ID: %d\t姓名: %s\t性别: %s\t年龄: %d\t所属学校:%s\n",
                            student->indices.id,
                            student->info.name,
                            student->info.gender,
@@ -258,7 +258,16 @@ void handle_delete_user()
     scanf("%s", password);
     printf(HEADER_LINE "\n");
 
-    delete_user_from_file("account.txt", username, password);
+    int delrank = login("account.txt", username, password);
+    if (delrank < 2)
+    {
+        delete_user_from_file("account.txt", username, password);
+    }
+    else
+    {
+        Log("Your can only delete user(你只能删除user)!", ERROR);
+        return;
+    }
 }
 
 void handle_delete_admin()
@@ -280,7 +289,16 @@ void handle_delete_admin()
     scanf("%s", password);
     printf(HEADER_LINE "\n");
 
-    delete_admin_from_file("account.txt", username, password);
+    int delrank = login("account.txt", username, password);
+    if (delrank < 3)
+    {
+        delete_admin_from_file("account.txt", username, password);
+    }
+    else
+    {
+        Log("Your can't delete developer(你不能删除developer)!", ERROR);
+        return;
+    }
 }
 
 void handle_quit()
