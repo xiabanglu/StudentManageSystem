@@ -136,7 +136,7 @@ void delete_user_from_file(const char *file_path, char *username, char *password
     else
     {
         remove("temp.txt"); // 如果没有找到用户，删除临时文件
-        Log("User not found(未找到用户)!", WARING);
+        Log("User not found(未找到用户)!", WARNING);
     }
 }
 
@@ -203,7 +203,7 @@ void delete_admin_from_file(const char *file_path, char *username, char *passwor
     else
     {
         remove("temp.txt"); // 如果没有找到管理员，删除临时文件
-        Log("Admin not found(未找到管理员)!", WARING);
+        Log("Admin not found(未找到管理员)!", WARNING);
     }
 }
 
@@ -270,7 +270,7 @@ void delete_student_from_file(const char *file_path, int id)
     else
     {
         remove("temp.txt");
-        Log("Student ID not found in file(未找到该学生!)", WARING);
+        Log("Student ID not found in file(未找到该学生!)", WARNING);
     }
 }
 
@@ -317,7 +317,7 @@ void update_student_from_file(const char *file_path, int id, Student *newStudent
     else
     {
         remove("temp.txt");
-        Log("Student ID not found in file(未找到该学生)!", WARING);
+        Log("Student ID not found in file(未找到该学生)!", WARNING);
     }
 
     file = fopen(file_path, "a");

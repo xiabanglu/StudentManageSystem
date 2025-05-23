@@ -33,7 +33,7 @@ extern int rank;
 typedef enum LOG_LEVEL
 {
     INFO,
-    WARING,
+    WARNING,
     ERROR
 } LOG_LEVEL;
 

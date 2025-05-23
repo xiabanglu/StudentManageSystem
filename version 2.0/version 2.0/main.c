@@ -24,6 +24,7 @@ int main()
     // 创建菜单
     Menu *login_menu = create_menu(MENU_LOGIN);
     Menu *function_menu = create_menu(MENU_FUNCTION);
+    Menu* score_menu = create_menu(MENU_SCORE);
 
     while (1)
     {
