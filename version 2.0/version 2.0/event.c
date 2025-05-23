@@ -316,3 +316,19 @@ void handle_quit()
         rank = 0; // 重置权限等级
     }
 }
+
+void handle_sum_avg_per_student()
+{
+}
+
+void handle_avg_per_class()
+{
+}
+
+void handle_avg_per_grade()
+{
+}
+
+void handle_ranking_list()
+{
+}

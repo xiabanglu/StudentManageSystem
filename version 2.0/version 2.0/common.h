@@ -39,5 +39,6 @@ typedef enum LOG_LEVEL
 
 // 函数声明
 void Log(const char *message, LOG_LEVEL level);
+const char *LogLevelToString(LOG_LEVEL level);
 
 #endif

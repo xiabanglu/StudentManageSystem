@@ -9,15 +9,15 @@ static const MenuItem login_items[] = {
     {NULL, '\0', NULL}};
 
 static const MenuItem function_items[] = {
-    {"[i] ────>  insert student        (添加学生信息)", 'i', handle_insert_record},   // 所需权限rank: 2,3
-    {"[d] ────>  delete student        (删除学生信息)", 'd', handle_delete_record},   // 所需权限rank: 2,3
-    {"[u] ────>  update student        (修改学生信息)", 'u', handle_update_record},   // 所需权限rank: 2,3
-    {"[s] ────>  show single student   (查询单个学生)", 's', handle_show_record},     // 所需权限rank: 1,2,3
-    {"[b] ────>  show all students     (显示所有学生)", 'b', handle_show_records},    // 所需权限rank: 2,3
-    {"[c] ────>  score statistics      (成绩统计)", 'c', handle_score_statistics},    // 所需权限rank: 2,3    接入scoreCounter.h
-    {"[r] ────>  register admin        (注册管理员)", 'r', handle_register_admin},    // 所需权限rank: 3
-    {"[e] ────>  delete user account   (注销普通用户账号)", 'e', handle_delete_user}, // 所需权限rank: 2,3
-    {"[a] ────>  delete admin account  (注销管理员账号)", 'a', handle_delete_admin},  // 所需权限rank: 3
+    {"[i] ────>  insert student        (添加学生信息)", 'i', handle_insert_record},
+    {"[d] ────>  delete student        (删除学生信息)", 'd', handle_delete_record},
+    {"[u] ────>  update student        (修改学生信息)", 'u', handle_update_record},
+    {"[s] ────>  show single student   (查询单个学生)", 's', handle_show_record},
+    {"[b] ────>  show all students     (显示所有学生)", 'b', handle_show_records},
+    {"[c] ────>  score statistics      (成绩统计)", 'c', handle_score_statistics},
+    {"[r] ────>  register admin        (注册管理员)", 'r', handle_register_admin},
+    {"[e] ────>  delete user account   (注销普通用户账号)", 'e', handle_delete_user},
+    {"[a] ────>  delete admin account  (注销管理员账号)", 'a', handle_delete_admin},
     {"[q] ────>  quit                  (返回)", 'q', handle_quit},
     {NULL, '\0', NULL}};
 
@@ -119,30 +119,35 @@ void event_loop(Menu *menu, int *is_quit, MenuType type)
             if (selected == item->choice)
             {
                 item->handler();
-                if (selected == 'l' && rank)
+                if (type == MENU_LOGIN)
                 {
-                    *is_quit = 1;
-                    selected = 'q';
-                }
-                // 处理退出逻辑
-                if (selected == 'q')
-                {
-                    if (type == MENU_LOGIN)
+                    if (selected == 'l' && rank > 0)
                     {
-                        *is_quit = 2; // 登录界面退出程序
+                        *is_quit = 1;
                     }
-                    else if (type == MENU_FUNCTION)
+                    else if (selected == 'q' && rank == 0)
                     {
-                        Log("返回登录界面...", INFO);
-                        *is_quit = 1; // 功能界面返回登录
-                    }
-                    else if (type == MENU_SCORE)
-                    {
-                        Log("返回功能菜单...", INFO);
-                        *is_quit = 1; // 成绩界面返回功能
+                        *is_quit = 2;
                     }
                 }
-                break;
+                else if (type == MENU_FUNCTION)
+                {
+                    if (selected == 'c' && rank > 0)
+                    {
+                        *is_quit = 1;
+                    }
+                    else if (selected == 'q' && rank > 0)
+                    {
+                        *is_quit = 2;
+                    }
+                }
+                else if (type == MENU_SCORE)
+                {
+                    if (selected == 'q' && rank > 0)
+                    {
+                        *is_quit = 2;
+                    }
+                }
             }
         }
     } while (!*is_quit);
@@ -169,30 +174,30 @@ void display_menu_login()
 // 显示功能菜单
 void display_menu_function()
 {
-    print_menu_frame();
-    print_menu_item("[i] ────>  insert student        (添加学生信息)", COLOR_GREEN);
-    print_menu_item("[d] ────>  delete student        (删除学生信息)", COLOR_GREEN);
-    print_menu_item("[u] ────>  update student        (修改学生信息)", COLOR_GREEN);
-    print_menu_item("[s] ────>  show single student   (查询单个学生)", COLOR_GREEN);
-    print_menu_item("[b] ────>  show all students     (显示所有学生)", COLOR_GREEN);
-    print_menu_item("[c] ────>  score statistics      (成绩统计)", COLOR_GREEN);
-    print_menu_item("[r] ────>  register admin        (注册管理员号)", COLOR_GREEN);
-    print_menu_item("[e] ────>  delete user account   (注销普通用户)", COLOR_GREEN);
-    print_menu_item("[a] ────>  delete admin account  (注销管理员号)", COLOR_GREEN);
-    print_menu_item("[q] ────>  quit                  (退出)", COLOR_RED);
-    print_menu_footer();
+    print_menu_function_frame();
+    print_menu_function_item("[i] ────>  insert student        (添加学生信息)", COLOR_GREEN);
+    print_menu_function_item("[d] ────>  delete student        (删除学生信息)", COLOR_GREEN);
+    print_menu_function_item("[u] ────>  update student        (修改学生信息)", COLOR_GREEN);
+    print_menu_function_item("[s] ────>  show single student   (查询单个学生)", COLOR_GREEN);
+    print_menu_function_item("[b] ────>  show all students     (显示所有学生)", COLOR_GREEN);
+    print_menu_function_item("[c] ────>  score statistics      (成绩统计)", COLOR_GREEN);
+    print_menu_function_item("[r] ────>  register admin        (注册管理员号)", COLOR_GREEN);
+    print_menu_function_item("[e] ────>  delete user account   (注销普通用户)", COLOR_GREEN);
+    print_menu_function_item("[a] ────>  delete admin account  (注销管理员号)", COLOR_GREEN);
+    print_menu_function_item("[q] ────>  quit                  (退出)", COLOR_RED);
+    print_menu_function_footer();
 }
 
 // 显示成绩菜单
 void display_menu_score()
 {
-    print_score_menu_frame();
-    print_menu_item("[s] ────>  sum and avg per student  (各个学生的总分及平均分)", COLOR_GREEN);
-    print_menu_item("[c] ────>  avg per class            (班级各科及总分平均分)", COLOR_GREEN);
-    print_menu_item("[g] ────>  avg per grade            (年级各科及总分平均分)", COLOR_GREEN);
-    print_menu_item("[r] ────>  ranking list             (排行榜)", COLOR_GREEN);
-    print_menu_item("[q] ────>  quit                     (退出)", COLOR_RED);
-    print_score_menu_footer();
+    print_menu_score_frame();
+    print_menu_score_item("[s] ────>  sum and avg per student  (各个学生的总分及平均分)", COLOR_GREEN);
+    print_menu_score_item("[c] ────>  avg per class            (班级各科及总分平均分)", COLOR_GREEN);
+    print_menu_score_item("[g] ────>  avg per grade            (年级各科及总分平均分)", COLOR_GREEN);
+    print_menu_score_item("[r] ────>  ranking list             (排行榜)", COLOR_GREEN);
+    print_menu_score_item("[q] ────>  quit                     (退出)", COLOR_RED);
+    print_menu_score_footer();
 }
 
 // 打印功能菜单项

@@ -31,10 +31,17 @@ typedef struct Menu
 Menu *create_menu(MenuType type);
 char getchoice(const char *greet, const MenuItem *items);
 void event_loop(Menu *menu, int *is_quit, MenuType type);
+
 void display_menu_login();
 void display_menu_function();
-void print_menu_item(const char *content, const char *color);
-void print_menu_footer();
-void print_menu_frame();
+void display_menu_score();
+
+void print_menu_function_frame();
+void print_menu_function_item(const char *content, const char *color);
+void print_menu_function_footer();
+
+void print_menu_score_frame();
+void print_menu_score_item(const char *content, const char *color);
+void print_menu_score_footer();
 
 #endif

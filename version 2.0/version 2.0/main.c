@@ -7,6 +7,11 @@
 School *school = NULL;
 int rank = 0;
 
+// 循环变量
+int login_quit = 0;
+int func_quit = 0;
+int score_quit = 0;
+
 int main()
 {
     // 初始化界面
@@ -24,42 +29,53 @@ int main()
     // 创建菜单
     Menu *login_menu = create_menu(MENU_LOGIN);
     Menu *function_menu = create_menu(MENU_FUNCTION);
-    Menu* score_menu = create_menu(MENU_SCORE);
+    Menu *score_menu = create_menu(MENU_SCORE);
 
     while (1)
     {
-        // 登录菜单循环
-        int login_quit = 0;
         while (!login_quit)
         {
             event_loop(login_menu, &login_quit, MENU_LOGIN);
-            if (login_quit == 2 && rank == 0)
+            if (login_quit == 1 && rank > 0)
+            {
+                login_quit = 1;
+                func_quit = 0;
+                score_quit = 1;
+            }
+            else if (login_quit == 2 && rank == 0)
             {
                 free(login_menu);
                 free(function_menu);
+                free(score_menu);
                 freeSchool(school);
                 return 0;
             }
         }
-        // 功能菜单循环
-        int func_quit = 0;
         while (!func_quit && rank > 0)
         {
             event_loop(function_menu, &func_quit, MENU_FUNCTION);
-            if (func_quit)
+            if (func_quit == 1 && rank > 0)
             {
-                rank = 0;       // 重置权限
-                login_quit = 0; // 返回登录菜单
+                login_quit = 1;
+                func_quit = 1;
+                score_quit = 0;
+            }
+            else if (func_quit == 2 && rank > 0)
+            {
+                rank = 0;
+                login_quit = 0;
+                func_quit = 1;
+                score_quit = 1;
             }
         }
-
-        int score_quit = 0;
         while (!score_quit && rank > 0)
         {
             event_loop(score_menu, &score_quit, MENU_SCORE);
-            if (score_quit)
+            if (score_quit == 2 && rank > 0)
             {
-                func_quit = 0; // 返回功能菜单
+                login_quit = 1;
+                func_quit = 0;
+                score_quit = 1;
             }
         }
     }

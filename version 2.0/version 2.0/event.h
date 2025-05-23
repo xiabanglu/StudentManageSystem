@@ -17,6 +17,9 @@ void handle_score_statistics();
 void handle_register_admin();
 void handle_delete_user();
 void handle_delete_admin();
-void handle_
+void handle_sum_avg_per_student();
+void handle_avg_per_class();
+void handle_avg_per_grade();
+void handle_ranking_list();
 
 #endif

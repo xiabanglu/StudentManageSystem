@@ -336,5 +336,3 @@ void update_student_from_file(const char *file_path, int id, Student *newStudent
 
     Log("Student updated(成功更新信息)!", INFO);
 }
-
-// void save_log_to_file(){}

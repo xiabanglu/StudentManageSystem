@@ -27,19 +27,23 @@ void Log(const char *message, LOG_LEVEL level)
     switch (level)
     {
     case INFO:
-        printf("\033[32m[%02d:%02d:%02d INFO] %s\033[0m\n",
+        printf("\033[32m[%04d-%02d-%02d %02d:%02d:%02d INFO] %s\033[0m\n",
+               t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
                t->tm_hour, t->tm_min, t->tm_sec, message);
         break;
     case WARNING:
-        printf("\033[33m[%02d:%02d:%02d WARNING] %s\033[0m\n",
+        printf("\033[33m[%04d-%02d-%02d %02d:%02d:%02d WARNING] %s\033[0m\n",
+               t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
                t->tm_hour, t->tm_min, t->tm_sec, message);
         break;
     case ERROR:
-        printf("\033[31m[%02d:%02d:%02d ERROR] %s\033[0m\n",
+        printf("\033[31m[%04d-%02d-%02d %02d:%02d:%02d ERROR] %s\033[0m\n",
+               t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
                t->tm_hour, t->tm_min, t->tm_sec, message);
         break;
     default:
-        printf("[%02d:%02d:%02d] %s\n",
+        printf("[%04d-%02d-%02d %02d:%02d:%02d] %s\n",
+               t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
                t->tm_hour, t->tm_min, t->tm_sec, message);
         break;
     }
@@ -47,7 +51,8 @@ void Log(const char *message, LOG_LEVEL level)
     FILE *file = fopen("logInfo.txt", "a");
     if (file != NULL)
     {
-        fprintf(file, "[%02d:%02d:%02d %s] %s\n",
+        fprintf(file, "[%04d-%02d-%02d %02d:%02d:%02d %s] %s\n",
+                t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
                 t->tm_hour, t->tm_min, t->tm_sec, level_str, message);
         fclose(file);
     }
