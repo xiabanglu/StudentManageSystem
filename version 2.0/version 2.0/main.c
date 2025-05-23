@@ -28,6 +28,7 @@ int main()
     while (!is_quit)
     {
         current_menu = event_loop(current_menu, &is_quit);
+        system("cls");
     }
 }
 

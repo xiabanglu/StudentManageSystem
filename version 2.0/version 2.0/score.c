@@ -174,17 +174,30 @@ void sortGradeByClassAvg(Grade *grade)
 }
 
 // 年级某学科的最高分和最低分
-double getGradeSubjectMax(Grade *grade, int subjectIdx)
+void getGradeSubjectRange(Grade *grade, int subjectIdx, double *max, double *min)
 {
-    double max = -1;
+    *max = -1;
+    *min = 101;
     for (int i = 0; i < grade->size; i++)
     {
         Class *class = grade->classes[i];
-        double classMax = getClassSubjectMax(class, subjectIdx);
-        if (classMax > max)
-            max = classMax;
+        for (int j = 0; j < class->size; j++)
+        {
+            Student *stu = class->students[j];
+            if (stu && stu->indices.id != 0)
+            {
+                double score = stu->score[subjectIdx];
+                if (score > *max)
+                    *max = score;
+                if (score < *min)
+                    *min = score;
+            }
+        }
     }
-    return max;
+    if (*max == -1)
+        *max = 0;
+    if (*min == 101)
+        *min = 0;
 }
 
 // 年级学生总分的最高分和最低分
@@ -244,7 +257,7 @@ double getGradeTotalAvg(Grade *grade)
             Student *stu = class->students[j];
             if (stu)
             {
-                sum += getSum(stu);
+                sum += getStudentSum(stu);
                 cnt++;
             }
         }
