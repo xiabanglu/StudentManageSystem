@@ -1,9 +1,28 @@
+#include <time.h>
+#include <stdio.h>
 #include "log.h"
+
+const char *LogLevelToString(LOG_LEVEL level)
+{
+    switch (level)
+    {
+    case INFO:
+        return "INFO";
+    case WARNING:
+        return "WARNING";
+    case ERROR:
+        return "ERROR";
+    default:
+        return "UNKNOWN";
+    }
+}
 
 void Log(const char *message, LOG_LEVEL level)
 {
     time_t now = time(NULL);
     struct tm *t = localtime(&now);
+
+    const char *level_str = LogLevelToString(level);
 
     switch (level)
     {
@@ -11,7 +30,7 @@ void Log(const char *message, LOG_LEVEL level)
         printf("\033[32m[%02d:%02d:%02d INFO] %s\033[0m\n",
                t->tm_hour, t->tm_min, t->tm_sec, message);
         break;
-    case WARING:
+    case WARNING:
         printf("\033[33m[%02d:%02d:%02d WARNING] %s\033[0m\n",
                t->tm_hour, t->tm_min, t->tm_sec, message);
         break;
@@ -23,5 +42,17 @@ void Log(const char *message, LOG_LEVEL level)
         printf("[%02d:%02d:%02d] %s\n",
                t->tm_hour, t->tm_min, t->tm_sec, message);
         break;
+    }
+
+    FILE *file = fopen("logInfo.txt", "a");
+    if (file != NULL)
+    {
+        fprintf(file, "[%02d:%02d:%02d %s] %s\n",
+                t->tm_hour, t->tm_min, t->tm_sec, level_str, message);
+        fclose(file);
+    }
+    else
+    {
+        printf("Error opening log file.\n");
     }
 }
