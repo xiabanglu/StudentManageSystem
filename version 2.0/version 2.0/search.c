@@ -98,29 +98,52 @@ void updateStudent(School *school, int id, Student *newStudent, double *score)
 }
 
 // 获取学生
-Student **getStudent(School *school, int id)
+Student *getStudent(School *school, int id)
 {
-	// 遍历学校的年级
 	for (int i = 0; i < school->size; i++)
 	{
 		Grade *grade = school->grades[i];
-		// 遍历年级的班级
 		for (int j = 0; j < grade->size; j++)
 		{
 			Class *class = grade->classes[j];
-			// 遍历班级的学生
 			for (int k = 0; k < class->size; k++)
 			{
 				Student *student = class->students[k];
-				// 检查学生的ID是否匹配
 				if (student->indices.id == id)
 				{
-					return &class->students[k]; // 返回匹配的学生指针
+					return class->students[k];
 				}
 			}
 		}
 	}
-	return NULL; // 如果没有找到，返回NULL
+	return NULL;
+}
+
+// 根据年级ID获取年级指针
+Grade *getGrade(School *school, int gradeId)
+{
+	for (int i = 0; i < school->size; i++)
+	{
+		if (school->grades[i]->gradeId == gradeId)
+		{
+			return school->grades[i];
+		}
+	}
+	return NULL;
+}
+
+// 根据年级ID和班级ID获取班级指针
+Class *getClass(School *school, int gradeId, int classId)
+{
+	Grade *grade = getGrade(school, gradeId);
+	for (int i = 0; i < grade->size; i++)
+	{
+		if (grade->classes[i]->classId == classId)
+		{
+			return grade->classes[i];
+		}
+	}
+	return NULL;
 }
 
 // 初始化学校

@@ -1,6 +1,7 @@
 #include "event.h"
 #include "login.h"
 #include "file.h"
+#include "score.h"
 
 void handle_login()
 {
@@ -163,7 +164,7 @@ void handle_show_record()
         return;
     }
 
-    Student **student = getStudent(school, id);
+    Student *student = getStudent(school, id);
     if (student == NULL)
     {
         Log("Student not found(学生未找到)!", ERROR);
@@ -173,12 +174,12 @@ void handle_show_record()
     {
         Log("Student found(该学生信息如下):", INFO);
     }
-    printf("姓名: %s 性别: %s 年龄: %d 所属学校: %s\n各科分数:", (*student)->info.name,
-           (*student)->info.gender, (*student)->info.age, (*student)->info.schoolName);
+    printf("姓名: %s 性别: %s 年龄: %d 所属学校: %s\n各科分数:", student->info.name,
+           student->info.gender, student->info.age, student->info.schoolName);
 
     for (int i = 0; i < 10; i++)
     {
-        printf("%.2lf ", (*student)->score[i]);
+        printf("%.2lf ", student->score[i]);
     }
     printf("\n");
 }
@@ -317,15 +318,49 @@ void handle_quit()
     }
 }
 
-void handle_sum_avg_per_student()
+void handle_student_score()
+{
+
+    int id;
+    printf(INPUT_PROMPT COLOR_YELLOW "Please enter id(请输入待统计学生ID): \n" COLOR_RESET);
+    printf(INPUT_PROMPT);
+    scanf("%d", &id);
+    printf(HEADER_LINE "\n");
+
+    if (id <= 0)
+    {
+        Log("Invalid id(ID不合法)!", ERROR);
+        return;
+    }
+
+    Student *student = getStudent(school, id);
+    if (student == NULL)
+    {
+        Log("Student not found(学生未找到)!", ERROR);
+        return;
+    }
+    else
+    {
+        Log("Student found(该学生成绩统计信息如下):", INFO);
+    }
+
+    printf("高数\t线代\t概统\t离散\t计网\t计组\t数据库\t数据结构\t操作系统\t程序设计\t总分\t\n");
+
+    for (int i = 0; i < 10; i++)
+    {
+        printf("%.2lf\t", student->score[i]);
+    }
+
+    printf("%.2lf\t", getStudentSum(student));
+
+    printf("\n");
+}
+
+void handle_class_score()
 {
 }
 
-void handle_avg_per_class()
-{
-}
-
-void handle_avg_per_grade()
+void handle_grade_score()
 {
 }
 

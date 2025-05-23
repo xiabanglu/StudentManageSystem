@@ -4,7 +4,7 @@
 // 暂定权限等级为 rank     1:普通用户    2：管理员    3：开发人员
 static const MenuItem login_items[] = {
     {"[l] ────>  login      (登录)", 'l', handle_login},
-    {"[r] ────>  register   (注册)", 'r', handle_register_user}, // 只能注册普通用户 (权限rank：1)
+    {"[r] ────>  register   (注册)", 'r', handle_register_user},
     {"[q] ────>  quit       (退出)", 'q', handle_quit},
     {NULL, '\0', NULL}};
 
@@ -22,10 +22,9 @@ static const MenuItem function_items[] = {
     {NULL, '\0', NULL}};
 
 static const MenuItem score_items[] = {
-    {"[s] ────>  sum and avg per student      (每个学生的总分和平均分)", 's', handle_sum_avg_per_student},
-    {"[c] ────>  avg per class   (班级各科平均分和总分平均分)", 'c', handle_avg_per_class},
-    {"[g] ────>  avg per grade   (年级各科平均分和总分平均分)", 'g', handle_avg_per_grade},
-    {"[r] ────>  ranking list   (排行榜)", 'r', handle_ranking_list},
+    {"[s] ────>  student      (学生分数情况)", 's', handle_student_score},
+    {"[c] ────>  class    (班级分数情况)", 'c', handle_class_score},
+    {"[g] ────>  grade   (年级分数情况)", 'g', handle_grade_score},
     {"[q] ────>  quit       (返回)", 'q', handle_quit},
     {NULL, '\0', NULL}};
 
@@ -104,10 +103,19 @@ char getchoice(const char *greet, const MenuItem *items)
 }
 
 // 事件循环
-void event_loop(Menu *menu, int *is_quit, MenuType type)
+Menu* event_loop(Menu *menu, int *is_quit)
 {
     char selected;
     const MenuItem *item;
+
+    static Menu* MenuLists[3] = {NULL, NULL, NULL};
+
+    if(menu == NULL) {
+        for(int i = 0; i < 3; i++) {
+            MenuLists[i] = create_menu(i);
+        }
+        menu = MenuLists[0];
+    }
 
     do
     {
@@ -119,38 +127,30 @@ void event_loop(Menu *menu, int *is_quit, MenuType type)
             if (selected == item->choice)
             {
                 item->handler();
-                if (type == MENU_LOGIN)
-                {
-                    if (selected == 'l' && rank > 0)
-                    {
-                        *is_quit = 1;
-                    }
-                    else if (selected == 'q' && rank == 0)
-                    {
-                        *is_quit = 2;
-                    }
+
+                if( selected == 'l' && rank) {
+                    menu = MenuLists[1];
+                    return menu;
                 }
-                else if (type == MENU_FUNCTION)
-                {
-                    if (selected == 'c' && rank > 0)
-                    {
-                        *is_quit = 1;
-                    }
-                    else if (selected == 'q' && rank > 0)
-                    {
-                        *is_quit = 2;
-                    }
+                if(selected == 'c') {
+                    menu = MenuLists[2];
+                    return menu;
                 }
-                else if (type == MENU_SCORE)
-                {
-                    if (selected == 'q' && rank > 0)
-                    {
-                        *is_quit = 2;
+                if(selected == 'q' ) {
+                    if(menu->type == MENU_LOGIN) {
+                        *is_quit = 1;
+                        return menu;
+                    }
+                    else {
+                        menu = MenuLists[menu->type - 1];
+                        return menu;
                     }
                 }
             }
         }
     } while (!*is_quit);
+
+    return menu;
 }
 
 // 显示登陆菜单
@@ -184,7 +184,7 @@ void display_menu_function()
     print_menu_function_item("[r] ────>  register admin        (注册管理员号)", COLOR_GREEN);
     print_menu_function_item("[e] ────>  delete user account   (注销普通用户)", COLOR_GREEN);
     print_menu_function_item("[a] ────>  delete admin account  (注销管理员号)", COLOR_GREEN);
-    print_menu_function_item("[q] ────>  quit                  (退出)", COLOR_RED);
+    print_menu_function_item("[q] ────>  quit                  (返回)", COLOR_RED);
     print_menu_function_footer();
 }
 
@@ -192,11 +192,10 @@ void display_menu_function()
 void display_menu_score()
 {
     print_menu_score_frame();
-    print_menu_score_item("[s] ────>  sum and avg per student  (各个学生的总分及平均分)", COLOR_GREEN);
-    print_menu_score_item("[c] ────>  avg per class            (班级各科及总分平均分)", COLOR_GREEN);
-    print_menu_score_item("[g] ────>  avg per grade            (年级各科及总分平均分)", COLOR_GREEN);
-    print_menu_score_item("[r] ────>  ranking list             (排行榜)", COLOR_GREEN);
-    print_menu_score_item("[q] ────>  quit                     (退出)", COLOR_RED);
+    print_menu_score_item("[s] ────>  student      (学生分数情况)", COLOR_GREEN);
+    print_menu_score_item("[c] ────>  class    (班级分数情况)", COLOR_GREEN);
+    print_menu_score_item("[g] ────>  grade   (年级分数情况)", COLOR_GREEN);
+    print_menu_score_item("[q] ────>  quit       (返回)", COLOR_RED);
     print_menu_score_footer();
 }
 

@@ -73,7 +73,9 @@ void registerStudent(School *school, int id, Student *newStudent, double *score)
 void deleteStudent(School *school, int id);
 void updateStudent(School *school, int id, Student *newStudent, double *score);
 
-Student **getStudent(School *school, int id);
+Student *getStudent(School *school, int id);
+Grade *getGrade(School *school, int gradeId);
+Class *getClass(School *school, int gradeId, int classId);
 
 School *initSchool(const char *schoolName, int maxGrade, int maxClass, int maxStudent);
 void freeSchool(School *school);

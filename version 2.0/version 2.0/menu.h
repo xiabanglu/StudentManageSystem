@@ -30,7 +30,7 @@ typedef struct Menu
 // 函数声明
 Menu *create_menu(MenuType type);
 char getchoice(const char *greet, const MenuItem *items);
-void event_loop(Menu *menu, int *is_quit, MenuType type);
+Menu *event_loop(Menu *menu, int *is_quit);
 
 void display_menu_login();
 void display_menu_function();
