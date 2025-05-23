@@ -40,7 +40,6 @@ int main()
                 return 0;
             }
         }
-
         // 功能菜单循环
         int func_quit = 0;
         while (!func_quit && rank > 0)
@@ -54,10 +53,12 @@ int main()
         }
 
         int score_quit = 0;
-        while (!score_quit && rank > 0){
-            event_loop(score_menu,&score_quit,MENU_SCORE);
-            if(score_quit){
-                func_quit = 0; //返回功能菜单
+        while (!score_quit && rank > 0)
+        {
+            event_loop(score_menu, &score_quit, MENU_SCORE);
+            if (score_quit)
+            {
+                func_quit = 0; // 返回功能菜单
             }
         }
     }

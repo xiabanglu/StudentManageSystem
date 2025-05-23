@@ -17,5 +17,6 @@ void handle_score_statistics();
 void handle_register_admin();
 void handle_delete_user();
 void handle_delete_admin();
+void handle_
 
 #endif
