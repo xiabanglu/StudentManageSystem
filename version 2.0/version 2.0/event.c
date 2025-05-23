@@ -215,7 +215,12 @@ void handle_show_records()
     printf("\n");
 }
 
-// void handle_score_statistics(){}
+void handle_score_statistics(){
+    if(rank != 2 && rank != 3){
+        Log("Your authority is insufficient(你的权限不够)!", ERROR);
+        return;
+    }
+}
 
 void handle_register_admin()
 {

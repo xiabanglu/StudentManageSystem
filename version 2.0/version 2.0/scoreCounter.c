@@ -5,7 +5,6 @@
 // 如需统计所有学科，可以循环 subjectIdx 0~9，分别调用上述函数即可。
 
 // 某同学总分
-// 暂规定score[11],包含十门学科成绩，第十一位存放总分
 int getSum(Student *student)
 {
     int sum = 0;

@@ -16,6 +16,7 @@ typedef enum MenuType
 {
     MENU_LOGIN,    // 登录
     MENU_FUNCTION, // 功能
+    MENU_SCORE,    // 成绩
 } MenuType;
 
 // 菜单结构体

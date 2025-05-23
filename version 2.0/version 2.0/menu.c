@@ -14,11 +14,19 @@ static const MenuItem function_items[] = {
     {"[u] ────>  update student        (修改学生信息)", 'u', handle_update_record}, // 所需权限rank: 2,3
     {"[s] ────>  show single student   (查询单个学生)", 's', handle_show_record},   // 所需权限rank: 1,2,3
     {"[b] ────>  show all students     (显示所有学生)", 'b', handle_show_records},  // 所需权限rank: 2,3
-    //{"c - score statistics      (成绩统计), 'c', handle_score_statistics},    //所需权限rank: 2,3    接入scoreCounter.h
+    //{"[c] ────>  score statistics      (成绩统计), 'c', handle_score_statistics},    //所需权限rank: 2,3    接入scoreCounter.h
     {"[r] ────>  register admin        (注册管理员)", 'r', handle_register_admin},    // 所需权限rank: 3
     {"[e] ────>  delete user account   (注销普通用户账号)", 'e', handle_delete_user}, // 所需权限rank: 2,3
     {"[a] ────>  delete admin account  (注销管理员账号)", 'a', handle_delete_admin},  // 所需权限rank: 3
     {"[q] ────>  quit                  (退出)", 'q', handle_quit},
+    {NULL, '\0', NULL}};
+
+static const MenuItem score_items[] = {  
+    {"[s] ────>  sum and avg per student      (每个学生的总分和平均分)", 's', handle_sum_avg_per_student},
+    {"[c] ────>  avg per class   (班级各科和总分平均分)", 'c', handle_avg_per_class},                                   
+    {"[g] ────>  avg per grade   (年级各科和总分平均分)", 'g', handle_avg_per_grade},                         
+    {"[r] ────>  ranking list   (排行榜)", 'r', handle_ranking_list},                                        
+    {"[q] ────>  quit       (退出)", 'q', handle_quit},
     {NULL, '\0', NULL}};
 
 // 创建菜单
@@ -33,10 +41,15 @@ Menu *create_menu(MenuType type)
         menu->title = "Login Menu (登录菜单)";
         menu->items = login_items;
     }
-    else
+    else if (type == MENU_FUNCTION)
     {
         menu->title = "Function Menu (功能菜单)";
         menu->items = function_items;
+    }
+    else if (type == MENU_SCORE)
+    {
+        menu->title = "Score Menu (成绩菜单)";
+        menu->items = score_items;
     }
 
     return menu;
@@ -57,6 +70,9 @@ char getchoice(const char *greet, const MenuItem *items)
         else if (strcmp(greet, "Function Menu (功能菜单)") == 0)
         {
             display_menu_function();
+        }
+        else if(strcmp(greet, "Score Menu (成绩菜单)") == 0){
+            display_menu_score();
         }
 
         printf(HEADER_LINE "\n");
@@ -118,6 +134,11 @@ void event_loop(Menu *menu, int *is_quit, MenuType type)
                     {
                         Log("返回登录界面...", INFO);
                         *is_quit = 1; // 功能界面返回登录
+                    }
+                    else if (type == MENU_SCORE)
+                    {
+                        Log("返回功能菜单...", INFO);
+                        *is_quit = 1; // 成绩界面返回功能
                     }
                 }
                 break;

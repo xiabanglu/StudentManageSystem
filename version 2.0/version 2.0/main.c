@@ -52,6 +52,14 @@ int main()
                 login_quit = 0; // 返回登录菜单
             }
         }
+
+        int score_quit = 0;
+        while (!score_quit && rank > 0){
+            event_loop(score_menu,&score_quit,MENU_SCORE);
+            if(score_quit){
+                func_quit = 0; //返回功能菜单
+            }
+        }
     }
 }
 
