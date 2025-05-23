@@ -4,7 +4,6 @@
 #include "common.h"
 #include "search.h"
 
-
 // 函数声明
 void handle_login();
 void handle_register_user();
@@ -21,6 +20,5 @@ void handle_delete_admin();
 void handle_student_score();
 void handle_class_score();
 void handle_grade_score();
-void handle_ranking_list();
 
 #endif

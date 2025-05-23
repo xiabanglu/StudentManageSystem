@@ -1,5 +1,5 @@
-#ifndef SCORECOUNTER_H
-#define SCORECOUNTER_H
+#ifndef SCORE_H
+#define SCORE_H
 
 #include "common.h"
 #include "search.h"
@@ -13,6 +13,5 @@ typedef struct ScoreLevelCount
 } ScoreLevelCount;
 
 // 函数声明
-
 
 #endif

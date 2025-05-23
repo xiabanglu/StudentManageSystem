@@ -103,15 +103,17 @@ char getchoice(const char *greet, const MenuItem *items)
 }
 
 // 事件循环
-Menu* event_loop(Menu *menu, int *is_quit)
+Menu *event_loop(Menu *menu, int *is_quit)
 {
     char selected;
     const MenuItem *item;
 
-    static Menu* MenuLists[3] = {NULL, NULL, NULL};
+    static Menu *MenuLists[3] = {NULL, NULL, NULL};
 
-    if(menu == NULL) {
-        for(int i = 0; i < 3; i++) {
+    if (menu == NULL)
+    {
+        for (int i = 0; i < 3; i++)
+        {
             MenuLists[i] = create_menu(i);
         }
         menu = MenuLists[0];
@@ -128,20 +130,25 @@ Menu* event_loop(Menu *menu, int *is_quit)
             {
                 item->handler();
 
-                if( selected == 'l' && rank) {
+                if (selected == 'l' && rank)
+                {
                     menu = MenuLists[1];
                     return menu;
                 }
-                if(selected == 'c') {
+                if (selected == 'c')
+                {
                     menu = MenuLists[2];
                     return menu;
                 }
-                if(selected == 'q' ) {
-                    if(menu->type == MENU_LOGIN) {
+                if (selected == 'q')
+                {
+                    if (menu->type == MENU_LOGIN)
+                    {
                         *is_quit = 1;
                         return menu;
                     }
-                    else {
+                    else
+                    {
                         menu = MenuLists[menu->type - 1];
                         return menu;
                     }

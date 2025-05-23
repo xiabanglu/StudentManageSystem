@@ -23,10 +23,11 @@ int main()
     // 加载学生数据
     loadStudentFromFile("student.txt", school);
 
-    Menu* current_menu = NULL;
+    Menu *current_menu = NULL;
 
-    while(!is_quit) {
-        current_menu =  event_loop(current_menu, &is_quit);
+    while (!is_quit)
+    {
+        current_menu = event_loop(current_menu, &is_quit);
     }
 }
 
