@@ -1,7 +1,7 @@
 #include "menu.h"
 #include "event.h"
 #include "score.h"
-
+#include "log.h"
 
 // 暂定权限等级为 rank     1:普通用户    2：管理员    3：开发人员
 static const MenuItem login_items[] = {
@@ -16,17 +16,17 @@ static const MenuItem function_items[] = {
     {"[u] ────>  update student        (修改学生信息)", 'u', handle_update_record},
     {"[s] ────>  show single student   (查询单个学生)", 's', handle_show_record},
     {"[b] ────>  show all students     (查询所有学生)", 'b', handle_show_records},
-    {"[c] ────>  score statistics      (成绩统计)", 'c', handle_score_statistics},
-    {"[r] ────>  register admin        (注册管理员)", 'r', handle_register_admin},
-    {"[e] ────>  delete user account   (注销普通用户账号)", 'e', handle_delete_user},
-    {"[a] ────>  delete admin account  (注销管理员账号)", 'a', handle_delete_admin},
-    {"[q] ────>  quit                  (返回)", 'q', handle_quit},
+    {"[c] ────>  score statistics      (统计学生成绩)", 'c', handle_score_statistics},
+    {"[r] ────>  register admin        (注册管理员号)", 'r', handle_register_admin},
+    {"[e] ────>  delete user account   (注销普通用户)", 'e', handle_delete_user},
+    {"[a] ────>  delete admin account  (注销管理员号)", 'a', handle_delete_admin},
+    {"[q] ────>  quit                  (返回登录菜单)", 'q', handle_quit},
     {NULL, '\0', NULL}};
 
 static const MenuItem score_items[] = {
     {"[s] ────>  student score      (学生分数情况)", 's', handle_student_score},
     {"[c] ────>  class score        (班级分数情况)", 'c', handle_class_score},
-    {"[q] ────>  quit               (返回)", 'q', handle_quit},
+    {"[q] ────>  quit               (返回功能菜单)", 'q', handle_quit},
     {NULL, '\0', NULL}};
 
 // 创建菜单
@@ -97,7 +97,7 @@ char getchoice(const char *greet, const MenuItem *items)
         }
 
         printf(HEADER_LINE "\n");
-        Log("没有这个选项", WARNING);
+        Log("读取输入时:没有这个选项", WARNING);
     } while (1);
 
     return '0';
@@ -129,7 +129,7 @@ Menu *event_loop(Menu *menu, int *is_quit)
         {
             if (selected == item->choice)
             {
-                
+
                 item->handler();
 
                 if (selected == 'l' && rank)
@@ -139,6 +139,11 @@ Menu *event_loop(Menu *menu, int *is_quit)
                 }
                 if (selected == 'c')
                 {
+                    if (rank != 2 && rank != 3)
+                    {
+                        Log("学生统计信息时:你的权限不够", ERROR);
+                        return NULL;
+                    }
                     menu = MenuLists[2];
                     return menu;
                 }
@@ -151,7 +156,8 @@ Menu *event_loop(Menu *menu, int *is_quit)
                     }
                     else if (menu->type == MENU_FUNCTION)
                     {
-                        rank = 0; // 重置权限等级
+                        rank = 0;
+                        clear_username();
                         menu = MenuLists[0];
                         return menu;
                     }
@@ -171,158 +177,67 @@ Menu *event_loop(Menu *menu, int *is_quit)
 // 显示登陆菜单
 void display_menu_login()
 {
-    // printf(  "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-    printf("\033[1;36m         ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\033[0m\n");
-    printf("\033[1;36m         ┃          \033[1;33m学生成绩管理系统\033[1;36m          ┃\033[0m\n");
-    printf("\033[1;36m         ┃        \033[1;33mLogin Menu (登录菜单)     \033[1;36m  ┃\033[0m\n");
-    printf("\033[1;36m         ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫\033[0m\n");
-    printf("\033[1;36m         ┃                                    ┃\033[0m\n");
-    printf("\033[1;36m         ┃    \033[1;32m[l] ────>  login      (登录)    \033[1;36m┃\033[0m\n");
-    printf("\033[1;36m         ┃                                    ┃\033[0m\n");
-    printf("\033[1;36m         ┃    \033[1;32m[r] ────>  register   (注册)    \033[1;36m┃\033[0m\n");
-    printf("\033[1;36m         ┃                                    ┃\033[0m\n");
-    printf("\033[1;36m         ┃    \033[1;31m[q] ────>  quit       (退出)    \033[1;36m┃\033[0m\n");
-    printf("\033[1;36m         ┃                                    ┃\033[0m\n");
-    printf("\033[1;36m         ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\033[0m\n");
+    //                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    printf(COLOR_CYAN "             ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓" COLOR_RESET "\n");
+    printf(COLOR_CYAN "             ┃          " COLOR_YELLOW "学生成绩管理系统" COLOR_CYAN "          ┃" COLOR_RESET "\n");
+    printf(COLOR_CYAN "             ┃        " COLOR_YELLOW "Login Menu (登录菜单)     " COLOR_CYAN "  ┃" COLOR_RESET "\n");
+    printf(COLOR_CYAN "             ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫" COLOR_RESET "\n");
+    printf(COLOR_CYAN "             ┃                                    ┃" COLOR_RESET "\n");
+    printf(COLOR_CYAN "             ┃    " COLOR_GREEN "[l] ────>  login      (登录)    " COLOR_CYAN "┃" COLOR_RESET "\n");
+    printf(COLOR_CYAN "             ┃                                    ┃" COLOR_RESET "\n");
+    printf(COLOR_CYAN "             ┃    " COLOR_GREEN "[r] ────>  register   (注册)    " COLOR_CYAN "┃" COLOR_RESET "\n");
+    printf(COLOR_CYAN "             ┃                                    ┃" COLOR_RESET "\n");
+    printf(COLOR_CYAN "             ┃    " COLOR_RED "[q] ────>  quit       (退出)    " COLOR_CYAN "┃" COLOR_RESET "\n");
+    printf(COLOR_CYAN "             ┃                                    ┃" COLOR_RESET "\n");
+    printf(COLOR_CYAN "             ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" COLOR_RESET "\n");
 }
 
 // 显示功能菜单
 void display_menu_function()
 {
-    print_menu_function_frame();
-    print_menu_function_item("[i] ────>  insert student        (添加学生信息)", COLOR_GREEN);
-    print_menu_function_item("[d] ────>  delete student        (删除学生信息)", COLOR_GREEN);
-    print_menu_function_item("[u] ────>  update student        (修改学生信息)", COLOR_GREEN);
-    print_menu_function_item("[s] ────>  show single student   (查询单个学生)", COLOR_GREEN);
-    print_menu_function_item("[b] ────>  show all students     (显示所有学生)", COLOR_GREEN);
-    print_menu_function_item("[c] ────>  score statistics      (成绩统计)", COLOR_GREEN);
-    print_menu_function_item("[r] ────>  register admin        (注册管理员号)", COLOR_GREEN);
-    print_menu_function_item("[e] ────>  delete user account   (注销普通用户)", COLOR_GREEN);
-    print_menu_function_item("[a] ────>  delete admin account  (注销管理员号)", COLOR_GREEN);
-    print_menu_function_item("[q] ────>  quit                  (返回)", COLOR_RED);
-    print_menu_function_footer();
+    //                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    printf(COLOR_CYAN "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃                      " COLOR_YELLOW "学生成绩管理系统" COLOR_CYAN "                         ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃                   " COLOR_YELLOW "Function Menu (功能菜单)     " COLOR_CYAN "               ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃                                                               ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃        " COLOR_GREEN "[i] ────>  insert student        (添加学生信息)   " COLOR_CYAN "     ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃                                                               ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃        " COLOR_GREEN "[d] ────>  delete student        (删除学生信息)   " COLOR_CYAN "     ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃                                                               ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃        " COLOR_GREEN "[u] ────>  update student        (修改学生信息)   " COLOR_CYAN "     ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃                                                               ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃        " COLOR_GREEN "[s] ────>  show single student   (查询单个学生)   " COLOR_CYAN "     ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃                                                               ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃        " COLOR_GREEN "[b] ────>  show all students     (查询所有学生)   " COLOR_CYAN "     ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃                                                               ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃        " COLOR_GREEN "[c] ────>  score statistics      (统计学生成绩)   " COLOR_CYAN "     ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃                                                               ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃        " COLOR_GREEN "[r] ────>  register admin        (注册管理员号)   " COLOR_CYAN "     ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃                                                               ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃        " COLOR_GREEN "[e] ────>  delete user account   (注销普通用户)   " COLOR_CYAN "     ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃                                                               ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃        " COLOR_GREEN "[a] ────>  delete admin account  (注销管理员号)   " COLOR_CYAN "     ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃                                                               ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃        " COLOR_RED "[q] ────>  quit                  (返回登录菜单)   " COLOR_CYAN "     ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┃                                                               ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n" COLOR_RESET);
 }
 
 // 显示成绩菜单
 void display_menu_score()
 {
-    print_menu_score_frame();
-    print_menu_score_item("[s] ────>  student      (学生分数情况)", COLOR_GREEN);
-    print_menu_score_item("[c] ────>  class    (班级分数情况)", COLOR_GREEN);
-    print_menu_score_item("[g] ────>  grade   (年级分数情况)", COLOR_GREEN);
-    print_menu_score_item("[q] ────>  quit       (返回)", COLOR_RED);
-    print_menu_score_footer();
-}
-
-// 打印功能菜单项
-void print_menu_function_item(const char *content, const char *color)
-{
-    char temp = content[1];
-    printf(COLOR_CYAN "┃   ");
-    printf("%s", color);
-    printf("%-58s", content); // 58字符宽度保持对齐
-    printf(COLOR_CYAN "┃" COLOR_RESET "\n");
-    printf(COLOR_CYAN "┃                                                         ┃" COLOR_RESET "\n");
-}
-
-// 打印功能菜单底部
-void print_menu_function_footer()
-{
-    printf(COLOR_CYAN "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" COLOR_RESET "\n");
-}
-
-// 打印功能菜单框架
-void print_menu_function_frame()
-{
-    printf(COLOR_CYAN "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓" COLOR_RESET "\n");
-    printf(COLOR_CYAN "┃                    " COLOR_YELLOW "学生成绩管理系统" COLOR_CYAN "                     ┃" COLOR_RESET "\n");
-    printf(COLOR_CYAN "┃                " COLOR_YELLOW "Function Menu (功能菜单)     " COLOR_CYAN "            ┃" COLOR_RESET "\n");
-    printf(COLOR_CYAN "┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫" COLOR_RESET "\n");
-    printf(COLOR_CYAN "┃                                                         ┃" COLOR_RESET "\n");
-}
-
-// 打印成绩菜单框架
-void print_menu_score_frame()
-{
-    printf(COLOR_CYAN "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓" COLOR_RESET "\n");
-    printf(COLOR_CYAN "┃                         " COLOR_YELLOW "学生成绩管理系统" COLOR_CYAN "                         ┃" COLOR_RESET "\n");
-    printf(COLOR_CYAN "┃                    " COLOR_YELLOW "  Score Menu (成绩菜单)     " COLOR_CYAN "                  ┃" COLOR_RESET "\n");
-    printf(COLOR_CYAN "┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫" COLOR_RESET "\n");
-    printf(COLOR_CYAN "┃                                                                  ┃" COLOR_RESET "\n");
-}
-
-// 打印成绩菜单项
-void print_menu_score_item(const char *content, const char *color)
-{
-    printf(COLOR_CYAN "┃   ");
-    printf("%s", color);
-    printf("%-67s", content); // 67字符宽度保持对齐
-    printf(COLOR_CYAN "┃" COLOR_RESET "\n");
-    printf(COLOR_CYAN "┃                                                                  ┃" COLOR_RESET "\n");
-}
-
-// 打印成绩菜单底部
-void print_menu_score_footer()
-{
-    printf(COLOR_CYAN "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" COLOR_RESET "\n");
-}
-
-// 科目名称及列宽
-const char *subjects[] = {"高数", "线代", "概统", "离散", "计网", "计组", "数据库", "数据结构", "操作系统", "程序设计", "总分"};
-const int widths[] = {6, 6, 6, 6, 6, 6, 7, 8, 8, 8, 6};
-
-// 显示学生成绩表
-void display_student_score(Student *student)
-{
-    // 打印表头
-    printf(COLOR_CYAN "┏");
-    for (int i = 0; i < 11; i++)
-    {
-        for (int j = 0; j < widths[i] + 2; j++)
-            printf("━");
-        if (i < 10)
-            printf("┳");
-        else
-            printf("┓");
-    }
-    printf(COLOR_RESET "\n");
-    printf(COLOR_CYAN "┃");
-    for (int i = 0; i < 11; i++)
-    {
-        printf(COLOR_YELLOW " %-*s " COLOR_CYAN "┃", widths[i], subjects[i]);
-    }
-    printf(COLOR_RESET "\n");
-    printf(COLOR_CYAN "┣");
-    for (int i = 0; i < 11; i++)
-    {
-        for (int j = 0; j < widths[i] + 2; j++)
-            printf("━");
-        if (i < 10)
-            printf("╋");
-        else
-            printf("┫");
-    }
-    printf(COLOR_RESET "\n");
-
-    // 打印成绩
-    printf(COLOR_CYAN "┃");
-    for (int i = 0; i < 10; i++)
-    {
-        printf(COLOR_WHITE " %-*.2lf " COLOR_RESET COLOR_CYAN "┃", widths[i], student->score[i]);
-    }
-    printf(COLOR_WHITE " %-*.2lf " COLOR_RESET COLOR_CYAN "┃", widths[10], getStudentSum(student));
-    printf(COLOR_RESET "\n");
-
-    // 打印表尾
-    printf(COLOR_CYAN "┗");
-    for (int i = 0; i < 11; i++)
-    {
-        for (int j = 0; j < widths[i] + 2; j++)
-            printf("━");
-        if (i < 10)
-            printf("┻");
-        else
-            printf("┛");
-    }
-    printf(COLOR_RESET "\n");
+    //                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    printf(COLOR_CYAN "    ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n" COLOR_RESET);
+    printf(COLOR_CYAN "    ┃                  " COLOR_YELLOW "学生成绩管理系统" COLOR_CYAN "                    ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "    ┃               " COLOR_YELLOW "Score Menu (成绩菜单)        " COLOR_CYAN "          ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "    ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫\n" COLOR_RESET);
+    printf(COLOR_CYAN "    ┃                                                      ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "    ┃        " COLOR_GREEN "[s] ────>  student      (学生分数情况)     " COLOR_CYAN "   ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "    ┃                                                      ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "    ┃        " COLOR_GREEN "[c] ────>  class        (班级分数情况)     " COLOR_CYAN "   ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "    ┃                                                      ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "    ┃        " COLOR_RED "[q] ────>  quit         (返回功能菜单)     " COLOR_CYAN "   ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "    ┃                                                      ┃\n" COLOR_RESET);
+    printf(COLOR_CYAN "    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n" COLOR_RESET);
 }

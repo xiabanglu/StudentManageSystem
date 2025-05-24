@@ -14,5 +14,7 @@ void save_student_to_file(const char *file_path, int id, Student *newStudent, do
 void delete_student_from_file(const char *file_path, int id);
 void update_student_from_file(const char *file_path, int id, Student *newStudent, double *score);
 int is_account_exist(const char *file_path, const char *username, const char *password);
+int is_valid_student_info(int id, const char *name, const char *gender, int age, const char *schoolName, double *score);
+int is_valid_student_id(int id);
 
 #endif

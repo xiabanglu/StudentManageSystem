@@ -77,18 +77,26 @@ void getClassSubjectRange(Class *class, int subjectIdx, double *max, double *min
 void getClassTotalRange(Class *class, double *max, double *min)
 {
     *max = -1;
-    *min = 101;
+    *min = 1e9; // 修改为一个足够大的正数，避免无效学生影响
+
+    int valid_cnt = 0;
     for (int i = 0; i < class->size; i++)
     {
         Student *stu = class->students[i];
-        if (stu)
+        if (stu && stu->indices.id != 0) // 只统计有效学生
         {
             double sum = getStudentSum(stu);
             if (sum > *max)
                 *max = sum;
             if (sum < *min)
                 *min = sum;
+            valid_cnt++;
         }
+    }
+    // 处理无有效数据的情况
+    if (valid_cnt == 0) {
+        *max = 0;
+        *min = 0;
     }
 }
 

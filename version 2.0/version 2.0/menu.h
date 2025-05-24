@@ -36,12 +36,4 @@ void display_menu_login();
 void display_menu_function();
 void display_menu_score();
 
-void print_menu_function_frame();
-void print_menu_function_item(const char *content, const char *color);
-void print_menu_function_footer();
-
-void print_menu_score_frame();
-void print_menu_score_item(const char *content, const char *color);
-void print_menu_score_footer();
-
 #endif

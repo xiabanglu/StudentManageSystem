@@ -1,4 +1,5 @@
 #include "login.h"
+#include "log.h"
 
 // 登录验证
 int login(const char *file_path, char *username, char *password)
@@ -6,7 +7,7 @@ int login(const char *file_path, char *username, char *password)
     FILE *file = fopen(file_path, "r");
     if (file == NULL)
     {
-        Log("打开accoumt.txt失败", ERROR);
+        Log("登录验证时:打开accoumt.txt失败", ERROR);
         return -1;
     }
 

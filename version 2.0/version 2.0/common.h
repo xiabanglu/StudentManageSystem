@@ -26,19 +26,7 @@ extern int rank;
 #define BLINK "\033[5m"
 
 // 界面元素模板
-#define HEADER_LINE COLOR_CYAN "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" COLOR_RESET
+#define HEADER_LINE COLOR_CYAN "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" COLOR_RESET
 #define INPUT_PROMPT COLOR_YELLOW "➤ " COLOR_RESET
-
-// 日志级别枚举
-typedef enum LOG_LEVEL
-{
-    INFO,
-    WARNING,
-    ERROR
-} LOG_LEVEL;
-
-// 函数声明
-void Log(const char *message, LOG_LEVEL level);
-const char *LogLevelToString(LOG_LEVEL level);
 
 #endif
