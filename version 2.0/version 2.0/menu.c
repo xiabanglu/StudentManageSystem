@@ -1,5 +1,6 @@
 #include "menu.h"
 #include "event.h"
+#include "score.h"
 
 
 // 暂定权限等级为 rank     1:普通用户    2：管理员    3：开发人员
@@ -264,4 +265,64 @@ void print_menu_score_item(const char *content, const char *color)
 void print_menu_score_footer()
 {
     printf(COLOR_CYAN "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" COLOR_RESET "\n");
+}
+
+// 科目名称及列宽
+const char *subjects[] = {"高数", "线代", "概统", "离散", "计网", "计组", "数据库", "数据结构", "操作系统", "程序设计", "总分"};
+const int widths[] = {6, 6, 6, 6, 6, 6, 7, 8, 8, 8, 6};
+
+// 显示学生成绩表
+void display_student_score(Student *student)
+{
+    // 打印表头
+    printf(COLOR_CYAN "┏");
+    for (int i = 0; i < 11; i++)
+    {
+        for (int j = 0; j < widths[i] + 2; j++)
+            printf("━");
+        if (i < 10)
+            printf("┳");
+        else
+            printf("┓");
+    }
+    printf(COLOR_RESET "\n");
+    printf(COLOR_CYAN "┃");
+    for (int i = 0; i < 11; i++)
+    {
+        printf(COLOR_YELLOW " %-*s " COLOR_CYAN "┃", widths[i], subjects[i]);
+    }
+    printf(COLOR_RESET "\n");
+    printf(COLOR_CYAN "┣");
+    for (int i = 0; i < 11; i++)
+    {
+        for (int j = 0; j < widths[i] + 2; j++)
+            printf("━");
+        if (i < 10)
+            printf("╋");
+        else
+            printf("┫");
+    }
+    printf(COLOR_RESET "\n");
+
+    // 打印成绩
+    printf(COLOR_CYAN "┃");
+    for (int i = 0; i < 10; i++)
+    {
+        printf(COLOR_WHITE " %-*.2lf " COLOR_RESET COLOR_CYAN "┃", widths[i], student->score[i]);
+    }
+    printf(COLOR_WHITE " %-*.2lf " COLOR_RESET COLOR_CYAN "┃", widths[10], getStudentSum(student));
+    printf(COLOR_RESET "\n");
+
+    // 打印表尾
+    printf(COLOR_CYAN "┗");
+    for (int i = 0; i < 11; i++)
+    {
+        for (int j = 0; j < widths[i] + 2; j++)
+            printf("━");
+        if (i < 10)
+            printf("┻");
+        else
+            printf("┛");
+    }
+    printf(COLOR_RESET "\n");
 }
