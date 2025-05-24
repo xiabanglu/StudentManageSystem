@@ -32,4 +32,4 @@ int main()
     }
 }
 
-// gcc main.c event.c file.c login.c menu.c search.c log.c -o main.exe
+// gcc main.c event.c file.c login.c menu.c search.c log.c score.c -o main.exe

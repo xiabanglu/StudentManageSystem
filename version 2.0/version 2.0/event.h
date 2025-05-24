@@ -19,6 +19,5 @@ void handle_delete_user();
 void handle_delete_admin();
 void handle_student_score();
 void handle_class_score();
-void handle_grade_score();
 
 #endif

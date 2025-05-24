@@ -24,7 +24,6 @@ static const MenuItem function_items[] = {
 static const MenuItem score_items[] = {
     {"[s] ────>  student      (学生分数情况)", 's', handle_student_score},
     {"[c] ────>  class    (班级分数情况)", 'c', handle_class_score},
-    {"[g] ────>  grade   (年级分数情况)", 'g', handle_grade_score},
     {"[q] ────>  quit       (返回)", 'q', handle_quit},
     {NULL, '\0', NULL}};
 

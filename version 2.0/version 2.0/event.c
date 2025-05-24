@@ -322,7 +322,7 @@ void handle_student_score()
 {
 
     int id;
-    printf(INPUT_PROMPT COLOR_YELLOW "Please enter id(请输入待统计学生ID): \n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "Please enter id(请输入学生ID): \n" COLOR_RESET);
     printf(INPUT_PROMPT);
     scanf("%d", &id);
     printf(HEADER_LINE "\n");
@@ -358,12 +358,76 @@ void handle_student_score()
 
 void handle_class_score()
 {
-}
+    int gradeId, classId;
+    printf(INPUT_PROMPT COLOR_YELLOW "Please enter as required(请按格式输入):\n\n" COLOR_RESET);
+    printf(INPUT_PROMPT COLOR_YELLOW "年级ID 班级ID: \n" COLOR_RESET);
+    printf(INPUT_PROMPT);
+    scanf("%d %d", &gradeId, &classId);
+    printf(HEADER_LINE "\n");
 
-void handle_grade_score()
-{
-}
+    if (gradeId <= 0 || classId <= 0)
+    {
+        Log("Invalid ID(不合法的ID)!", ERROR);
+        return;
+    }
 
-void handle_ranking_list()
-{
+    Class *class = getClass(school, gradeId, classId);
+    if (class == NULL)
+    {
+        Log("Class not found(班级未找到)!", ERROR);
+        return;
+    }
+
+    Log("Class found(该班级成绩统计信息如下):", INFO);
+
+    // 班级排行榜
+    Class *sortedClass = getSortedClassByTotalScore(class);
+    printf("名次\t姓名\t高数\t线代\t概统\t离散\t计网\t计组\t数据库\t数据结构\t操作系统\t程序设计\t总分\n");
+    for (int i = 0; i < sortedClass->size; i++)
+    {
+        Student *stu = sortedClass->students[i];
+        if (stu && stu->indices.id != 0) // 仅处理有效学生
+        {
+            printf("%d\t%s\t", i + 1, stu->info.name);
+            for (int j = 0; j < 10; j++)
+            {
+                printf("%.2lf\t", stu->score[j]);
+            }
+            printf("%.2lf\n", getStudentSum(stu));
+        }
+    }
+    free(sortedClass->students);
+    free(sortedClass);
+    printf("\n");
+
+    // 班级各科成绩统计
+    double totalMax, totalMin, totalAvg;
+    printf("\t高数\t线代\t概统\t离散\t计网\t计组\t数据库\t数据结构\t操作系统\t程序设计\t总分\t\n");
+    printf("最高分\t");
+    for (int i = 0; i < 10; i++)
+    {
+        double subImax, subImin;
+        getClassSubjectRange(class, i, &subImax, &subImin);
+        printf("%.2lf\t", subImax);
+    }
+    getClassTotalRange(class, &totalMax, &totalMin);
+    printf("%.2lf\n", totalMax);
+
+    printf("最低分\t");
+    for (int i = 0; i < 10; i++)
+    {
+        double subImax, subImin;
+        getClassSubjectRange(class, i, &subImax, &subImin);
+        printf("%.2lf\t", subImin);
+    }
+    getClassTotalRange(class, &totalMax, &totalMin);
+    printf("%.2lf\n", totalMin);
+
+    printf("平均分\t");
+    for (int i = 0; i < 10; i++)
+    {
+        double subAvg;
+        printf("%.2lf\t",getClassSubjectAvg(class,i));
+    }
+    printf("%.2lf\n",getClassTotalAvg(class));
 }
