@@ -53,6 +53,12 @@ void handle_register_user()
     scanf("%s", password);
     printf(HEADER_LINE "\n");
 
+    if (is_account_exist("account.txt", username, password))
+    {
+        Log("用户名和密码已存在，注册失败！", WARNING);
+        return;
+    }
+
     save_user_to_file("account.txt", username, password);
 }
 
@@ -244,6 +250,12 @@ void handle_register_admin()
     scanf("%s", password);
     printf(HEADER_LINE "\n");
 
+    if (is_account_exist("account.txt", username, password))
+    {
+        Log("用户名和密码已存在，注册失败！", WARNING);
+        return;
+    }
+
     save_admin_to_file("account.txt", username, password);
 }
 
@@ -311,11 +323,6 @@ void handle_delete_admin()
 
 void handle_quit()
 {
-    // 功能菜单退出时自动重置rank
-    if (rank > 0)
-    {
-        rank = 0; // 重置权限等级
-    }
 }
 
 void handle_student_score()
@@ -382,18 +389,24 @@ void handle_class_score()
 
     // 班级排行榜
     Class *sortedClass = getSortedClassByTotalScore(class);
-    printf("名次\t姓名\t高数\t线代\t概统\t离散\t计网\t计组\t数据库\t数据结构\t操作系统\t程序设计\t总分\n");
-    for (int i = 0; i < sortedClass->size; i++)
+
+    // 表头
+    printf("%-4s %-8s", "名次", "姓名");
+    const char *subjects[10] = {"高数", "线代", "概统", "离散", "计网", "计组", "数据库", "数据结构", "操作系统", "程序设计"};
+    for (int i = 0; i < 10; i++)
+        printf(" %-8s", subjects[i]);
+    printf(" %-8s\n", "总分");
+
+    // 排行榜内容
+    for (int i = 0, rank = 1; i < sortedClass->size; i++)
     {
         Student *stu = sortedClass->students[i];
-        if (stu && stu->indices.id != 0) // 仅处理有效学生
+        if (stu && stu->indices.id != 0)
         {
-            printf("%d\t%s\t", i + 1, stu->info.name);
+            printf("%-4d %-8s", rank++, stu->info.name);
             for (int j = 0; j < 10; j++)
-            {
-                printf("%.2lf\t", stu->score[j]);
-            }
-            printf("%.2lf\n", getStudentSum(stu));
+                printf(" %-8.2lf", stu->score[j]);
+            printf(" %-8.2lf\n", getStudentSum(stu));
         }
     }
     free(sortedClass->students);
@@ -402,32 +415,33 @@ void handle_class_score()
 
     // 班级各科成绩统计
     double totalMax, totalMin, totalAvg;
-    printf("\t高数\t线代\t概统\t离散\t计网\t计组\t数据库\t数据结构\t操作系统\t程序设计\t总分\t\n");
-    printf("最高分\t");
+    printf("%-8s", "");
+    for (int i = 0; i < 10; i++)
+        printf(" %-8s", subjects[i]);
+    printf(" %-8s\n", "总分");
+
+    printf("%-8s", "最高分");
     for (int i = 0; i < 10; i++)
     {
         double subImax, subImin;
         getClassSubjectRange(class, i, &subImax, &subImin);
-        printf("%.2lf\t", subImax);
+        printf(" %-8.2lf", subImax);
     }
     getClassTotalRange(class, &totalMax, &totalMin);
-    printf("%.2lf\n", totalMax);
+    printf(" %-8.2lf\n", totalMax);
 
-    printf("最低分\t");
+    printf("%-8s", "最低分");
     for (int i = 0; i < 10; i++)
     {
         double subImax, subImin;
         getClassSubjectRange(class, i, &subImax, &subImin);
-        printf("%.2lf\t", subImin);
+        printf(" %-8.2lf", subImin);
     }
     getClassTotalRange(class, &totalMax, &totalMin);
-    printf("%.2lf\n", totalMin);
+    printf(" %-8.2lf\n", totalMin);
 
-    printf("平均分\t");
+    printf("%-8s", "平均分");
     for (int i = 0; i < 10; i++)
-    {
-        double subAvg;
-        printf("%.2lf\t",getClassSubjectAvg(class,i));
-    }
-    printf("%.2lf\n",getClassTotalAvg(class));
+        printf(" %-8.2lf", getClassSubjectAvg(class, i));
+    printf(" %-8.2lf\n", getClassTotalAvg(class));
 }

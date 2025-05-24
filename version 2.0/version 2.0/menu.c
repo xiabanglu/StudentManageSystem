@@ -1,6 +1,7 @@
 #include "menu.h"
 #include "event.h"
 
+
 // 暂定权限等级为 rank     1:普通用户    2：管理员    3：开发人员
 static const MenuItem login_items[] = {
     {"[l] ────>  login      (登录)", 'l', handle_login},
@@ -13,7 +14,7 @@ static const MenuItem function_items[] = {
     {"[d] ────>  delete student        (删除学生信息)", 'd', handle_delete_record},
     {"[u] ────>  update student        (修改学生信息)", 'u', handle_update_record},
     {"[s] ────>  show single student   (查询单个学生)", 's', handle_show_record},
-    {"[b] ────>  show all students     (显示所有学生)", 'b', handle_show_records},
+    {"[b] ────>  show all students     (查询所有学生)", 'b', handle_show_records},
     {"[c] ────>  score statistics      (成绩统计)", 'c', handle_score_statistics},
     {"[r] ────>  register admin        (注册管理员)", 'r', handle_register_admin},
     {"[e] ────>  delete user account   (注销普通用户账号)", 'e', handle_delete_user},
@@ -22,9 +23,9 @@ static const MenuItem function_items[] = {
     {NULL, '\0', NULL}};
 
 static const MenuItem score_items[] = {
-    {"[s] ────>  student      (学生分数情况)", 's', handle_student_score},
-    {"[c] ────>  class    (班级分数情况)", 'c', handle_class_score},
-    {"[q] ────>  quit       (返回)", 'q', handle_quit},
+    {"[s] ────>  student score      (学生分数情况)", 's', handle_student_score},
+    {"[c] ────>  class score        (班级分数情况)", 'c', handle_class_score},
+    {"[q] ────>  quit               (返回)", 'q', handle_quit},
     {NULL, '\0', NULL}};
 
 // 创建菜单
@@ -95,7 +96,7 @@ char getchoice(const char *greet, const MenuItem *items)
         }
 
         printf(HEADER_LINE "\n");
-        Log("no this choice(没有这个选项)", WARNING);
+        Log("没有这个选项", WARNING);
     } while (1);
 
     return '0';
@@ -127,6 +128,7 @@ Menu *event_loop(Menu *menu, int *is_quit)
         {
             if (selected == item->choice)
             {
+                
                 item->handler();
 
                 if (selected == 'l' && rank)
@@ -146,9 +148,15 @@ Menu *event_loop(Menu *menu, int *is_quit)
                         *is_quit = 1;
                         return menu;
                     }
-                    else
+                    else if (menu->type == MENU_FUNCTION)
                     {
-                        menu = MenuLists[menu->type - 1];
+                        rank = 0; // 重置权限等级
+                        menu = MenuLists[0];
+                        return menu;
+                    }
+                    else if (menu->type == MENU_SCORE)
+                    {
+                        menu = MenuLists[1];
                         return menu;
                     }
                 }

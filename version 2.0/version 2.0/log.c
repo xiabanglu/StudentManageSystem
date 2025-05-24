@@ -49,15 +49,13 @@ void Log(const char *message, LOG_LEVEL level)
     }
 
     FILE *file = fopen("logInfo.txt", "a");
-    if (file != NULL)
+    if (file == NULL)
     {
-        fprintf(file, "[%04d-%02d-%02d %02d:%02d:%02d %s] %s\n",
-                t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
-                t->tm_hour, t->tm_min, t->tm_sec, level_str, message);
-        fclose(file);
+        Log("打开logInfo.txt失败", ERROR);
+        return;
     }
-    else
-    {
-        printf("Error opening log file.\n");
-    }
+    fprintf(file, "[%04d-%02d-%02d %02d:%02d:%02d %s] %s\n",
+            t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
+            t->tm_hour, t->tm_min, t->tm_sec, level_str, message);
+    fclose(file);
 }

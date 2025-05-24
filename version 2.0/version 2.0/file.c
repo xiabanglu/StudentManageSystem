@@ -6,23 +6,21 @@ void loadStudentFromFile(const char *file_path, School *school)
     FILE *file = fopen(file_path, "r");
     if (file == NULL)
     {
-        Log("no student.txt", ERROR);
+        Log("打开student.txt失败", ERROR);
         return;
     }
-
     char line[512];
     while (fgets(line, sizeof(line), file))
     {
-        // 检查是否为空行
         if (line[0] == '\n')
         {
-            break; // 如果是空行，停止读取
+            break;
         }
+
         int id, age;
         char name[50], gender[10], schoolName[50];
         double scores[10];
 
-        // 解析学生数据
         int parsed = sscanf(line, "%d %s %s %d %s %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
                             &id, name, gender, &age, schoolName,
                             &scores[0], &scores[1], &scores[2], &scores[3], &scores[4],
@@ -30,17 +28,15 @@ void loadStudentFromFile(const char *file_path, School *school)
 
         if (parsed != 15)
         {
-            Log("学生数据格式错误!", ERROR);
+            Log("学生数据格式有误", ERROR);
             continue;
         }
 
-        // 解释ID获取索引
         StudentIndices indices = explainStudentId(id);
-        int grade_idx = indices.gradeId - 2024;  // 年级索引
-        int class_idx = indices.classId - 1;     // 班级索引
-        int student_idx = indices.studentId - 1; // 学生索引
+        int grade_idx = indices.gradeId - 2024;
+        int class_idx = indices.classId - 1;
+        int student_idx = indices.studentId - 1;
 
-        // 检查索引有效性
         if (grade_idx < 0 || grade_idx >= school->size)
         {
             Log("无效年级!", ERROR);
@@ -55,11 +51,10 @@ void loadStudentFromFile(const char *file_path, School *school)
         Class *cls = grade->classes[class_idx];
         if (student_idx < 0 || student_idx >= cls->size)
         {
-            Log("无效学生位置!", ERROR);
+            Log("无效学生", ERROR);
             continue;
         }
 
-        // 填充内存数据
         Student *stu = cls->students[student_idx];
         stu->indices = indices;
         stu->indices.id = id;
@@ -70,7 +65,7 @@ void loadStudentFromFile(const char *file_path, School *school)
         memcpy(stu->score, scores, sizeof(double) * 10);
     }
     fclose(file);
-    Log("Student load sucessfully(学生数据加载完成)!", INFO);
+    Log("学生数据加载完成", INFO);
 }
 
 // 保存user信息
@@ -79,13 +74,13 @@ void save_user_to_file(const char *file_path, char *username, char *password)
     FILE *file = fopen(file_path, "a");
     if (file == NULL)
     {
-        Log("no account.txt", ERROR);
+        Log("打开account.txt失败", ERROR);
         return;
     }
 
     fprintf(file, "%s %s 1\n", username, password);
 
-    Log("Register user successful(注册user成功)!", INFO);
+    Log("注册user成功", INFO);
     fclose(file);
 }
 
@@ -95,20 +90,20 @@ void delete_user_from_file(const char *file_path, char *username, char *password
     FILE *file = fopen(file_path, "r");
     if (file == NULL)
     {
-        Log("no account.txt", ERROR);
+        Log("打开account.txt失败", ERROR);
         return;
     }
 
     FILE *temp_file = fopen("temp.txt", "w");
     if (temp_file == NULL)
     {
-        Log("no temp.txt", ERROR);
+        Log("创建temp.txt失败", ERROR);
         fclose(file);
         return;
     }
 
     char line[256];
-    int found = 0; // 添加一个标志来检查是否找到用户
+    int found = 0;
     while (fgets(line, sizeof(line), file))
     {
         char file_username[50];
@@ -120,23 +115,23 @@ void delete_user_from_file(const char *file_path, char *username, char *password
         }
         else
         {
-            found = 1; // 找到要删除的用户
+            found = 1;
         }
     }
 
     fclose(file);
     fclose(temp_file);
 
-    if (found) // 只有在找到用户的情况下才执行删除和重命名
+    if (found)
     {
         remove(file_path);
         rename("temp.txt", file_path);
-        Log("User deleted successfully(成功注销user)!", INFO);
+        Log("注销user成功", INFO);
     }
     else
     {
-        remove("temp.txt"); // 如果没有找到用户，删除临时文件
-        Log("User not found(未找到用户)!", WARNING);
+        remove("temp.txt");
+        Log("未找到用户", WARNING);
     }
 }
 
@@ -146,13 +141,13 @@ void save_admin_to_file(const char *file_path, char *username, const char *passw
     FILE *file = fopen(file_path, "a");
     if (file == NULL)
     {
-        Log("no account.txt", ERROR);
+        Log("打开account.txt失败", ERROR);
         return;
     }
 
     fprintf(file, "%s %s 2\n", username, password);
 
-    Log("Register admin successfully(注册admin成功)!", INFO);
+    Log("注册admin成功", INFO);
     fclose(file);
 }
 
@@ -162,20 +157,20 @@ void delete_admin_from_file(const char *file_path, char *username, char *passwor
     FILE *file = fopen(file_path, "r");
     if (file == NULL)
     {
-        Log("no account.txt", ERROR);
+        Log("打开account.txt失败", ERROR);
         return;
     }
 
     FILE *temp_file = fopen("temp.txt", "w");
     if (temp_file == NULL)
     {
-        Log("no temp.txt", ERROR);
+        Log("创建temp.txt失败", ERROR);
         fclose(file);
         return;
     }
 
     char line[256];
-    int found = 0; // 添加一个标志来检查是否找到管理员
+    int found = 0;
     while (fgets(line, sizeof(line), file))
     {
         char file_username[50];
@@ -187,23 +182,23 @@ void delete_admin_from_file(const char *file_path, char *username, char *passwor
         }
         else
         {
-            found = 1; // 找到要删除的管理员
+            found = 1;
         }
     }
 
     fclose(file);
     fclose(temp_file);
 
-    if (found) // 只有在找到管理员的情况下才执行删除和重命名
+    if (found)
     {
         remove(file_path);
         rename("temp.txt", file_path);
-        Log("Admin deleted successfully(成功注销admin)!", INFO);
+        Log("注销admin成功", INFO);
     }
     else
     {
-        remove("temp.txt"); // 如果没有找到管理员，删除临时文件
-        Log("Admin not found(未找到管理员)!", WARNING);
+        remove("temp.txt");
+        Log("未找到管理员", WARNING);
     }
 }
 
@@ -213,7 +208,7 @@ void save_student_to_file(const char *file_path, int id, Student *newStudent, do
     FILE *file = fopen(file_path, "a");
     if (file == NULL)
     {
-        Log("no student.txt", ERROR);
+        Log("打开student.txt失败", ERROR);
         return;
     }
 
@@ -222,7 +217,7 @@ void save_student_to_file(const char *file_path, int id, Student *newStudent, do
             score[0], score[1], score[2], score[3], score[4], score[5],
             score[6], score[7], score[8], score[9]);
 
-    Log("Student registered successfully(学生添加成功)!", INFO);
+    Log("学生信息添加成功", INFO);
     fclose(file);
 }
 
@@ -232,14 +227,14 @@ void delete_student_from_file(const char *file_path, int id)
     FILE *file = fopen(file_path, "r");
     if (file == NULL)
     {
-        Log("no student.txt", ERROR);
+        Log("打开student.txt失败", ERROR);
         return;
     }
 
     FILE *temp = fopen("temp.txt", "w");
     if (temp == NULL)
     {
-        Log("no temp.txt", ERROR);
+        Log("创建temp.txt失败", ERROR);
         fclose(file);
         return;
     }
@@ -265,12 +260,12 @@ void delete_student_from_file(const char *file_path, int id)
     {
         remove("student.txt");
         rename("temp.txt", "student.txt");
-        Log("Student file record deleted(成功删除)!", INFO);
+        Log("成功删除学生信息", INFO);
     }
     else
     {
         remove("temp.txt");
-        Log("Student ID not found in file(未找到该学生!)", WARNING);
+        Log("未找到该学生", WARNING);
     }
 }
 
@@ -280,14 +275,14 @@ void update_student_from_file(const char *file_path, int id, Student *newStudent
     FILE *file = fopen(file_path, "r");
     if (file == NULL)
     {
-        Log("no student.txt", ERROR);
+        Log("打开student.txt失败", ERROR);
         return;
     }
 
     FILE *temp = fopen("temp.txt", "w");
     if (temp == NULL)
     {
-        Log("no temp.txt", ERROR);
+        Log("创建temp.txt失败", ERROR);
         fclose(file);
         return;
     }
@@ -317,13 +312,13 @@ void update_student_from_file(const char *file_path, int id, Student *newStudent
     else
     {
         remove("temp.txt");
-        Log("Student ID not found in file(未找到该学生)!", WARNING);
+        Log("未找到该学生", WARNING);
     }
 
     file = fopen(file_path, "a");
     if (file == NULL)
     {
-        Log("no student.txt", ERROR);
+        Log("打开student.txt失败", ERROR);
         return;
     }
 
@@ -334,5 +329,25 @@ void update_student_from_file(const char *file_path, int id, Student *newStudent
 
     fclose(file);
 
-    Log("Student updated(成功更新信息)!", INFO);
+    Log("更新学生信息成功", INFO);
+}
+
+// 检查用户名和密码是否已存在
+int is_account_exist(const char *file_path, const char *username, const char *password)
+{
+    FILE *file = fopen(file_path, "r");
+    if (file == NULL)
+        return 0;
+    char file_username[50], file_password[50];
+    int flag;
+    while (fscanf(file, "%s %s %d", file_username, file_password, &flag) == 3)
+    {
+        if (strcmp(file_username, username) == 0 && strcmp(file_password, password) == 0)
+        {
+            fclose(file);
+            return 1;
+        }
+    }
+    fclose(file);
+    return 0;
 }

@@ -13,5 +13,6 @@ void delete_admin_from_file(const char *file_path, char *username, char *passwor
 void save_student_to_file(const char *file_path, int id, Student *newStudent, double *score);
 void delete_student_from_file(const char *file_path, int id);
 void update_student_from_file(const char *file_path, int id, Student *newStudent, double *score);
+int is_account_exist(const char *file_path, const char *username, const char *password);
 
 #endif
