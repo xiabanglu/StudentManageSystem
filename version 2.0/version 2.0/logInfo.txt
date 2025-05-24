@@ -70,3 +70,20 @@
 [2025-05-24 23:55:55 INFO][xiabanglu] xiabanglu 登录成功，权限等级: 3
 [2025-05-24 23:59:28 INFO][unknown] 加载学生信息时:学生数据加载完成
 [2025-05-24 23:59:49 INFO][xiabanglu] xiabanglu 登录成功，权限等级: 3
+[2025-05-25 00:06:17 INFO][unknown] 加载学生信息时:学生数据加载完成
+[2025-05-25 00:06:26 INFO][xiabanglu] xiabanglu 登录成功，权限等级: 3
+[2025-05-25 00:08:17 INFO][unknown] 加载学生信息时:学生数据加载完成
+[2025-05-25 00:08:25 INFO][xiabanglu] xiabanglu 登录成功，权限等级: 3
+[2025-05-25 00:08:29 INFO][unknown] 加载学生信息时:学生数据加载完成
+[2025-05-25 00:08:37 INFO][xiabanglu] xiabanglu 登录成功，权限等级: 3
+[2025-05-25 00:09:13 INFO][unknown] 加载学生信息时:学生数据加载完成
+[2025-05-25 00:09:28 INFO][xiabanglu] xiabanglu 登录成功，权限等级: 3
+[2025-05-25 00:13:22 INFO][unknown] 加载学生信息时:学生数据加载完成
+[2025-05-25 00:13:29 INFO][xiabanglu] xiabanglu 登录成功，权限等级: 3
+[2025-05-25 00:14:06 INFO][xiabanglu] xiabanglu 登录成功，权限等级: 3
+[2025-05-25 00:19:07 INFO][unknown] 加载学生信息时:学生数据加载完成
+[2025-05-25 00:19:12 INFO][xiabanglu] xiabanglu 登录成功，权限等级: 3
+[2025-05-25 00:19:44 INFO][unknown] 加载学生信息时:学生数据加载完成
+[2025-05-25 00:19:54 INFO][xiabanglu] xiabanglu 登录成功，权限等级: 3
+[2025-05-25 00:40:14 INFO][unknown] 加载学生信息时:学生数据加载完成
+[2025-05-25 00:40:23 INFO][xiabanglu] xiabanglu 登录成功，权限等级: 3

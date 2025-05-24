@@ -353,7 +353,8 @@ int is_account_exist(const char *file_path, const char *username, const char *pa
     return 0;
 }
 
-int is_valid_student_info(int id, const char *name, const char *gender, int age, const char *schoolName, double *score) {
+int is_valid_student_info(int id, const char *name, const char *gender, int age, const char *schoolName, double *score)
+{
     // 检查ID格式
     int year = id / 10000;
     int classNum = (id / 100) % 100;
@@ -376,7 +377,8 @@ int is_valid_student_info(int id, const char *name, const char *gender, int age,
     return 1;
 }
 
-int is_valid_student_id(int id) {
+int is_valid_student_id(int id)
+{
     int year = id / 10000;
     int classNum = (id / 100) % 100;
     int stuNum = id % 100;

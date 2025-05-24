@@ -81,11 +81,18 @@ char getchoice(const char *greet, const MenuItem *items)
         printf(INPUT_PROMPT);
 
         // 获取输入
-        selected = getchar();
-        while (selected == '\n')
-            selected = getchar();
-        while (getchar() != '\n')
-            ; // 清空输入缓冲区
+        char message[10];
+        scanf("%10s", message);
+        size_t len = strlen(message);
+        if (len - 1)
+        {
+            Log("读取输入时:请输入单个字符而不是字符串", WARNING);
+            return '0';
+        }
+        else
+        {
+            selected = message[0];
+        }
 
         // 检查选择是否有效
         for (item = items; item->description != NULL; item++)
@@ -137,7 +144,7 @@ Menu *event_loop(Menu *menu, int *is_quit)
                     menu = MenuLists[1];
                     return menu;
                 }
-                if (selected == 'c')
+                else if (selected == 'c' && menu->type == MENU_FUNCTION)
                 {
                     if (rank != 2 && rank != 3)
                     {
@@ -147,7 +154,7 @@ Menu *event_loop(Menu *menu, int *is_quit)
                     menu = MenuLists[2];
                     return menu;
                 }
-                if (selected == 'q')
+                else if (selected == 'q')
                 {
                     if (menu->type == MENU_LOGIN)
                     {

@@ -94,7 +94,8 @@ void getClassTotalRange(Class *class, double *max, double *min)
         }
     }
     // 处理无有效数据的情况
-    if (valid_cnt == 0) {
+    if (valid_cnt == 0)
+    {
         *max = 0;
         *min = 0;
     }
