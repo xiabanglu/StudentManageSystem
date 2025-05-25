@@ -425,7 +425,7 @@ void handle_class_score()
 
     // 打印班级排行榜
     printf(COLOR_YELLOW "班级总分排行榜（降序）:\n" COLOR_RESET);
-    printf("名次\tID\t姓名\t总分\n");
+    printf("名次\tID\t\t姓名\t\t总分\n");
     Class *sorted = getSortedClassByTotalScore(cls);
     int rank_num = 1;
     for (int i = 0; i < sorted->size; i++)
@@ -433,7 +433,7 @@ void handle_class_score()
         Student *stu = sorted->students[i];
         if (stu && stu->indices.id != 0)
         {
-            printf("%d\t%d\t%s\t%.2lf\n", rank_num++, stu->indices.id, stu->info.name, getStudentSum(stu));
+            printf("%d\t%d\t%s\t\t%.2lf\n", rank_num++, stu->indices.id, stu->info.name, getStudentSum(stu));
         }
     }
     free(sorted->students);
