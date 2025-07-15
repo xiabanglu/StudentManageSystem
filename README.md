@@ -32,7 +32,6 @@ version 3.0
 
 右击打开powershell,输入以下命令:
 
-// 编译(生成class文件)
-// javac -d . studentManageSystem/*.java
-// 运行
-// java studentManageSystem.SystemTest
+编译(生成class文件): javac -d . studentManageSystem/*.java
+
+运行: java studentManageSystem.SystemTest
